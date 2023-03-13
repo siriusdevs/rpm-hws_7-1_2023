@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>API Media List</title>
+  </head>
+  <body>
+    <h1>Media List</h1>
+    <ul>
+      {% for item in data %}
+      <li>
+        <a href="/media_api/{{ loop.index }}">{{ item.title.english }}</a>
+        {% if item.title.native %}
+        ({{ item.title.native }})
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

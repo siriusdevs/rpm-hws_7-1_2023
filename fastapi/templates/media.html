@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ data.title.english }}</title>
+  </head>
+  <body>
+    <h1>{{ data.title.english }}</h1>
+    {% if data.title.native %}
+    <h2>{{ data.title.native }}</h2>
+    {% endif %}
+    <p>{{ data.description }}</p>
+    <a href="{{ data.siteUrl }}">Visit Website</a>
+    <br>
+    <a href="/">Home</a>
+  </body>
+</html>
