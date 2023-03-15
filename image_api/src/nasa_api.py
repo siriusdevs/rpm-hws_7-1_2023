@@ -8,7 +8,7 @@ from requests import get
 from dotenv import load_dotenv
 
 load_dotenv()
-NASA_API = getenv('NASA_API')
+NASA_API = getenv('NASA_API', default="DEMO_KEY")
 
 
 def get_mars_date_image(date: datetime.date) -> dict:

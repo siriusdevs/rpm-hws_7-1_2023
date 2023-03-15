@@ -161,6 +161,6 @@ def user_image(token: str, user_name: str, image_id: int, model_user: ModelImage
             return HTTPException(status_code=HTTP_GONE, detail="File was deleted")
         return FileResponse(path)
 
-    db_cursor.execute(SQL_SELECT_USER_IMAGE.format(request=model_user, parameters=f"where id = {image_id}"))
+    db_cursor.execute(SQL_SELECT_USER_IMAGE.format(request=model_user.value, parameters=f"where id = {image_id}"))
     image = db_cursor.fetchone()
     return image if image else HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
