@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Space Photo Viewer</title>
+    <style>
+      body {
+        background-color: #252525;
+        color: #fff;
+        font-family: sans-serif;
+      }
+button {
+    background-color: #0072c6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+
+  button:hover {
+    background-color: #005ea1;
+  }
+
+  input[type="date"] {
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+
+  #ok {
+    background-color: #0072c6;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  #ok:hover {
+    background-color: #005ea1;
+  }
+
+  #photo {
+    max-width: 70%;
+    height: 500px;
+    margin-top: 20px;
+  }
+
+
+  h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin: 20px 0;
+  }
+
+  h3 {
+    font-size: 20px;
+    margin: 20px 0;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+  }
+
+  .header button {
+    padding: 12px 24px;
+    font-size: 18px;
+    margin-right: 10px;
+  }
+
+  .header input[type="date"] {
+    margin-right: 10px;
+    width: 200px;
+    height: 44px;
+    padding: 10px;
+    font-size: 18px;
+  }
+
+  .content {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 30px;
+  }
+
+  .buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #mars{
+  background-color: #c67200;
+  }
+
+
+
+
+    #loading {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .spinner {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>
+  </head>
+  <body>
+    <div style="text-align: center; margin-top: 20px;">
+      <button id="nasa">NASA</button>
+      <button id="mars">Mars</button>
+      <button id="User">User</button>
+    </div>
+    <div style="text-align: center; margin-top: 20px;">
+      <input type="date" id="date" value="{{ image.date }}">
+      <button id="ok">OK</button>
+
+    </div>
+    <div id="loading">
+  <div class="spinner"></div>
+</div>
+    <div style="text-align: center; margin-top: 30px">
+        <h1 id="name">Rover: {{ image.rover_name }}</h1>
+    </div>
+    <div style="text-align: center; margin-top: 10px;">
+
+      <img id="photo" src="{{ image.url }}" alt="Photo">
+<div style="text-align: center; margin-top: 30px;">
+  <h3 id = "explanation" style="max-width: 70%; margin: auto;">Camera {{ image.camera }}</h3>
+</div>
+    </div>
+  </body>
+<script>
+  const nasaBtn = document.getElementById("nasa");
+  const marsBtn = document.getElementById("mars");
+  const userBtn = document.getElementById("User");
+  const okBtn = document.getElementById("ok");
+
+  const dateInput = document.getElementById("date");
+const loading = document.getElementById("loading");
+  // Send an HTTP GET request to the Django server with the selected parameters
+  const sendRequest = (params) => {
+  loading.style.display = "block";
+    const url = "/";
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", url + "?" + params, true);
+    xhr.send();
+    xhr.onload = () => {
+
+      if (xhr.status === 200) {
+
+        const response = JSON.parse(xhr.responseText);
+        if (response.url){
+        updateUI(response);
+        } else
+        {
+          console.log("Error occurred during request.");
+          alert("Not found");
+        }
+
+
+      } else {
+
+        console.log("Error:", xhr.status);
+      }
+     loading.style.display = "none";
+    };
+
+  };
+
+  // Update the UI with the response from the Django server
+  const updateUI = (response) => {
+
+
+    document.getElementById("photo").src = response.url;
+    document.getElementById("name").textContent = 'Rover: ' + response.rover_name;
+    document.getElementById("explanation").textContent = 'Camera:' + response.camera;
+
+  };
+
+  // Handle button clicks
+  nasaBtn.addEventListener("click", () => {
+   window.location.href = "/nasa";
+  });
+
+  marsBtn.addEventListener("click", () => {
+window.location.href = "/mars";
+  });
+
+  userBtn.addEventListener("click", () => {
+window.location.href = "/user";
+  });
+
+  okBtn.addEventListener("click", () => {
+    const params = `source=mars&date=${dateInput.value}`;
+    sendRequest(params);
+  });
+
+
+</script>
+</html>
