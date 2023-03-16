@@ -1,5 +1,5 @@
 # About project:
-## It is a simple sever written on python. It uses base python library http.server. Well, BaseHttpServer is a class. I used it to create a custom class which implements CRUD requests. It also used it for realisation REST methods.
+## It is a simple sever written on python. It uses base python library http.server. I use BaseHTTPServer class to create a custom example which implements CRUD and REST methods.
 
 # How to start
     git clone https://github.com/kirillsev1/SecondPartAtom_hard.git
@@ -23,6 +23,14 @@
 
 ### For DELETE request url field must be filled with parameters after HOST:PORT and ?;
     127.0.0.1:8000/?fname=Kirill&lname=Prikhodko
+
+# this server needs:
+
+## postgres database
+##### with tables: 
+##### token (username text primary key, token uuid)
+##### people (id integer generated always as identity not null primary key, fname text not null, lname text not null, fname text, email text not null)
+
 # .env
 #### HOST - host for http server
 
