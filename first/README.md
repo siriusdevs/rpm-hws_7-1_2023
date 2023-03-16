@@ -1,5 +1,5 @@
 # About project:
-## It is a simple sever written on python. It uses base python library http.server. I use BaseHTTPServer class to create a custom example which implements CRUD and REST methods.
+## It is a simple sever written on python with http.server. I used BaseHTTPServer class to create a custom example which implements CRUD and REST methods.
 
 # How to start
     git clone https://github.com/kirillsev1/SecondPartAtom_hard.git
