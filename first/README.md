@@ -16,11 +16,11 @@
 
 # Docker container
     docker run -d --name library_project_7_1 -p 5435:5432 \
-    -v $HOME/postgresql/http_db:/var/lib/postgresql/http_db \
-    -e POSTGRES_PASSWORD=12345678 \
-    -e POSTGRES_USER=app \
-    -e POSTGRES_DB=http_db \
-    postgres
+        -v $HOME/postgresql/http_db:/var/lib/postgresql/http_db \
+        -e POSTGRES_PASSWORD=12345678 \
+        -e POSTGRES_USER=app \
+        -e POSTGRES_DB=http_db \
+        postgres
 ### Now run ddl file for creating and filling database
     psql -h 127.0.0.1 -p 5435 -U app http_db -f init_db.ddl
 
