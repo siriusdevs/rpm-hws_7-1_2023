@@ -19,3 +19,9 @@
 # Run 
 - uvicorn src.main:app --reload
 - Go to http://127.0.0.1:8000/
+
+# Docker for postgresql
+
+docker run  -d --name image_api -e POSTGRES_USER=image_api -e POSTGRES_PASSWORD=change_me -e PGDATA=/postgres_data_inside_container -v ~/image_api/postgres_data:/postgres_data_inside_container  -p 38748:5432 
+        postgres:15.1
+

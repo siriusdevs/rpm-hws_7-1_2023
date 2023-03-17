@@ -90,7 +90,7 @@ def update_user_image(token: str, image_id: int, upload_file: UploadFile, user_n
         raise HTTPException(status_code=HTTP_FORBIDDEN, detail="Wrong token or you can't edit it")
     db_cursor.execute(SQL_SELECT_USER_IMAGE.format(request="*", parameters="where id = %s"), (image_id,))
     if not db_cursor.fetchone():
-        return HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
+        raise HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
     for key, image_value in image.dict().items():
         db_cursor.execute(SQL_UPDATE_IMAGE.format(request=f"{key} = %s", parameters="where id = %s"),
                           (image_value, image_id))
@@ -123,7 +123,7 @@ def delete_user_image(token: str, image_id: int, user_name: str):
     db_cursor.execute(SQL_SELECT_USER_IMAGE.format(request="*", parameters="where id = %s"), (image_id,))
     img = db_cursor.fetchone()
     if not img:
-        return HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
+        raise HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
     db_cursor.execute(SQL_DELETE.format(parameters=f"where id = {image_id}"))
     db_connection.commit()
     file_names = glob.glob(root_dir=FILES_DIR.format(user=user_name, file_name=""), pathname=f"{image_id}.*")
@@ -150,17 +150,23 @@ def user_image(token: str, user_name: str, image_id: int, model_user: ModelImage
         raise HTTPException(status_code=HTTP_FORBIDDEN, detail="Wrong token")
     if not model_user:
         db_cursor.execute(SQL_SELECT_USER_IMAGE.format(request="*", parameters=f"where id = {image_id}"))
-        return db_cursor.fetchone()
+        image = db_cursor.fetchone()
+        if not image:
+            raise HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
+        return image
 
     if model_user is ModelImageUser.data:
         file_names = glob.glob(root_dir=FILES_DIR.format(user=user_name, file_name=""), pathname=f"{image_id}.*")
         if not file_names:
-            return HTTPException(status_code=HTTP_GONE, detail="File was deleted")
+            raise HTTPException(status_code=HTTP_GONE, detail="File was deleted")
         path = Path(FILES_DIR.format(user=user_name, file_name=file_names[0]))
         if not path.is_file():
-            return HTTPException(status_code=HTTP_GONE, detail="File was deleted")
+            raise HTTPException(status_code=HTTP_GONE, detail="File was deleted")
         return FileResponse(path)
 
     db_cursor.execute(SQL_SELECT_USER_IMAGE.format(request=model_user.value, parameters=f"where id = {image_id}"))
     image = db_cursor.fetchone()
-    return image if image else HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
+    if not image:
+        raise HTTPException(status_code=HTTP_NOT_FOUND, detail="Not found")
+
+    return image
