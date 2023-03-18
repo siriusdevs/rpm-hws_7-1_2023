@@ -15,11 +15,11 @@ echo "PG_PASSWORD=$PG_PASSWORD" >> .env
 echo "PG_DBNAME=$PG_DBNAME" >> .env
 
 # set up database
-python3.10 setup_db.py
+python3.10 first/setup_db.py
 
 # server start
 echo "Starting the server"
-python3.10 main.py &
+python3.10 first/main.py &
 
 # real tests
 sleep 2
