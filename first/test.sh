@@ -47,10 +47,9 @@ fi
 echo "POST request:"
 post_code=`curl -s -o /dev/null \
     -X POST \
-    -d '{"fname": "a1b2c3d4", "lname":"abcdef", "group_":"1"}' \
     -H "Authorization:admin {$token}"\
     -w %{http_code} \
-    http://127.0.0.1:8001/`
+    http://127.0.0.1:8001/?{"fname": "a1b2c3d4", "lname":"abcdef", "group_":"1"}`
 if [[ $post_code -eq $CREATED ]]
 then
 echo "OK"
