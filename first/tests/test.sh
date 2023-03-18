@@ -8,11 +8,11 @@ DOCKER_NAME=test
 DDL_NAME=db_init.ddl
 
 # set env variables
-echo "PG_HOST=$PG_HOST" > .env
-echo "PG_PORT=$PG_PORT" >> .env
-echo "PG_USER=$PG_USER" >> .env
-echo "PG_PASSWORD=$PG_PASSWORD" >> .env
-echo "PG_DBNAME=$PG_DBNAME" >> .env
+echo "PG_HOST=$PG_HOST" > ../.env
+echo "PG_PORT=$PG_PORT" >> ../.env
+echo "PG_USER=$PG_USER" >> ../.env
+echo "PG_PASSWORD=$PG_PASSWORD" >> ../.env
+echo "PG_DBNAME=$PG_DBNAME" >> ../.env
 
 # set up database
 python3.10 setup_db.py
