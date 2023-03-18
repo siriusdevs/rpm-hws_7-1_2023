@@ -142,7 +142,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
                 return OK, 'Content has been deleted'
         return NOT_FOUND, 'Content not found'
 
-    def post(self, record: dict = None) -> tuple:
+    def put(self, record: dict = None) -> tuple:
         """Runs put method.
 
         Args:
@@ -164,7 +164,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
             return BAD_REQUEST, f'Required keys to add: {MAIN_REQUIRED_ATTRS}'
         return NO_CONTENT, 'Content not found'
 
-    def put(self) -> tuple:
+    def post(self) -> tuple:
         """Runs post or update method.
 
         Returns:
