@@ -42,7 +42,7 @@ jobs:
         pip install -r first/test_requirements.txt
     - name: Tests
       run: |
-        chmod +x first/tests/test.sh
-        ./first/tests/test.sh
+        chmod +x first/test.sh
+        ./first/test.sh
     - name: Pytest
       run: pytest
