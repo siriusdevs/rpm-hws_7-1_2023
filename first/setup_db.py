@@ -1,8 +1,8 @@
+"""File creates tables in database."""
 
 from psycopg2 import connect
 from dotenv import load_dotenv
 from os import getenv
-
 
 load_dotenv()
 creds = {
@@ -13,13 +13,12 @@ creds = {
     "password": getenv("PG_PASSWORD"),
 }
 
-FILE = "first/init.ddl"
+INIT_FILE = "first/init.ddl"
 
 connection = connect(**creds)
 cursor = connection.cursor()
-with open(FILE, 'r') as file:
-    cursor.execute(file.read())
-
+with open(INIT_FILE, 'r') as init_db:
+    cursor.execute(init_db.read())
 
 connection.commit()
 cursor.close()
