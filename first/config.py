@@ -37,11 +37,11 @@ MAIN_REQUIRED_ATTRS = ["fname", "lname", "email"]
 
 # Templates
 TEMPLATE = getenv("TEMPLATES_FILE")
-MAIN_PAGE = "{0}}/index.html".format(TEMPLATE)
-ERROR_PAGE = "{0}}/error.html".format(TEMPLATE)
-COMPANY_TEMPLATE = "{0}}/generate_company.html".format(TEMPLATE)
-PERSON_TEMPLATE = "{0}}/generate_person.html".format(TEMPLATE)
-CLEAR_TABLE = "{0}}/clear_table.html".format(TEMPLATE)
+MAIN_PAGE = "{0}/index.html".format(TEMPLATE)
+ERROR_PAGE = "{0}/error.html".format(TEMPLATE)
+COMPANY_TEMPLATE = "{0}/generate_company.html".format(TEMPLATE)
+PERSON_TEMPLATE = "{0}/generate_person.html".format(TEMPLATE)
+CLEAR_TABLE = "{0}/clear_table.html".format(TEMPLATE)
 
 # Host and port
 HOST = "127.0.0.1"
