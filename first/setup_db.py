@@ -13,7 +13,7 @@ creds = {
     "password": getenv("PG_PASSWORD"),
 }
 
-FILE = "db_init.ddl"
+FILE = "first/db_init.ddl"
 
 connection = connect(**creds)
 cursor = connection.cursor()
