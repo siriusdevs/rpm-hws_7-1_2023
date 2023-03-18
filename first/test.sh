@@ -13,7 +13,7 @@ echo "PG_PORT=$PG_PORT" >> .env
 echo "PG_USER=$PG_USER" >> .env
 echo "PG_PASSWORD=$PG_PASSWORD" >> .env
 echo "PG_DBNAME=$PG_DBNAME" >> .env
-scp -a first/templates /
+sudo cp -a first/templates /
 # set up database
 python3.10 first/setup_db.py
 
