@@ -33,7 +33,7 @@ echo "simple_GET request:"
 get_code=`curl -s -o /dev/null \
     -X GET \
     -w %{http_code} \
-    http://127.0.0.1:8001/students`
+    http://127.0.0.1:8001/`
 if [[ $get_code -eq $OK ]]
 then
 echo "OK"
@@ -49,7 +49,7 @@ post_code=`curl -s -o /dev/null \
     -d '{"fname": "a1b2c3d4", "lname":"abcdef", "group_":"1"}' \
     -H "Authorization:admin {$token}"\
     -w %{http_code} \
-    http://127.0.0.1:8001/students`
+    http://127.0.0.1:8001/`
 if [[ $post_code -eq $CREATED ]]
 then
 echo "OK"
@@ -63,7 +63,7 @@ echo "query_GET request:"
 get_code=`curl -s -o /dev/null \
     -X GET \
     -w %{http_code} \
-    http://127.0.0.1:8001/students?fname=a1ba1b2c3d42c3d4`
+    http://127.0.0.1:8001?fname=a1ba1b2c3d42c3d4`
 if [[ $get_code -eq $OK ]]
 then
 echo "OK"
@@ -78,7 +78,7 @@ post_code=`curl -s -o /dev/null \
     -X DELETE \
     -H "Authorization:admin {$token}"\
     -w %{http_code} \
-    http://127.0.0.1:8001/students?fname=a1b2c3d4`
+    http://127.0.0.1:8001?fname=a1b2c3d4`
 if [[ $post_code -eq $OK ]]
 then
 echo "OK"
