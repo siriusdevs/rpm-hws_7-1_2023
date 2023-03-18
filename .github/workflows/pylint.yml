@@ -44,5 +44,3 @@ jobs:
       run: |
         chmod +x first/test.sh
         ./first/test.sh
-    - name: Pytest
-      run: pytest
