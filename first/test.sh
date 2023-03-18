@@ -13,6 +13,11 @@ echo "PG_PORT=$PG_PORT" >> .env
 echo "PG_USER=$PG_USER" >> .env
 echo "PG_PASSWORD=$PG_PASSWORD" >> .env
 echo "PG_DBNAME=$PG_DBNAME" >> .env
+echo `MAIN_PAGE = "first/templates/index.html"
+ERROR_PAGE = "first/templates/error.html"
+COMPANY_TEMPLATE = "first/templates/generate_company.html"
+PERSON_TEMPLATE = "first/templates/generate_person.html"
+CLEAR_TABLE = "first/templates/clear_table.html"` >> first/config.py
 
 # set up database
 python3.10 first/setup_db.py
