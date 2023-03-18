@@ -1,4 +1,8 @@
 """Configuration file."""
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv()
 # HTTP server error codes
 NOT_FOUND = 404
 FORBIDDEN = 403
@@ -32,11 +36,12 @@ DELETE_ATTRS = ["fname", "lname", "email"]
 MAIN_REQUIRED_ATTRS = ["fname", "lname", "email"]
 
 # Templates
-MAIN_PAGE = "templates/index.html"
-ERROR_PAGE = "templates/error.html"
-COMPANY_TEMPLATE = "templates/generate_company.html"
-PERSON_TEMPLATE = "templates/generate_person.html"
-CLEAR_TABLE = "templates/clear_table.html"
+TEMPLATE = getenv("TEMPLATES_FILE")
+MAIN_PAGE = "{0}}/index.html".format(TEMPLATE)
+ERROR_PAGE = "{0}}/error.html".format(TEMPLATE)
+COMPANY_TEMPLATE = "{0}}/generate_company.html".format(TEMPLATE)
+PERSON_TEMPLATE = "{0}}/generate_person.html".format(TEMPLATE)
+CLEAR_TABLE = "{0}}/clear_table.html".format(TEMPLATE)
 
 # Host and port
 HOST = "127.0.0.1"

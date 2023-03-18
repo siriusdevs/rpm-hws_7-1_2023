@@ -6,14 +6,15 @@ PG_PASSWORD=test
 PG_DBNAME=test
 DOCKER_NAME=test
 DDL_NAME=db_init.ddl
+TEMPLATES="first/templates"
 
 # set env variables
-echo "PG_HOST=$PG_HOST" > .env
-echo "PG_PORT=$PG_PORT" >> .env
-echo "PG_USER=$PG_USER" >> .env
-echo "PG_PASSWORD=$PG_PASSWORD" >> .env
-echo "PG_DBNAME=$PG_DBNAME" >> .env
-sudo cp first/templates /
+echo "PG_HOST=$PG_HOST" > first/.env
+echo "PG_PORT=$PG_PORT" >> first/.env
+echo "PG_USER=$PG_USER" >> first/.env
+echo "PG_PASSWORD=$PG_PASSWORD" >> first/.env
+echo "PG_DBNAME=$PG_DBNAME" >> first/.env
+echo "TEMPLATES_FILE=$TEMPLATES" >> first/.env
 # set up database
 python3.10 first/setup_db.py
 
