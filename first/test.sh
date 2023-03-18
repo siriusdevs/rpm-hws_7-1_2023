@@ -90,4 +90,4 @@ exit 1
 fi
 
 # # clean up
-rm .env
+rm first/.env
