@@ -63,7 +63,5 @@
     PG_USER - database user
 
     PG_PASSWORD - database password
-
-    API_KEY - API key from token table
-
-    USER_API - API user from token table
+    
+    TEMPLATES_FILE
