@@ -89,5 +89,5 @@ echo "DELETE_CODE $delete_code"
 exit 1
 fi
 
-# # clean up
+# clean up
 rm first/.env
