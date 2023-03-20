@@ -27,6 +27,7 @@ class DbHandler:
         if not cls.db_cursor.fetchone():
             return
         cls.db_cursor.execute("DELETE FROM people")
+        cls.db_connection.commit()
 
     @classmethod
     def get_data(cls, req_conds: dict = None) -> dict:
@@ -40,7 +41,6 @@ class DbHandler:
         """
         cls.db_cursor.execute(DbHandler.query_request(SELECTOR, req_conds) if req_conds else SELECTOR)
         selection = cls.db_cursor.fetchall()
-        print(selection)
         return {
             'number': len(selection),
             'rendered_people': list_to_view(selection)
