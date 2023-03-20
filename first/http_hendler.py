@@ -141,7 +141,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
             if not query:
                 return BAD_REQUEST, 'DELETE FAILED'
             if DbHandler.delete(query):
-                return OK, 'Content has been deleted'
+                return OK, f'{self.path}: DELETE OK'
         return NOT_FOUND, 'Content not found'
 
     def put(self, record: dict = None) -> tuple:
@@ -162,7 +162,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
                     return NOT_IMPLEMENTED, f'people do not have attribute: {attr}'
             if all([key in record for key in MAIN_REQUIRED_ATTRS]):
                 answer = 'OK' if DbHandler.insert(record) else 'FAIL'
-                return CREATED, f'{self.command} {answer}'
+                return CREATED, f'{self.path}: {self.command} {answer}'
             return BAD_REQUEST, f'Required keys to add: {MAIN_REQUIRED_ATTRS}'
         return NO_CONTENT, 'Content not found'
 
@@ -184,7 +184,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
             res = DbHandler.update(record=record, where=query)
             if not res:
                 return self.put(record)
-            return OK, f'{self.command} OK'
+            return OK, f'{self.path}: {self.command} OK'
 
     def get(self) -> None:
         """Runs get template method."""
