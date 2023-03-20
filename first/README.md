@@ -48,7 +48,7 @@
 ### It should be used with url field parameters from .env file:
     HOST:PORT(127.0.0.1:8000)
 ### Results of requests are situated in main page. There you can find posted persons by using filter:
-    127.0.0.1:8000/?fname=Kirill
+    127.0.0.1:8000/main?fname=Kirill
 ### For DELETE request url field must be filled with parameters after HOST:PORT and ?;
     127.0.0.1:8000/main?fname=Kirill&lname=Prikhodko
 ### If DELETE query was right there won't be information about person.
