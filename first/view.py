@@ -1,13 +1,6 @@
 """File with function for rendering pages templates."""
-from config import MAIN_PAGE, ERROR_PAGE, CLEAR_TABLE
-from dotenv import load_dotenv
+from config import REDIRECT, ERROR_PAGE, CLEAR_TABLE, MAIN
 from requests import get
-from os import getenv
-
-load_dotenv()
-
-API_KEY = getenv("API_KEY")
-USER_API = getenv("USER_API")
 
 
 def to_html(key: any, k_val: any) -> str:
@@ -21,6 +14,16 @@ def to_html(key: any, k_val: any) -> str:
         str - key, value in html tag <ul>.
     """
     return f"<ul>{dict_to_view(k_val)}</ul>" if isinstance(k_val, dict) else f'<ul>{key}: {k_val}</ul>'
+
+
+def start() -> str:
+    """Function reads start page template.
+
+    Returns:
+        str - start page template.
+    """
+    with open(REDIRECT, 'r') as template:
+        return template.read()
 
 
 def dict_to_view(iterable: dict) -> str:
@@ -55,7 +58,7 @@ def main_page() -> str:
     Returns:
         str - main page template.
     """
-    with open(MAIN_PAGE, "r") as template:
+    with open(REDIRECT, "r") as template:
         return template.read()
 
 
@@ -81,7 +84,7 @@ def people(people_data: dict) -> str:
     Returns:
         str - formed page template.
     """
-    with open(MAIN_PAGE, "r") as template:
+    with open(MAIN, "r") as template:
         page = template.read()
         return page.format(**people_data)
 

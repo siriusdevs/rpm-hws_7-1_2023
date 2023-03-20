@@ -16,6 +16,7 @@ CREATED = 201
 NO_CONTENT = 204
 
 # Paths
+MAIN_PAGE = "/main"
 PERSON_PATH = "/gen_person"
 COMPANY_PATH = "/gen_company"
 CLEAR_TABLE_PATH = "/clear_table"
@@ -37,7 +38,8 @@ MAIN_REQUIRED_ATTRS = ["fname", "lname", "email"]
 
 # Templates
 TEMPLATES = getenv("TEMPLATES_PATH")
-MAIN_PAGE = "{0}/index.html".format(TEMPLATES)
+REDIRECT = "{0}/start.html".format(TEMPLATES)
+MAIN = "{0}/index.html".format(TEMPLATES)
 ERROR_PAGE = "{0}/error.html".format(TEMPLATES)
 COMPANY_TEMPLATE = "{0}/generate_company.html".format(TEMPLATES)
 PERSON_TEMPLATE = "{0}/generate_person.html".format(TEMPLATES)

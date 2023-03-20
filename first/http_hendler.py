@@ -2,8 +2,8 @@
 from config import CONTENT_LENGTH, AUTH, PERSON_PATH, COMPANY_PATH, \
     BAD_REQUEST, OK, MAIN_ATTRS, CONTENT_TYPE, CODING, NOT_FOUND, \
     NOT_IMPLEMENTED, MAIN_REQUIRED_ATTRS, FORBIDDEN, CREATED, \
-    NO_CONTENT, PERSON_URL, COMPANY_URL, CLEAR_TABLE_PATH
-from view import get_api_data, people, error_page, main_page, clear_table
+    NO_CONTENT, PERSON_URL, COMPANY_URL, CLEAR_TABLE_PATH, MAIN_PAGE
+from view import get_api_data, people, error_page, main_page, clear_table, start
 from fill_templates import person_template, company_template
 from http.server import BaseHTTPRequestHandler
 from db_utils import DbHandler
@@ -67,6 +67,8 @@ class CustomHTTP(BaseHTTPRequestHandler):
         Returns:
             Callable - method for rendering page.
         """
+        if self.path.startswith(MAIN_PAGE):
+            return people(DbHandler.get_data(query))
         if self.path.startswith(PERSON_PATH):
             return person_template(get_api_data(PERSON_URL))
         if self.path.startswith(COMPANY_PATH):
@@ -74,7 +76,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
         if self.path.startswith(CLEAR_TABLE_PATH):
             DbHandler.remove_data()
             return clear_table()
-        return people(DbHandler.get_data(query))
+        return start()
 
     def get_template(self) -> tuple:
         """Method tries getting query from path.
@@ -134,7 +136,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
         Returns:
             tuple - statuscode and message.
         """
-        if self.path.startswith("/"):
+        if self.path.startswith(MAIN_PAGE):
             query = self.parse_query()
             if not query:
                 return BAD_REQUEST, 'DELETE FAILED'
@@ -151,7 +153,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
         Returns:
             tuple - statuscode and message.
         """
-        if self.path.startswith("/"):
+        if self.path.startswith(MAIN_PAGE):
             record = record if record else self.read_content_json()
             if not record:
                 return BAD_REQUEST, f'No content provided by {self.command}'
@@ -170,7 +172,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
         Returns:
             tuple - statuscode and message.
         """
-        if self.path.startswith("/"):
+        if self.path.startswith(MAIN_PAGE):
             record = self.read_content_json()
             if not record:
                 return BAD_REQUEST, f'No record provided by {self.command}'
