@@ -43,7 +43,7 @@
     --------------------------------------------------------------------
     |  Authorization   |  admin{a1b2c3d4-a1b2-c3d4-e5f6-a1b2c3a1b2c3}  |
     --------------------------------------------------------------------
-### For example to PUT, POST or UPDATE database data the body raw must be filled:
+### Example for PUT, POST or UPDATE database data the body raw must be filled:
     {"fname": "Kirill", "lname": "Prikhodko", "email": "email1@email.com"}
 ### It should be used with url field parameters from .env file:
     HOST:PORT(127.0.0.1:8000)
