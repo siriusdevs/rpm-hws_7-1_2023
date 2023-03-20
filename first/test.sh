@@ -14,7 +14,7 @@ echo "PG_PORT=$PG_PORT" >> first/.env
 echo "PG_USER=$PG_USER" >> first/.env
 echo "PG_PASSWORD=$PG_PASSWORD" >> first/.env
 echo "PG_DBNAME=$PG_DBNAME" >> first/.env
-echo "TEMPLATES_FILE=$TEMPLATES" >> first/.env
+echo "TEMPLATES_PATH=$TEMPLATES" >> first/.env
 # set up database
 python3.10 first/setup_db.py
 

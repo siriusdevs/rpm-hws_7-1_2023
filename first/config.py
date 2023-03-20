@@ -36,12 +36,12 @@ DELETE_ATTRS = ["fname", "lname", "email"]
 MAIN_REQUIRED_ATTRS = ["fname", "lname", "email"]
 
 # Templates
-TEMPLATE = getenv("TEMPLATES_FILE")
-MAIN_PAGE = "{0}/index.html".format(TEMPLATE)
-ERROR_PAGE = "{0}/error.html".format(TEMPLATE)
-COMPANY_TEMPLATE = "{0}/generate_company.html".format(TEMPLATE)
-PERSON_TEMPLATE = "{0}/generate_person.html".format(TEMPLATE)
-CLEAR_TABLE = "{0}/clear_table.html".format(TEMPLATE)
+TEMPLATES = getenv("TEMPLATES_PATH")
+MAIN_PAGE = "{0}/index.html".format(TEMPLATES)
+ERROR_PAGE = "{0}/error.html".format(TEMPLATES)
+COMPANY_TEMPLATE = "{0}/generate_company.html".format(TEMPLATES)
+PERSON_TEMPLATE = "{0}/generate_person.html".format(TEMPLATES)
+CLEAR_TABLE = "{0}/clear_table.html".format(TEMPLATES)
 
 # Host and port
 HOST = "127.0.0.1"
