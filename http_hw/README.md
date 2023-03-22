@@ -19,4 +19,4 @@
 
 # POST REQUEST
 
-![alt text](/examples/delete.png) 
+![alt text](http_hw/examples/delete.png) 
