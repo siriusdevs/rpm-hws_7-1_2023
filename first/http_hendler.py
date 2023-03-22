@@ -3,7 +3,7 @@ from config import CONTENT_LENGTH, AUTH, PERSON_PATH, COMPANY_PATH, \
     BAD_REQUEST, OK, MAIN_ATTRS, CONTENT_TYPE, CODING, NOT_FOUND, \
     NOT_IMPLEMENTED, MAIN_REQUIRED_ATTRS, FORBIDDEN, CREATED, \
     NO_CONTENT, PERSON_URL, COMPANY_URL, CLEAR_TABLE_PATH, MAIN_PAGE
-from view import get_api_data, people, error_page, main_page, clear_table, start
+from view import get_api_data, people, error_page, main_page, clear_table
 from fill_templates import person_template, company_template
 from http.server import BaseHTTPRequestHandler
 from db_utils import DbHandler
@@ -76,7 +76,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
         if self.path.startswith(CLEAR_TABLE_PATH):
             DbHandler.remove_data()
             return clear_table()
-        return start()
+        return main_page()
 
     def get_template(self) -> tuple:
         """Method tries getting query from path.
@@ -192,9 +192,6 @@ class CustomHTTP(BaseHTTPRequestHandler):
 
     def process_request(self) -> None:
         """Method makes choice between CRUD methods."""
-        if not self.path.startswith(MAIN_PAGE):
-            self.respond(BAD_REQUEST, "Error with path")
-            return
         methods = {
             "PUT": self.put,
             "POST": self.post,

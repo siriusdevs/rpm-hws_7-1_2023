@@ -16,16 +16,6 @@ def to_html(key: any, k_val: any) -> str:
     return f"<ul>{dict_to_view(k_val)}</ul>" if isinstance(k_val, dict) else f'<ul>{key}: {k_val}</ul>'
 
 
-def start() -> str:
-    """Function reads start page template.
-
-    Returns:
-        str - start page template.
-    """
-    with open(REDIRECT, 'r') as template:
-        return template.read()
-
-
 def dict_to_view(iterable: dict) -> str:
     """Function remakes dict to html readable form.
 
