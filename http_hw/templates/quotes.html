@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quotes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+  </head>
+  <body>
+    <section class="hero is-info is-fullheight">
+      <div class="hero-head">
+        <header class="navbar">
+          <div class="container">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="/quotes">
+                <h1 class="title has-text-white">Sirius students quotes</h1>
+              </a>
+              <div class="navbar-end">
+                <a class="navbar-item" href="/">
+                  <h1 class="title has-text-white">Homepage</h1>
+                </a>
+            </div>
+          </div>
+          </div>
+          <form action="/quotes" method="get">
+            <div class="field has-addons">
+              <div class="control">
+                <input class="input" type="text" placeholder="Enter author name" name="author">
+              </div>
+              <div class="control">
+                <button class="button is-info">
+                  Search
+                </button>
+              </div>
+            </div>
+          </form>
+        </header>
+      </div>
+      <div class="hero-body">
+        <div class="container">
+          {% for quote in quotes%}
+            <div class="columns is-multiline is-centered">
+              <div class="column is-half">
+                <div class="card">
+                  <div class="card-content">
+                    <p class="title has-text-black" style="position: relative">{{ quote.author }} <span class="has-text-grey-light is-size-7">ID: {{ quote.id }}</span></p>
+                    <p class="subtitle has-text-grey-dark">{{ quote.body }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
