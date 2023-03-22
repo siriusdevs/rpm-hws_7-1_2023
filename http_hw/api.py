@@ -183,7 +183,7 @@ async def postman_get(request: Request, author: str = None, id: int = None):
     return JSONResponse(content={'quotes': response}, status_code=OK)
 
 
-@app.post("/quotes/")
+@app.post("/quotes")
 async def postman_post(request: Request, author: str, body: str):
     """Method that post new quote for postman.
 
@@ -200,7 +200,7 @@ async def postman_post(request: Request, author: str, body: str):
     return JSONResponse(content=response, status_code=CREATED)
 
 
-@app.put("/quotes/")
+@app.put("/quotes")
 async def postman_put(request: Request, id: int, author: str, body: str):
     """Method that put new data in quote for postman.
 
@@ -218,7 +218,7 @@ async def postman_put(request: Request, id: int, author: str, body: str):
     return JSONResponse(content=response, status_code=OK)
 
 
-@app.delete("/quotes/")
+@app.delete("/quotes")
 async def postman_delete(request: Request, id: int):
     """Method that delete quote for postman.
 

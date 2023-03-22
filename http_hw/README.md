@@ -35,7 +35,7 @@
 
 ![alt text](examples/put.png)
 
-# ADMIN PANEL
+# ADMIN PANEL (BETA)
 
 - Go to http://127.0.0.1:8002/admin
 
