@@ -19,4 +19,4 @@
 
 # POST REQUEST
 
-![alt text](radugaboost/rpm-hws_7-1_2023/tree/smirnov/http_hw/examples/delete.png) 
+![alt text](smirnov/http_hw/examples/delete.png) 
