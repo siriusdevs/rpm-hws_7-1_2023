@@ -34,3 +34,11 @@
 # PUT REQUEST EXAMPLE
 
 ![alt text](examples/put.png)
+
+# ADMIN PANEL
+
+- Go to http://127.0.0.1:8002/admin
+
+- Example for admin request
+
+![alt text](examples/admin.png)
