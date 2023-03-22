@@ -7,7 +7,7 @@ from fastapi.templating import Jinja2Templates
 from config import BAD_REQUEST, OK, DEFAULT_ADMIN, KEYS_AUTHOR, CREATED
 from json import loads as json_loads
 from functions import DBHandler, NotFoundException, \
-    BadRequestException, ForbiddenException
+    BadRequestException, ForbiddenException, DBMethods
 from fastapi.exceptions import RequestValidationError
 
 
@@ -84,7 +84,7 @@ async def admin_r(request: Request, token: str = Form(...),\
         _type_: html page
     """
     try:
-        DBHandler.check_auth(token)
+        DBMethods.check_auth(token)
     except ForbiddenException as error:
         return templates.TemplateResponse("admin.html", {"request": request, "quotes": error.detail},
                                           status_code=error.status_code)
@@ -174,7 +174,7 @@ async def postman_get(request: Request, author: str = None, id: int = None):
     Returns:
         json: result of work
     """
-    DBHandler.check_auth(request.headers.get('Authorization'))
+    DBMethods.check_auth(request.headers.get('Authorization'))
     request_keys = request.query_params.keys()
     for key in request_keys:
         if key not in KEYS_AUTHOR:
@@ -195,7 +195,7 @@ async def postman_post(request: Request, author: str, body: str):
     Returns:
         json: result of work
     """
-    DBHandler.check_auth(request.headers.get('Authorization'))
+    DBMethods.check_auth(request.headers.get('Authorization'))
     response = DBHandler.process_post(author, body)
     return JSONResponse(content=response, status_code=CREATED)
 
@@ -213,7 +213,7 @@ async def postman_put(request: Request, id: int, author: str, body: str):
     Returns:
         json: result of work
     """
-    DBHandler.check_auth(request.headers.get('Authorization'))
+    DBMethods.check_auth(request.headers.get('Authorization'))
     response = DBHandler.process_put(author, body, id)
     return JSONResponse(content=response, status_code=OK)
 
@@ -229,7 +229,7 @@ async def postman_delete(request: Request, id: int):
     Returns:
         json: result of work
     """
-    DBHandler.check_auth(request.headers.get('Authorization'))
+    DBMethods.check_auth(request.headers.get('Authorization'))
     response = DBHandler.process_delete(id)
     return JSONResponse(content=response, status_code=OK)
 

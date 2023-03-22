@@ -42,7 +42,7 @@ class ForbiddenException(HTTPException):
         super().__init__(status_code=FORBIDDEN['code'], detail=FORBIDDEN)
 
 
-class DBHandler():
+class DBMethods():
     """Class for work with database."""
 
     conn = connect(database=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
@@ -88,6 +88,22 @@ class DBHandler():
         return [{'id': elem[0], 'author': elem[1], 'body': elem[2]} for elem in response]
 
     @staticmethod
+    def get_authors(cur, author):
+        """Method that all authors.
+
+        Args:
+            cur (psycopg2.extensions.cursor): _description_
+            author (str): _description_
+
+        Returns:
+            dict: authors
+        """
+        cur.execute(GET_ALL_AUTHORS)
+        authors = cur.fetchall()
+        auth_lst = [author[0] for author in authors]
+        return author in auth_lst
+
+    @staticmethod
     def check(cur, select, author, body=None):
         """Check infromatin about author.
 
@@ -121,9 +137,16 @@ class DBHandler():
         Returns:
             dict: result of work
         """
-        if DBHandler.get_authors(cur, author):
-            return DBHandler.check(cur, POST_SELECT, author, body)
+        if DBMethods.get_authors(cur, author):
+            return DBMethods.check(cur, POST_SELECT, author, body)
         return True
+
+
+class DBHandler():
+    """Class for work with database."""
+
+    conn = connect(database=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+    cur = conn.cursor()
 
     @classmethod
     def process_post(cls, author: str, body: str) -> dict:
@@ -140,7 +163,7 @@ class DBHandler():
             dict: result of work
         """
         with cls.conn.cursor() as cur:
-            if cls.check_get(cur, author, body):
+            if DBMethods.check_get(cur, author, body):
                 cur.execute(INSERT, (author, body))
                 cls.conn.commit()
                 cur.execute(SELECT_ID, (author, body))
@@ -164,7 +187,7 @@ class DBHandler():
             dict: result of work.
         """
         with cls.conn.cursor() as cur:
-            if not cls.check(cur, GET, id):
+            if not DBMethods.check(cur, GET, id):
                 raise NotFoundException
             cur.execute(UPDATE, (author, body, id))
             cls.conn.commit()
@@ -184,27 +207,11 @@ class DBHandler():
             dict: result of work
         """
         with cls.conn.cursor() as cur:
-            if not cls.check(cur, GET, id):
+            if not DBMethods.check(cur, GET, id):
                 raise NotFoundException
             cur.execute(DELETE, (id,))
             cls.conn.commit()
             return DELETE_OK
-
-    @staticmethod
-    def get_authors(cur, author):
-        """Method that all authors.
-
-        Args:
-            cur (psycopg2.extensions.cursor): _description_
-            author (str): _description_
-
-        Returns:
-            dict: authors
-        """
-        cur.execute(GET_ALL_AUTHORS)
-        authors = cur.fetchall()
-        auth_lst = [author[0] for author in authors]
-        return author in auth_lst
 
     @classmethod
     def process_get(cls, author: str = None, id: int = None):
@@ -222,15 +229,15 @@ class DBHandler():
         """
         with cls.conn.cursor() as cur:
             if author:
-                if not cls.get_authors(cur, author):
+                if not DBMethods.get_authors(cur, author):
                     raise NotFoundException
                 cur.execute(GET_AUTHOR, (author,))
                 response = cur.fetchall()
                 return [{'id': elem[0], 'author': elem[1], 'body': elem[2]} for elem in response]
             if id:
-                if not cls.check(cur, GET, id):
+                if not DBMethods.check(cur, GET, id):
                     raise NotFoundException
-                return cls.get_with_id(cur, id)
+                return DBMethods.get_with_id(cur, id)
 
     @classmethod
     def select_quotes(cls):
@@ -255,7 +262,7 @@ class DBHandler():
             cur.execute(DATE_SELECTOR)
             response = cur.fetchall()
             date_lst = [quote_item[0] for quote_item in response]
-            date_now = datetime.datetime.now().strftime('%m-%d-%Y')
+            date_now = datetime.now().strftime('%m-%d-%Y')
 
             if date_now in date_lst:
                 cur.execute(DAY_SELECTOR, (date_now,))
