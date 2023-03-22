@@ -42,6 +42,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r for_tests/test_requirements.txt
         pip install jinja2
+        pip install python-multipart
     - name: Создание env и бд
       run: |
         python3.10 for_tests/setup_env.py
