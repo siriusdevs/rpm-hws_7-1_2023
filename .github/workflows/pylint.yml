@@ -47,4 +47,4 @@ jobs:
         python3.10 for_tests/setup_db.py
     - name: Тесты
       run: |
-        python3.10 test_api_test.py
+        python3.10 http_hw/test_api_test.py
