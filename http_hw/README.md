@@ -17,6 +17,20 @@
 - python3.10 main.py
 - Go to http://127.0.0.1:8002/
 
-# POST REQUEST
+# GET REQUEST EXAMPLES
 
-![alt text](examples/delete.png) 
+![alt text](examples/get_id.png)
+
+![alt text](examples/get_author.png)
+
+# DELETE REQUEST EXAMPLE
+
+![alt text](examples/delete.png)
+
+# POST REQUEST EXAMPLE
+
+![alt text](examples/post.png)
+
+# PUT REQUEST EXAMPLE
+
+![alt text](examples/put.png)
