@@ -1,0 +1,42 @@
+<html lang="en">
+    <head>
+        <title>
+            Movies
+        </title>
+    </head>
+    <body>
+        <br>
+        <form action="/movie" name="movies_form" id="movies_form">
+            <label for="title">Title</label><br>
+            <input type="text" id="title" name="title">
+            <br><br>
+            <label for="duration">Duration</label><br>
+            <input type="integer" id="duration" name="duration">
+            <br><br>
+            <label for="released">Released</label><br>
+            <input type="integer" id="released" name="released">
+            <br><br>
+            <input type="submit">
+        </form>
+        <script>
+            var form = document.getElementById("movies_form")
+            form.addEventListener('submit', function () {{
+                var all_inputs = form.getElementsByTagName('input');
+                for (var i = 0; i < all_inputs.length; i++) {{
+                    var input = all_inputs[i];
+                    if (input.name && !input.value) {{
+                        input.name = '';
+                    }}
+                }}
+            }});
+        </script>
+        <h4>
+            Movies count: {number}
+        </h4>
+        <h4> Full movies list: </h4>
+            {rendered_movies}
+        <br></br>
+        <a href="/">Back to main</a>
+    </body>
+
+</html>

@@ -1,0 +1,57 @@
+<html lang="en">
+    <head>
+        <title>
+            The Lord of the Rings characters
+        </title>
+    </head>
+    <body>
+        <br><br>
+        <h3>
+            Enter the name of your beloved character:
+        </h3>
+        <br>
+        <form action="/character" name="characters_form" id="characters_form">
+            <label for="name">Name</label><br>
+            <input type="text" id="name" name="name">
+            <br><br>
+            <input type="submit">
+        </form>
+        <script>
+            var form = document.getElementById("characters_form")
+            form.addEventListener('submit', function () {{
+                var all_inputs = form.getElementsByTagName('input');
+                for (var i = 0; i < all_inputs.length; i++) {{
+                    var input = all_inputs[i];
+                    if (input.name && !input.value) {{
+                        input.name = '';
+                    }}
+                }}
+            }});
+        </script>
+        <h2>
+            Character`s description
+        </h2>
+        <h3>
+            Name: {name}
+        </h3>
+        <h4>
+            Race: {race}
+        </h4>
+        <h4>
+            Gender: {gender}
+        </h4>
+        <h4>
+            Birth: {birth}
+        </h4>
+        <h4>
+            {death}
+        </h4>
+        <h4>
+            Spouse: {spouse}
+        </h4>
+        <h4>
+            Realm: {realm}
+        </h4>
+        <a href="/">Back to main</a>
+    </body>
+</html>
