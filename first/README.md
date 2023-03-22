@@ -46,7 +46,7 @@
 ### Example for PUT, POST or UPDATE database data the body raw must be filled:
     {"fname": "Kirill", "lname": "Prikhodko", "email": "email1@email.com"}
 ### It should be used with url field parameters from .env file:
-    HOST:PORT(127.0.0.1:8000)
+    HOST:PORT(127.0.0.1:8000)/main
 ### Results of requests are situated in main page. There you can find posted persons by using filter:
     127.0.0.1:8000/main?fname=Kirill
 ### For DELETE request url field must be filled with parameters after HOST:PORT and ?;
