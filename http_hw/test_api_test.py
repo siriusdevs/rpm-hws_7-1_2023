@@ -35,73 +35,73 @@ def test_get4():
 
 def test_put():
     test = '&author=Maksim+Bezborodov&body=What does it mean? It means that you are a hole.'
-    response = client.put("/quotes/?id=2{0}".format(test), headers=json)
+    response = client.put("/quotes?id=2{0}".format(test), headers=json)
     assert response.status_code == OK
     assert response.json() == PUT_OK
 
 
 def test_put2():
-    response = client.put("/quotes/?id=100&author=Coca&body=Cola", headers=json)
+    response = client.put("/quotes?id=100&author=Coca&body=Cola", headers=json)
     assert response.status_code == NOT_FOUND_TEST['detail']['code']
     assert response.json() == NOT_FOUND_TEST
 
 
 def test_put3():
-    response = client.put("/quotes/?id=6&autho=Coca&body=Cola", headers=json)
+    response = client.put("/quotes?id=6&autho=Coca&body=Cola", headers=json)
     assert response.status_code == BAD_REQUEST_TEST['detail']['code']
     assert response.json() == BAD_REQUEST_TEST
 
 
 def test_put4():
-    response = client.put("/quotes/?id=6&author=Coca&body=Cola", headers=incorrect_json)
+    response = client.put("/quotes?id=6&author=Coca&body=Cola", headers=incorrect_json)
     assert response.status_code == FORBIDDEN_TEST['detail']['code']
     assert response.json() == FORBIDDEN_TEST
 
 
 def test_post():
-    response = client.post("/quotes/?author=Coca&body=Cola", headers=json)
+    response = client.post("/quotes?author=Coca&body=Cola", headers=json)
     POST_OK["url"] = "http://{0}:{1}/quotes?id=6".format(HOST, PORT)
     assert response.status_code == CREATED
     assert response.json() == POST_OK
 
 
 def test_post2():
-    response = client.post("/quotes/?autho=Coca&body=Cola", headers=json)
+    response = client.post("/quotes?autho=Coca&body=Cola", headers=json)
     assert response.status_code == BAD_REQUEST_TEST['detail']['code']
     assert response.json() == BAD_REQUEST_TEST
 
 
 def test_post3():
-    response = client.post("/quotes/?author=Coca&body=Cola", headers=incorrect_json)
+    response = client.post("/quotes?author=Coca&body=Cola", headers=incorrect_json)
     assert response.status_code == FORBIDDEN_TEST['detail']['code']
     assert response.json() == FORBIDDEN_TEST
 
 
 def test_post4():
-    response = client.post("/quotes/?author=Coca&body=Cola", headers=json)
+    response = client.post("/quotes?author=Coca&body=Cola", headers=json)
     assert response.status_code == BAD_REQUEST_TEST['detail']['code']
     assert response.json() == BAD_REQUEST_TEST
 
 
 def test_delete():
-    response = client.delete("/quotes/?id=1", headers=json)
+    response = client.delete("/quotes?id=1", headers=json)
     assert response.status_code == OK
     assert response.json() == DELETE_OK
 
 
 def test_delete2():
-    response = client.delete("/quotes/?id=1", headers=incorrect_json)
+    response = client.delete("/quotes?id=1", headers=incorrect_json)
     assert response.status_code == FORBIDDEN_TEST['detail']['code']
     assert response.json() == FORBIDDEN_TEST
 
 
 def test_delete3():
-    response = client.delete("/quotes/?id=100", headers=json)
+    response = client.delete("/quotes?id=100", headers=json)
     assert response.status_code == NOT_FOUND_TEST['detail']['code']
     assert response.json() == NOT_FOUND_TEST
 
 
 def test_delete4():
-    response = client.delete("/quotes/?i=100", headers=json)
+    response = client.delete("/quotes?i=100", headers=json)
     assert response.status_code == BAD_REQUEST_TEST['detail']['code']
     assert response.json() == BAD_REQUEST_TEST

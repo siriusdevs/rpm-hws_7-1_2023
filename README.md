@@ -1,1 +1,0 @@
-Keep your branches clean and nice. Use flake8 and tests. Good luck!
