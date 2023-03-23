@@ -1,4 +1,6 @@
 """Some function for nasa entrypoints."""
+import logging
+
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import requests as req
@@ -28,7 +30,10 @@ def nasa_page(request):
         source = request.GET.get('source')
         if source:
             return image_api(source, request.GET)
-        image = req.get(IMAGE_API_URL + f"/image/nasa/?token={IMAGE_API_TOKEN}").json()
+        try:
+            image = req.get(IMAGE_API_URL + f"/image/nasa/?token={IMAGE_API_TOKEN}").json()
+        except Exception:
+            logging.warning("Image api server is not responding")
     return render(request, "nasa.html",
                   {"image": image})
 
@@ -44,7 +49,10 @@ def mars_page(request: WSGIRequest):
         source = request.GET.get('source')
         if source:
             return image_api(source, request.GET)
-        image = req.get(IMAGE_API_URL + f"/image/mars/?token={IMAGE_API_TOKEN}").json()
+        try:
+            image = req.get(IMAGE_API_URL + f"/image/mars/?token={IMAGE_API_TOKEN}").json()
+        except Exception:
+            logging.warning("Image api server is not responding")
     return render(request, "mars.html",
                   {"image": image})
 
