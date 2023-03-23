@@ -3,7 +3,6 @@ from psycopg2 import connect
 from dotenv import load_dotenv
 from os import getenv
 
-
 load_dotenv()
 
 DBNAME, HOST, PORT, USER, PASSWORD = map(lambda x: getenv(x),
