@@ -68,7 +68,6 @@ async def admin(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request, "quotes": DEFAULT_ADMIN})
 
 
-@app.exception_handler(RequestValidationError)
 @app.post('/admin')
 async def admin_r(
     request: Request, token: str = Form(...),
@@ -101,7 +100,7 @@ async def admin_r(
                 "admin.html",
                 {"request": request, "quotes": BAD_REQUEST},
                 status_code=BAD_REQUEST['code'])
-    if type == 'get' and id and author:
+    if type == 'get' and (id or author):
         try:
             response = DBHandler.process_get(author, id)
         except NotFoundException as error:
