@@ -12,5 +12,6 @@ def setup_env():
     with open('.env', 'w') as env_file:
         env_file.writelines(lines)
 
+
 if __name__ == '__main__':
     setup_env()
