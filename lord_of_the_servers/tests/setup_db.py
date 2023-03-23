@@ -17,7 +17,7 @@ def main():
 
     connection = connect(**creds)
     cursor = connection.cursor()
-    with open("lord_of_the_servers/tests/db_init.ddl", 'r') as db_file:
+    with open("tests/db_init.ddl", 'r') as db_file:
         cursor.execute(db_file.read())
 
     connection.commit()
