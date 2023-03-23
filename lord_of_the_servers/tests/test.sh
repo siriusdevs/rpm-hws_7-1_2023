@@ -57,11 +57,11 @@ post_code=`curl -s -o /dev/null \
 
 check_code $post_code $CREATED
 
-echo "POST movir request:"
+echo "POST movie request:"
 
 post_code=`curl -s -o /dev/null \
     -X POST \
-    -d '{"title": "some movie", "duration": 160, "release": 2000}' \
+    -d '{"title": "some movie", "duration": 160, "released": 2000}' \
     -H "Authorization:admin {$token}"\
     -w %{http_code} \
     http://127.0.0.1:8002/movie`
