@@ -206,7 +206,11 @@ class CustomHTTP(BaseHTTPRequestHandler):
             self.respond(NOT_IMPLEMENTED, "Unknown request method")
             return
         if self.check_auth():
-            self.respond(*process())
+            new_proc = process()
+            if new_proc:
+                self.respond(*new_proc)
+            else:
+                self.respond(NOT_FOUND, "Path not found")
             return
         self.respond(FORBIDDEN, "Auth Fail")
 
