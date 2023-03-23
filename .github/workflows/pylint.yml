@@ -13,7 +13,8 @@ jobs:
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
-        pip install -r lord_of_the_servers/tests/flake_requirements.txt
+        cd lord_of_the_servers
+        pip install -r tests/flake_requirements.txt
     - name: Flake8
       run: flake8 .
   container-job:
@@ -38,8 +39,10 @@ jobs:
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
-        pip install -r lord_of_the_servers/tests/test_requirements.txt
+        cd lord_of_the_servers
+        pip install -r tests/test_requirements.txt
     - name: Тесты bash-curl
       run: |
-        chmod +x lord_of_the_servers/tests/test.sh
-        ./lord_of_the_servers/tests/test.sh
+        cd lord_of_the_servers
+        chmod +x tests/test.sh
+        ./tests/test.sh
