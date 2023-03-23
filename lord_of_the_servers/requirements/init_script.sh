@@ -17,4 +17,4 @@ sleep 2
 export PGPASSWORD=1234
 psql -h 127.0.0.1 -p 3850 -U app book_db -f requirements/db_init.ddl
 
-python3.10 requirements/setup_env.py
+python3 requirements/setup_env.py
