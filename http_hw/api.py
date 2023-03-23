@@ -5,7 +5,6 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from config import BAD_REQUEST, OK, DEFAULT_ADMIN, KEYS_AUTHOR, CREATED
-from json import loads as json_loads
 from functions import DBHandler, NotFoundException, \
     BadRequestException, ForbiddenException, DBMethods
 from fastapi.exceptions import RequestValidationError
@@ -69,16 +68,22 @@ async def admin(request: Request):
     return templates.TemplateResponse("admin.html", {"request": request, "quotes": DEFAULT_ADMIN})
 
 
+@app.exception_handler(RequestValidationError)
 @app.post('/admin')
-async def admin_r(request: Request, token: str = Form(...),\
-                  type: str = Form(...), json: str = Form(...)):
+async def admin_r(
+    request: Request, token: str = Form(...),
+    type: str = Form(...), id: str = Form(None),
+    author: str = Form(None), body: str = Form(None)
+                ):
     """I don't understand why I did it.
 
     Args:
         request (Request): user request.
-        token (str): user token. Defaults to Form(...).
-        json (str): json request. Defaults to Form(...).
+        token (str): user token. Defaults to Form(...)
         type (str): request type. Defaults to Form(...)
+        id (str): quote id. Defaults to Form(None)
+        author (str): quote author. Defaults to Form(None)
+        body (str): quote body. Defaults to Form(None)
 
     Returns:
         _type_: html page
@@ -88,21 +93,17 @@ async def admin_r(request: Request, token: str = Form(...),\
     except ForbiddenException as error:
         return templates.TemplateResponse("admin.html", {"request": request, "quotes": error.detail},
                                           status_code=error.status_code)
-
-    try:
-        json = json_loads(json)
-    except Exception:
-        return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                          status_code=BAD_REQUEST['code'])
-
-    if type == 'get':
+    if id:
         try:
-            author = str(json['author'])
+            id = int(id)
         except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
+            return templates.TemplateResponse(
+                "admin.html",
+                {"request": request, "quotes": BAD_REQUEST},
+                status_code=BAD_REQUEST['code'])
+    if type == 'get' and id and author:
         try:
-            response = DBHandler.process_get(author)
+            response = DBHandler.process_get(author, id)
         except NotFoundException as error:
             return templates.TemplateResponse("admin.html", {"request": request, "quotes": error.detail},
                                               status_code=error.status_code)
@@ -110,53 +111,29 @@ async def admin_r(request: Request, token: str = Form(...),\
             return templates.TemplateResponse("admin.html", {"request": request, "quotes": error.detail},
                                               status_code=error.status_code)
         return templates.TemplateResponse("quotes.html", {"request": request, "quotes": response})
-    if type == 'delete':
-        try:
-            id = int(json['id'])
-        except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
+    if type == 'delete' and id:
         try:
             response = DBHandler.process_delete(id)
         except NotFoundException as exc:
             return templates.TemplateResponse("admin.html", {"request": request, "quotes": exc.detail},
                                               status_code=exc.status_code)
         return templates.TemplateResponse("admin.html", {"request": request, "quotes": response})
-    if type == 'post':
-        try:
-            author = str(json['author'])
-        except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
-        try:
-            body = str(json['body'])
-        except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
+    if type == 'post' and author and body:
         try:
             response = DBHandler.process_post(author, body)
         except BadRequestException as err:
             return templates.TemplateResponse("admin.html", {"request": request, "quotes": err.detail},
                                               status_code=err.status_code)
         return templates.TemplateResponse("admin.html", {"request": request, "quotes": response})
-    if type == 'put':
-        try:
-            id = int(json['id'])
-        except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
-        try:
-            author = str(json['author'])
-        except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
-        try:
-            body = str(json['body'])
-        except Exception:
-            return templates.TemplateResponse("admin.html", {"request": request, "quotes": BAD_REQUEST},
-                                              status_code=BAD_REQUEST['code'])
+    if type == 'put' and author and body and id:
         response = DBHandler.process_put(author, body, id)
-        return templates.TemplateResponse("admin.html", {"request": request, "quotes": response})
+        return templates.TemplateResponse(
+            "admin.html",
+            {"request": request, "quotes": response})
+    return templates.TemplateResponse(
+        "admin.html",
+        {"request": request, "quotes": BAD_REQUEST},
+        status_code=BAD_REQUEST['code'])
 
 
 @app.get("/quotes/")
@@ -250,7 +227,9 @@ async def get_quote(request: Request, author: str = None, id: int = None):
         try:
             response = DBHandler.process_get(author, id)
         except NotFoundException as error:
-            return templates.TemplateResponse("error.html", {"request": request, "quotes": error.detail})
+            return templates.TemplateResponse(
+                "error.html", {"request": request, "quotes": error.detail},
+                status_code=error.status_code)
         return templates.TemplateResponse("quotes.html", {"request": request, "quotes": response})
     response = DBHandler.select_quotes()
     return templates.TemplateResponse("quotes.html", {"request": request, "quotes": response})
