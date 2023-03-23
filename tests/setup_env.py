@@ -1,6 +1,6 @@
 env_consts = {
     'PG_HOST': '127.0.0.1',
-    'PG_PORT': '5555',
+    'PG_PORT': '5432',
     'PG_USER': 'test',
     'PG_PASSWORD': 'test',
     'PG_DBNAME': 'test'
