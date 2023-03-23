@@ -24,7 +24,7 @@ class CustomHTTP(BaseHTTPRequestHandler):
         content_length = int(self.headers.get(CONTENT_LENGTH, 0))
         check_json = json.loads(self.rfile.read(content_length).decode())
         for element in check_json:
-            if element not in MAIN_ATTRS:
+            if element not in MAIN_REQUIRED_ATTRS:
                 return {}
         if content_length:
             return check_json
