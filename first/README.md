@@ -37,11 +37,11 @@
     SELECT * FROM token; - [User and token]
 ### Now put it into Postman headers(Authorization token):
     ------------------------------------
-    |  Authorization   |  user{token}  |
+    |  Authorization   |  user {token}  |
     ------------------------------------
     
     --------------------------------------------------------------------
-    |  Authorization   |  admin{a1b2c3d4-a1b2-c3d4-e5f6-a1b2c3a1b2c3}  |
+    |  Authorization   |  admin {a1b2c3d4-a1b2-c3d4-e5f6-a1b2c3a1b2c3}  |
     --------------------------------------------------------------------
 ### Example for PUT, POST or UPDATE database data the body raw must be filled:
     {"fname": "Kirill", "lname": "Prikhodko", "email": "email1@email.com"}
