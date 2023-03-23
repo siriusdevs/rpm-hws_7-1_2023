@@ -70,10 +70,12 @@ async def admin(request: Request):
 
 @app.post('/admin')
 async def admin_r(
-    request: Request, token: str = Form(...),
-    type: str = Form(...), id: str = Form(None),
-    author: str = Form(None), body: str = Form(None)
-                ):
+    request: Request,
+        token: str = Form(...),
+        type: str = Form(...),
+        id: str = Form(None),
+        author: str = Form(None),
+        body: str = Form(None)):
     """I don't understand why I did it.
 
     Args:
