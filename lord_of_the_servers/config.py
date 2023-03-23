@@ -1,3 +1,4 @@
+"""Various variables."""
 # server host and port
 HOST = '127.0.0.1'
 PORT = 8002
@@ -36,7 +37,7 @@ NOT_IMPLEMENTED = 501
 
 # db requests
 SELECTOR = 'SELECT * FROM {table}'
-GET_TOKEN = 'SELECT token FROM token WHERE username=\'{username}\''
+GET_TOKEN = "SELECT token FROM token WHERE username='{username}'"
 INSERT = 'INSERT INTO {table} ({keys}) VALUES ({values})'
 UPDATE = 'UPDATE {table} SET {request}'
 DELETE = 'DELETE FROM {table} '
@@ -53,7 +54,7 @@ BOOK = 'book'
 MOVIE = 'movie'
 
 # page str to byte coding
-CODING = 'utf-16'
+CODING = 'utf-8'
 
 # characters const
 CHARACTER_META = {'name': None}

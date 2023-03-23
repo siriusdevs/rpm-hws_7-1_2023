@@ -1,3 +1,4 @@
+"""Runs the server."""
 from http.server import HTTPServer
 from http_handler import CustomHandler
 from config import HOST, PORT

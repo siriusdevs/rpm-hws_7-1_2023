@@ -2,10 +2,10 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE IF NOT EXISTS token (
     username text NOT NULL primary key,
-    token uuid default uuid_generate_v4()
+    token uuid
 );
 
-INSERT INTO token (username) VALUES ('admin');
+INSERT INTO token (username, token) VALUES ('admin', 'a1b2c3d4-a1b2-c3d4-e5f6-a1b2c3a1b2c3');
 
 CREATE TABLE IF NOT EXISTS book (
     id int primary key generated always as identity,

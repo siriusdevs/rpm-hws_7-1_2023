@@ -1,3 +1,4 @@
+"""Create .env file."""
 env_consts = {
     'PG_HOST': '127.0.0.1',
     'PG_PORT': '3850',
@@ -9,7 +10,8 @@ env_consts = {
 
 
 def setup_env():
-    lines = [f'{const}={value}\n' for const, value in env_consts.items()]
+    """Set up .env file."""
+    lines = [f'{const}={equiv}\n' for const, equiv in env_consts.items()]
     with open('./.env', 'w') as env_file:
         env_file.writelines(lines)
 

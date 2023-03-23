@@ -6,6 +6,8 @@ git clone https://github.com/annashutova/rpm-hws_7-1_2023
 
 git checkout shutova
 
+cd rpm-hws_7-1_2023
+
 cd lord_of_the_servers
 ```
 
