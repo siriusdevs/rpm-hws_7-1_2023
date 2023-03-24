@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from http_config import  HTTP_OK, HTTP_CREATE, HTTP_FORBIDDEN
+from http_config import HTTP_OK, HTTP_CREATE, HTTP_FORBIDDEN
 from src.main import app
 
 II = 2

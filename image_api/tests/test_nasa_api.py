@@ -48,5 +48,3 @@ def test_get_mars_today_bad():
 def test_get_mars_today():
     response = client.get(f'/image/mars/?token={USER_TOKEN}')
     assert response.status_code == HTTP_OK
-
-
