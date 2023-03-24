@@ -22,7 +22,7 @@ if __name__ == '__main__':
             host=PG_HOST,
             port=PG_PORT) as con:
         cur = con.cursor()
-        with open("init.sql", "r") as fi:
+        with open("image_api/init.sql", "r") as fi:
             cur.execute(fi.read())
 
         cur.execute("insert into token values (%s, %s)", (TEST_USER, TEST_TOKEN))
