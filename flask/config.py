@@ -13,3 +13,6 @@ TOKEN = getenv('TOKEN')
 
 CLIENT = MongoClient(f'mongodb://{HOST}:{PORT}/')
 
+OK = 200
+
+SUCCEEDED = 204

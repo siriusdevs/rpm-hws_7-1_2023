@@ -37,3 +37,6 @@ jobs:
         cd fastapi
         echo $'HOST=localhost\nPORT=27018\nDBNAME=anime\nCOLNAME=titles\nTOKEN=MAX228' >> .env
         pytest
+        cd ../flask
+        echo $'HOST=localhost\nPORT=27018\nDBNAME=anime\nCOLNAME=titles\nTOKEN=MAX2288' >> .env
+        pytest
