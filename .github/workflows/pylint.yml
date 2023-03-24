@@ -17,19 +17,37 @@ jobs:
 
     - name: Flake8
       run: flake8 .
-  tests:
-    name: Тесты
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Установка Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.11.0
-    - name: Установка зависимостей
-      run: |
-        python -m pip install --upgrade pip
-        pip install pytest==6.2.5
-    - name: Pytest
-      run: pytest
 
+  test_image_api:
+    name: Тесты image-api
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DBNAME: test
+          POSTGRES_USER: test
+          POSTGRES_PORT: 5555
+          POSTGRES_HOST: 127.0.0.1
+        ports:
+          - 5555:5555
+    steps:
+      - uses: actions/checkout@v2
+      - name: Установка Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11.0
+      - name: Установка зависимостей
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r image_api/requirements.txt
+          pip install python-multipart
+          pip install httpx
+      - name: Создание env и бд
+        run: |
+          python3.11 image_api/tests/setup_env.py
+          python3.11 image_api/tests/setup_db.py
+      - name: Тесты
+        run: |
+          pytest image_api/test/.
