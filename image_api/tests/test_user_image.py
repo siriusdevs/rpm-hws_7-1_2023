@@ -18,7 +18,7 @@ IMAGE_ID = None
 
 
 def test_user_post_bad():
-    with open(Path("tests/test_image.png").absolute(), 'rb') as test_file:
+    with open("image_api/tests/test_image.png", 'rb') as test_file:
         response = client.post(
             f"/image/user/{TEST_USER}2/?token={USER_TOKEN}",  # wrong user
             files={"upload_file": ("test.png", test_file, "image/png")},
@@ -29,7 +29,7 @@ def test_user_post_bad():
 
 def test_user_post():
     global IMAGE_ID
-    with open(Path("tests/test_image.png").absolute(), 'rb') as test_file:
+    with open("image_api/tests/test_image.png", 'rb') as test_file:
         response = client.post(
             f"/image/user/{TEST_USER}/?token={USER_TOKEN}",
             files={"upload_file": ("test.png", test_file, "image/png")},
