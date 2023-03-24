@@ -1,0 +1,58 @@
+[
+{
+    "id": 1,
+    "source_to_img" : "/static/images/miche_tshort.png",
+    "name" : "DJ Miche Collection",
+    "price" : 99.99,
+    "description" : "Dictator Miche is our favourite logo because we used it to name our project to first project for ICDIIS. It`s our special design.",
+    "featured_products" : true
+},
+
+{
+    "id": 2,
+    "source_to_img" : "/static/images/stm_tshort.png",
+    "name" : "DJ STM32 Idlers",
+    "price" : 99.99,
+    "description" : "You give your all to the workout, pushing yourself to the limit. Let the STM32 keep you cool and comfortable with its soft fabric.",
+    "featured_products" : true
+},
+
+{
+    "id": 3,
+    "source_to_img" : "/static/images/overhot_jungle.png",
+    "name" : "Overshot JUNGLE",
+    "price" : 399,
+    "description" : "Italian brand of everyday classic Backsideclub. Straight cut. Adjustable cuffs and hem with buttons. Woven patch on the back. Made in Italy.",
+    "featured_products" : true
+},
+
+{
+    "id": 4,
+    "source_to_img" : "/static/images/han_khobenhavn_hoodie.png",
+    "name" : "Han Kjobenhavn Hoodie",
+    "price" : 250,
+    "description" : "Printed graphic artwork on the chest. Will complement your basic wardrobe.Original designer everyday item. Made in Portugal.",
+    "featured_products" : true
+},
+
+{
+    "id": 5,
+    "source_to_img" : "/static/images/dj_winter_boots.png",
+    "name" : "DJ Winter Boots",
+    "featured_categories" : true
+},
+
+{
+    "id": 6,
+    "source_to_img" : "/static/images/andreas_strap.png",
+    "name" : "Andreas Strap",
+    "featured_categories" : true
+},
+
+{
+    "id": 7,
+    "source_to_img" : "/static/images/sneakers_y2op.png",
+    "name" : "Sneakers Y2OP",
+    "featured_categories" : true
+}
+]

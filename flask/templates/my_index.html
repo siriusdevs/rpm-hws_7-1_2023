@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DoubleJam</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<script src="https://smtpjs.com/v3/smtp.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+          <div class="logo">
+            <img src="/static/images/logo_black.png" alt="Logo">
+          </div>
+          <nav class="navigation">
+            <ul>
+              <li><a href="#" onclick="location.reload()">Home</a></li>
+              <li><a href="#products">Shop</a></li>
+              <li><a href="#footer">About</a></li>
+              <li><a href="#footer">Contact</a></li>
+            </ul>
+          </nav>
+          <div class="cart" id="cart-icon">
+            <a href="#" onclick="openCart()">
+              <img src="/static/images/basket-outline.svg" alt="Cart">
+            </a>
+          </div>					
+          <div class="heart">
+            <a href="#" id="like-button">
+              <img src="/static/images/heart-outline.svg" alt="Heart">
+            </a>
+          </div>		  
+        </div>
+      </header>
+      <section class="banner">
+        <video autoplay muted loop id="bg-video">
+          <source src="/static/videos/header_video.mp4" type="video/mp4">
+        </video>
+        <div class="container">
+          <h1>Welcome to Our Online Shop</h1>
+          <p>Shop for the latest fashion trends at affordable prices.</p>
+        </div>
+      </section>
+      
+      
+    <section class="products" id="products">
+    <div class="container">
+      <h2>Featured Products</h2>
+      <div class="product-container">
+        {% for item in data %}
+            {% if item.featured_products %}
+                <div class="product">
+                <img src="{{item.source_to_img}}" alt="Product">
+                <h3>{{item.name}}</h3>
+                <p class="price">${{item.price}}</p>
+                <p>{{item.description}}</p>
+                <a href="#" class="add-to-cart" id="add-to-cart-{{item._id}}">Add to Cart</a>
+                </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    </section>
+    <div class="cart-window">
+    <div class="cart-items">
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <h3>Total: $0.00</h3>
+      </div>
+      <button class="checkout-btn" onclick="location.reload()">Checkout</button>
+    </div>
+    </div>
+    
+    
+    <section class="featured-categories">
+        <div class="container" style="text-align: center;">
+            <h2>Featured Categories</h2>
+            <div class="category-container">
+                {% for item in data %}
+                    {% if item.featured_categories %}
+                        <div class="category">
+                            <img src="{{item.source_to_img}}" alt="Category">
+                            <h3>{{item.name}}</h3>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+    
+    
+	<section class="newsletter">
+		<div class="newsletter">
+			<h2>Subscribe to our newsletter</h2>
+			<p>Get the latest news and updates delivered to your inbox.</p>
+			<div class="input-container">
+				<form id="email-form">
+				  <input type="email" placeholder="Enter your email address">
+				  <button id="submit-btn" type="submit">Subscribe</button>
+				</form>
+			  </div>			  
+		  </div>
+	</section>
+
+	<section class="footer" id="footer">
+	<footer>
+		<div class="container">
+			<p class="footer-text-upper">
+				Double Jam is a medium-sized company. Our customers who want a lot of interesting content not only read it, but they can also buy it. We are known for our clothes prints.
+			</p>
+		  <div class="footer-social">
+			<a href="#"><img src="/static/images/facebook.svg" alt="Facebook"></a>
+			<a href="#"><img src="/static/images/twitter.svg" alt="Twitter"></a>
+			<a href="#"><img src="/static/images/instagram.svg" alt="Instagram"></a>
+		  </div>
+		  
+		  <div class="footer-text">
+			<p>&copy; 2023 Double Jam company. All rights reserved.</p>
+		  </div>
+		</div>
+	  </footer>
+	</section>
+</body>
+
+<script src="https://cdn.emailjs.com/sdk/2.3.2/email.min.js"></script>
+<script src="/static/js/add_to_cart.js"></script>
+<script src="/static/js/email.js"></script>
+<script src="/static/js/update_cart.js"></script>
+</html>
