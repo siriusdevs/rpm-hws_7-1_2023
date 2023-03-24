@@ -1,12 +1,15 @@
-from config import GET_TOKEN, DELETE, INSERT, UPDATE, SELECTOR
+from config import GET_TOKEN, DELETE, INSERT, UPDATE, SELECTOR, LEN_UUID
 from psycopg2 import connect
 from dotenv import load_dotenv
 from os import getenv
 
 load_dotenv()
 
-DBNAME, HOST, PORT, USER, PASSWORD = map(lambda x: getenv(x),
-                                         ['PG_DBNAME', 'PG_HOST', 'PG_PORT', 'PG_USER', 'PG_PASSWORD'])
+DBNAME = getenv('PG_DBNAME')
+HOST = getenv('PG_HOST')
+PORT = getenv('PG_PORT')
+USER = getenv('PG_USER')
+PASSWORD = getenv('PG_PASSWORD')
 
 
 class DbHandler:
@@ -28,7 +31,7 @@ class DbHandler:
         cls.db_cursor.execute(GET_TOKEN.format(username=username))
         db_token = cls.db_cursor.fetchone()
         if db_token:
-            return db_token[0][-37:-1] == req_token
+            return db_token[0][LEN_UUID:-1] == req_token
         return False
 
     @classmethod
@@ -41,15 +44,15 @@ class DbHandler:
 
     @classmethod
     def insert(cls, insert_data: dict):
+        phrase = insert_data['phrase']
+        value = DbHandler.find_max_index() + 1
         try:
-            phrase = insert_data['phrase']
-            cls.db_cursor.execute(INSERT.format(table='titles', keys='number, phrase', \
-                                                values=(DbHandler.find_max_index() + 1, phrase)))
+            cls.db_cursor.execute(INSERT.format(table='titles', keys='number, phrase', values=(value, phrase)))
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
         cls.db_connection.commit()
-        return bool(cls.db_cursor.rowcount), DbHandler.find_max_index()
+        return bool(cls.db_cursor.rowcount), cls.find_max_index()
 
     @classmethod
     def update(cls, data: dict, where: dict):
@@ -59,8 +62,7 @@ class DbHandler:
         print(UPDATE.format(table='titles', colomn=colomn, new_value=new_value, key=key, value=value))
         try:
 
-            cls.db_cursor.execute(UPDATE.format(table='titles', colomn=colomn,\
-                                                new_value=new_value, key=key, value=value))
+            cls.db_cursor.execute(UPDATE.format(table='titles', colomn=colomn, new_value=new_value, key=key, value=value))
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
@@ -68,21 +70,23 @@ class DbHandler:
         return bool(cls.db_cursor.rowcount)
 
     @classmethod
+    def delete_and_change(cls, key, value):
+        cls.db_cursor.execute(DELETE.format(table='titles', key=key, value=value))
+        cls.db_cursor.execute(SELECTOR.format(table='titles'))
+        ident = value
+        for elem in cls.db_cursor.fetchall():
+            if elem[0] > value:
+                cls.db_cursor.execute(UPDATE.format(table='titles', colomn='number', new_value=ident, key='number', value=elem[0]))
+                ident += 1
+
+    @classmethod
     def delete(cls, data: dict):
         key = list(data.keys())[0]
         value = data[key]
         try:
-            cls.db_cursor.execute(DELETE.format(table='titles', key=key, value=value))
-            cls.db_cursor.execute(SELECTOR.format(table='titles'))
-            id = value
-            for elem in cls.db_cursor.fetchall():
-                if elem[0] > value:
-                    cls.db_cursor.execute(UPDATE.format(table='titles', colomn='number', \
-                                                        new_value=id, key='number', value=elem[0]))
-                    id += 1
+            cls.delete_and_change(key, value)
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
-        else:
-            cls.db_connection.commit()
-            return bool(cls.db_cursor.rowcount)
+        cls.db_connection.commit()
+        return bool(cls.db_cursor.rowcount)

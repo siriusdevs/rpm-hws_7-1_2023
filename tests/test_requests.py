@@ -14,9 +14,6 @@ data = {
 
 def test_requests():
     assert get(URL, headers=headers).status_code == OK
-    # assert post(URL, headers=headers, data=data).status_code == CREATED
-    # assert get(URL, params=data).status_code == OK
-    # assert delete(URL, params=data).status_code == OK
 
 
 if __name__ == '__main__':

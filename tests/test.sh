@@ -51,7 +51,7 @@ echo "DELETE request:"
 
 post_code=`curl -s -o /dev/null \
     -X DELETE \
-    -H "Authorization:admin {$token}"\
+    -H "Authorization:admin $token"\
     -w %{http_code} \
     http://127.0.0.1:8001/main?number=1`
 

@@ -1,13 +1,10 @@
-from requests import get
+"""Getting data from API."""
 from config import YES_NO_API_URL, ANSWER_RESPONSE_MSG, OK
+from requests import get
 
 
 def get_answer() -> dict:
-    answer_data = {
-        "answer": None,
-        "forced": None,
-        "image": None}
-
+    answer_data = {"answer": None, "forced": None, "image": None}
     response = get(YES_NO_API_URL)
     status_code = response.status_code
     if status_code != OK:

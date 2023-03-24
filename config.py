@@ -36,12 +36,15 @@ OK = 200
 CREATED = 201
 
 # db requests
-GET_TOKEN = 'SELECT token FROM token WHERE username=\'{username}\';'
+GET_TOKEN = "SELECT token FROM token WHERE username='{username}';"
 INSERT = 'INSERT INTO {table} ({keys}) VALUES {values};'
-UPDATE = 'UPDATE {table} SET {colomn}=\'{new_value}\' where {key}={value};'
+UPDATE = "UPDATE {table} SET {colomn}='{new_value}' where {key}={value};"
 DELETE = 'DELETE FROM {table} where {key}={value};'
 SELECTOR = 'select * from {table} order by number;'
 
+# some db consts
+LEN_UUID = -37
+
 # page str to byte coding
 CODING = 'KOI8-R'
-POSIB_ATTRS = ['title', 'number', 'phrase']
+POSIB_ATTRS = ('title', 'number', 'phrase')

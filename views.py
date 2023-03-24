@@ -19,7 +19,4 @@ def quote(quote_data):
 def frombase_to_main(iterable: list):
     if not iterable:
         return '<p>No data given.</p>'
-    res = ''
-    for item in iterable:
-        res += f'<li style="font-size: 30px;">{item}</li>'
-    return res
+    return ''.join([f'<li style="font-size: 30px;">{item}</li>' for item in iterable])

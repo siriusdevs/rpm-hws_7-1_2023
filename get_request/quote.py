@@ -3,18 +3,22 @@ from config import QUOTE_API_URL, QOUTE_RESPONSE_MSG, OK
 
 
 def get_quote() -> dict:
-    quote_data = {"qotd_date": None,
-                  "quote": {
-                      "id": None, "dialogue": None, "private": None, "tags": [None],
-                      "url": None,
-                      "favorites_count": None,
-                      "upvotes_count": None,
-                      "downvotes_count": None,
-                      "author": None,
-                      "author_permalink": None,
-                      "body": None
-                  }
-                  }
+    quote_data = {
+        "qotd_date": None,
+        "quote": {
+            "id": None,
+            "dialogue": None,
+            "private": None,
+            "tags": None,
+            "url": None,
+            "favorites_count": None,
+            "upvotes_count": None,
+            "downvotes_count": None,
+            "author": None,
+            "author_permalink": None,
+            "body": None
+        }
+    }
 
     response = get(QUOTE_API_URL)
     status_code = response.status_code

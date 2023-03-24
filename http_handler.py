@@ -31,16 +31,13 @@ class CastomHandler(BaseHTTPRequestHandler):
         if '?' in self.path and qm_ind != len(self.path) - 1:
             query_data = self.path[qm_ind + 1:].split('&')
             attrs_values = [line.split('=') for line in query_data]
-            query = {key: int(value) if value.isdigit()
-                     else value for key, value in attrs_values}
+            query = {key: int(value) if value.isdigit() else value for key, value in attrs_values}
             if "id" in query and not isinstance(query["id"], int):
                 return False
             if possible_attrs:
-                attrs = list(
-                    filter(lambda attr: attr not in possible_attrs, query.keys()))
+                attrs = list(filter(lambda attr: attr not in possible_attrs, query.keys()))
                 if attrs:
-                    raise InvalidQuery(
-                        f'{__name__} unknown attributes: {attrs}')
+                    raise InvalidQuery(f'{__name__} unknown attributes: {attrs}')
             return query
         return None
 
@@ -50,8 +47,7 @@ class CastomHandler(BaseHTTPRequestHandler):
 
         elif self.path.startswith(ANSWER_PATH):
             return answer(get_answer())
-        else:
-            return CastomHandler.main_page()
+        return CastomHandler.main_page()
 
     def read_content_json(self) -> dict:
         content_length = int(self.headers.get(CONTENT_LENGTH, 0))
@@ -84,8 +80,8 @@ class CastomHandler(BaseHTTPRequestHandler):
                 return NOT_IMPLEMENTED, f'students do not have attribute: {attr}'
 
             answer_bool, ind = DbHandler.insert(content)
-            answer = 'OK' if answer_bool else 'FAIL'
-            error_code = CREATED if answer == 'OK' else BAD_REQUEST
+            answer_db = 'OK' if answer_bool else 'FAIL'
+            error_code = CREATED if answer_db == 'OK' else BAD_REQUEST
             return error_code, f'{self.command} {answer} \n path to the obj: http/main?number={ind}'
         return NOT_FOUND, 'Content not found'
 
@@ -102,11 +98,12 @@ class CastomHandler(BaseHTTPRequestHandler):
             res = DbHandler.update(where=query, data=content)
             if not res:
                 return self.post(content)
-            return OK, f'PUT OK'
+            return OK, 'PUT OK'
         return NOT_FOUND, 'Content not found'
 
     def check_auth(self):
         auth = self.headers.get(AUTH, '').split()
+        print(auth)
         if len(auth) == 2:
             return DbHandler.is_valid_token(auth[0], auth[1][1:-1])
         return False
