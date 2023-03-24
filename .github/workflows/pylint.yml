@@ -50,4 +50,4 @@ jobs:
           python3.11 image_api/tests/setup_db.py
       - name: Тесты
         run: |
-          pytest image_api/test/.
+          pytest image_api/tests/.
