@@ -44,7 +44,11 @@ class DbHandler:
 
     @classmethod
     def insert(cls, insert_data: dict):
-        phrase = insert_data['phrase']
+        try:
+            phrase = insert_data['phrase']
+        except Exception as err:
+            print("No key 'phrase' in data")
+            return False
         value = DbHandler.find_max_index() + 1
         try:
             cls.db_cursor.execute(INSERT.format(table='titles', keys='number, phrase', values=(value, phrase)))

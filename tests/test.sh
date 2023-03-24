@@ -40,7 +40,7 @@ echo "POST request:"
 
 post_code=`curl -s -o /dev/null \
     -X POST \
-    -d '{"title": "this is first title"}' \
+    -d '{"phrase": "this is first title"}' \
     -H "Authorization:admin {$token}"\
     -w %{http_code} \
     http://127.0.0.1:8001/main`
