@@ -1,7 +1,6 @@
 """Tests for user image."""
 
 from os import getenv
-from pathlib import Path
 
 from fastapi.testclient import TestClient
 
