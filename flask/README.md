@@ -67,11 +67,7 @@ Example of data that we send to update:
 You can delete media from page / (Postman recommended)
 
 * Go to Postman
-* Query example: _http://HOST:5000/index/delete_
-
-        {
-            "id": int
-        }
+* Query example: _http://HOST:5000/index/delete?id=1_
 
 
 # .env

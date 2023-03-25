@@ -1,6 +1,6 @@
 from main import app
 import pytest
-from config import TOKEN, OK, SUCCEEDED
+from config import TOKEN, OK, SUCCEEDED, CREATED
 
 
 @pytest.fixture(name="client_for_test")
@@ -27,7 +27,7 @@ def test_fill_index(client_for_test):
         "Authorization": TOKEN
     }
     response = client_for_test.post('/index/create', json=data_for_test, headers=headers)
-    assert response.status_code == OK
+    assert response.status_code == CREATED
 
 
 def test_update_index(client_for_test):
@@ -45,11 +45,8 @@ def test_update_index(client_for_test):
 
 
 def test_delete_from_index(client_for_test):
-    data_for_test = {
-        "id": 101
-    }
     headers = {
         "Authorization": TOKEN
     }
-    response = client_for_test.delete('/index/delete', json=data_for_test, headers=headers)
+    response = client_for_test.delete('/index/delete?id=101', headers=headers)
     assert response.status_code == SUCCEEDED

@@ -26,15 +26,15 @@ def fill_index():
     except Exception as ex:
         logging.error(ex, exc_info=True)
         return '', 400
-    return fill_db(CLIENT, body)
+    temprorary = fill_db(CLIENT, body)
+    return 'http://127.0.0.1:5000/#product-{0}'.format(temprorary['_id']), 201
 
 
 @app.route("/index/delete", methods=['DELETE'])
 @AuthTokenRequired
 def delete_from_index():
-    body = request.json
     try:
-        deleted_rows = delete_from_db(CLIENT, body)
+        deleted_rows = delete_from_db(CLIENT, request.args.get('id'))
     except Exception as ex:
         logging.error(ex, exc_info=True)
         return '', 400

@@ -28,7 +28,7 @@ def fill_db(client, data_to_insert):
 def delete_from_db(client, id_from_user):
     db = client[f'{DBNAME}']
     coll = db.MAIN_COL
-    result_to_user = coll.delete_one({"_id": id_from_user['id']})
+    result_to_user = coll.delete_one({"_id": int(id_from_user)})
     logger.info(f"Deleted document with ID {id_from_user}")
     return result_to_user.deleted_count
 

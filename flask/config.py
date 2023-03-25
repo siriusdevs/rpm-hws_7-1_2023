@@ -15,4 +15,6 @@ CLIENT = MongoClient(f'mongodb://{HOST}:{PORT}/')
 
 OK = 200
 
+CREATED = 201
+
 SUCCEEDED = 204
