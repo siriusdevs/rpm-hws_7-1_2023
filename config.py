@@ -47,4 +47,6 @@ LEN_UUID = -37
 
 # page str to byte coding
 CODING = 'KOI8-R'
-POSIB_ATTRS = ('title', 'number', 'phrase')
+POSIB_ATTRS = ('number')
+POSIB_BODY_KEY = ('phrase')
+OBJ_PATH = "\n path to the obj: http/main?number={ind}"

@@ -7,17 +7,6 @@ from get_request.Yes_or_No import get_answer
 from db_handler import DbHandler
 
 
-class InvalidQuery(Exception):
-
-    def __init__(self, msg: str):
-        super().__init__(msg)
-        self.message = msg
-
-    def __str__(self):
-        classname = self.__class__.__name__
-        return f'{classname} error: {self.message}'
-
-
 class CastomHandler(BaseHTTPRequestHandler):
 
     @staticmethod
@@ -26,20 +15,14 @@ class CastomHandler(BaseHTTPRequestHandler):
             return template.read().format(phrases=frombase_to_main(DbHandler.get_data()))
 
     def parse_query(self) -> dict:
-        possible_attrs = POSIB_ATTRS
         qm_ind = self.path.find('?')
         if '?' in self.path and qm_ind != len(self.path) - 1:
-            query_data = self.path[qm_ind + 1:].split('&')
-            attrs_values = [line.split('=') for line in query_data]
-            query = {key: int(value) if value.isdigit() else value for key, value in attrs_values}
-            if "id" in query and not isinstance(query["id"], int):
-                return False
-            if possible_attrs:
-                attrs = list(filter(lambda attr: attr not in possible_attrs, query.keys()))
-                if attrs:
-                    raise InvalidQuery(f'{__name__} unknown attributes: {attrs}')
-            return query
-        return None
+            query_data = self.path[qm_ind + 1:].split('=')
+            if "number" not in query_data or not query_data[1].isdigit():
+                return False, "Request has incorrect attr 'number' or does not have it"
+            query = {query_data[0]: query_data[1]}
+            return query, ''
+        return None, 'No query'
 
     def page(self):
         if self.path.startswith(QUOTE_PATH):
@@ -52,7 +35,12 @@ class CastomHandler(BaseHTTPRequestHandler):
     def read_content_json(self) -> dict:
         content_length = int(self.headers.get(CONTENT_LENGTH, 0))
         if content_length:
-            return loads(self.rfile.read(content_length).decode())
+            try:
+                data = loads(self.rfile.read(content_length).decode())
+            except Exception:
+                return {}
+            return data
+        return {}
 
     def respond(self, http_code: int, msg: str):
         self.send_response(http_code)
@@ -62,48 +50,46 @@ class CastomHandler(BaseHTTPRequestHandler):
 
     def delete(self):
         if self.path.startswith(f'{MAIN_PATH}?'):
-            query = self.parse_query()
+            query, msg = self.parse_query()
             if not query:
-                return BAD_REQUEST, 'DELETE FAILED'
-            if DbHandler.delete(query):
-                return OK, 'Content has been deleted'
+                return BAD_REQUEST, f'DELETE FAILED \n\n{msg}'
+            ans, msg = DbHandler.delete(query)
+            return (OK, 'Content has been deleted') if ans else (BAD_REQUEST, msg)
         return NOT_FOUND, 'Content not found'
 
-    def post(self, content=None):
+    def post(self, content=None, msg=None):
+        note = f'\n\n Database notification: \n {msg}' if msg else ''
         if self.path == MAIN_PATH or self.path.startswith(f'{MAIN_PATH}?'):
             if not content:
                 content = self.read_content_json()
             if not content:
-                return BAD_REQUEST, f'No content provided by {self.command}'
+                return BAD_REQUEST, f'No content provided by {self.command}{note}'
             attr = list(content.keys())[0]
-            if attr not in POSIB_ATTRS:
+            if attr not in POSIB_BODY_KEY:
                 return NOT_IMPLEMENTED, f'students do not have attribute: {attr}'
 
-            answer_bool, ind = DbHandler.insert(content)
-            answer_db = 'OK' if answer_bool else 'FAIL'
-            error_code = CREATED if answer_db == 'OK' else BAD_REQUEST
-            return error_code, f'{self.command} {answer} \n path to the obj: http/main?number={ind}'
+            ans_bl, ind = DbHandler.insert(content)
+            return (CREATED, f'{self.command} OK {OBJ_PATH.format(ind=ind)}') if ans_bl else (BAD_REQUEST, f'Incorrect values {note}')
         return NOT_FOUND, 'Content not found'
 
     def put(self):
         if self.path == MAIN_PATH or self.path.startswith(f'{MAIN_PATH}?'):
             content = self.read_content_json()
             if not content:
-                return BAD_REQUEST, f'No content provided by {self.command}'
-            query = self.parse_query()
+                return BAD_REQUEST, 'No content or incorrect data provided by PUT'
+            query, msg = self.parse_query()
+            print(msg)
             if query:
                 attr = list(query.keys())[0]
                 if attr not in POSIB_ATTRS:
                     return NOT_IMPLEMENTED, f'titles do not have attribute: {attr}'
-            res = DbHandler.update(where=query, data=content)
-            if not res:
-                return self.post(content)
-            return OK, 'PUT OK'
+
+            ans, msg = DbHandler.update(where=query, data=content)
+            return (self.post(content, msg)) if not ans else (OK, 'PUT OK')
         return NOT_FOUND, 'Content not found'
 
     def check_auth(self):
         auth = self.headers.get(AUTH, '').split()
-        print(auth)
         if len(auth) == 2:
             return DbHandler.is_valid_token(auth[0], auth[1][1:-1])
         return False

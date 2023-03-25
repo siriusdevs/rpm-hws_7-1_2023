@@ -48,30 +48,32 @@ class DbHandler:
             phrase = insert_data['phrase']
         except Exception:
             print("No key 'phrase' in data")
-            return False
+            return False, "_"
         value = DbHandler.find_max_index() + 1
         try:
             cls.db_cursor.execute(INSERT.format(table='titles', keys='number, phrase', values=(value, phrase)))
         except Exception as error:
             print(f'{__name__} error: {error}')
-            return False
+            return False, "_"
         cls.db_connection.commit()
         return bool(cls.db_cursor.rowcount), cls.find_max_index()
 
     @classmethod
     def update(cls, data: dict, where: dict):
+        if not where:
+            return False, 'redirect to POST'
 
         colomn, key = list(data.keys())[0], list(where.keys())[0]
         new_value, value = data[colomn], where[key]
-        print(UPDATE.format(table='titles', colomn=colomn, new_value=new_value, key=key, value=value))
         try:
 
             cls.db_cursor.execute(UPDATE.format(table='titles', colomn=colomn, new_value=new_value, key=key, value=value))
         except Exception as error:
             print(f'{__name__} error: {error}')
-            return False
+            return False, 'UPDATE database FAIL'
         cls.db_connection.commit()
-        return bool(cls.db_cursor.rowcount)
+        changed_rows = bool(cls.db_cursor.rowcount)
+        return (changed_rows, "No changes") if not changed_rows else (changed_rows, '')
 
     @classmethod
     def delete_and_change(cls, key, value):
@@ -88,9 +90,10 @@ class DbHandler:
         key = list(data.keys())[0]
         value = data[key]
         try:
-            cls.delete_and_change(key, value)
+            cls.delete_and_change(key, int(value))
         except Exception as error:
             print(f'{__name__} error: {error}')
-            return False
+            return False, 'Database command error'
         cls.db_connection.commit()
-        return bool(cls.db_cursor.rowcount)
+        changed_rows = bool(cls.db_cursor.rowcount)
+        return (changed_rows, "No changes") if not changed_rows else (changed_rows, '')
