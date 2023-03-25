@@ -112,7 +112,10 @@ class CustomHandler(BaseHTTPRequestHandler):
     def delete(self):
         """Proccess DELETE request."""
         if self.path.startswith((BOOKS, MOVIES)):
-            query = self.parse_query()
+            try:
+                query = self.parse_query()
+            except Exception as error:
+                return BAD_REQUEST, error_page(str(error))
             if not query:
                 return BAD_REQUEST, 'DELETE FAILED'
             table = BOOK if self.path.startswith(BOOKS) else MOVIE
@@ -138,8 +141,12 @@ class CustomHandler(BaseHTTPRequestHandler):
                 if attr not in all_attr:
                     return NOT_IMPLEMENTED, f'{table} do not have attribute: {attr}'
             if all([key in material for key in req_attr]):
-                answer = 'OK' if DbHandler.insert(table, material) else 'FAIL'
-                return CREATED, f'{self.command} {answer}: http://{HOST}:{PORT}{self.path}'
+                if DbHandler.insert(table, material):
+                    answer = 'OK'
+                    put_id = DbHandler.get_data(table, material)['id']
+                    return CREATED, f'{self.command} {answer}: http://{HOST}:{PORT}{self.path}?id={put_id}'
+                answer = 'FAIL'
+                return CREATED, f'{self.command} {answer}'
             return BAD_REQUEST, f'Required keys to add: {req_attr}'
         return NO_CONTENT, 'Content not found'
 
