@@ -143,7 +143,7 @@ class CustomHandler(BaseHTTPRequestHandler):
             if all([key in material for key in req_attr]):
                 if DbHandler.insert(table, material):
                     answer = 'OK'
-                    put_id = DbHandler.get_data(table, material).get('id')
+                    put_id = DbHandler.get_id(table, material)
                     return CREATED, f'{self.command} {answer}: http://{HOST}:{PORT}{self.path}?id={put_id}'
                 answer = 'FAIL'
                 return CREATED, f'{self.command} {answer}'

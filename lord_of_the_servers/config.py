@@ -41,6 +41,7 @@ GET_TOKEN = "SELECT token FROM token WHERE username='{username}'"
 INSERT = 'INSERT INTO {table} ({keys}) VALUES ({values})'
 UPDATE = 'UPDATE {table} SET {request}'
 DELETE = 'DELETE FROM {table} '
+SELECT_ID = 'SELECT id from {table}'
 
 # tables parameters
 BOOKS_REQUIRED_ATTRS = ['title', 'volume', 'published']

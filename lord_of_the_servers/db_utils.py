@@ -1,5 +1,5 @@
 """Database utilits."""
-from config import GET_TOKEN, SELECTOR, DELETE, INSERT, UPDATE
+from config import GET_TOKEN, SELECTOR, DELETE, INSERT, UPDATE, SELECT_ID
 from views import list_to_view
 from psycopg2 import connect
 from psycopg2.errors import UndefinedFunction
@@ -144,3 +144,18 @@ class DbHandler:
             to_add = f'{attr}={element}' if isinstance(element, (int, float)) else f"{attr}='{element}'"
             conditions.append(to_add)
         return '{0} WHERE {1}'.format(request, ' AND '.join(conditions))
+
+    @classmethod
+    def get_id(cls, table: str, query: dict) -> int:
+        """Select id from the table.
+
+        Args:
+            table : str - table to search
+            query : dict - searching conditions
+        """
+        try:
+            cls.db_cursor.execute(DbHandler.query_request(SELECT_ID.format(table=table), query))
+        except Exception as error:
+            print(f'{__name__} error: {error}')
+            return 0
+        return cls.db_cursor.fetchone()[0]
