@@ -1,7 +1,7 @@
 """Routers for my FastApi."""
 
 
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, Body
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from config import BAD_REQUEST, OK, DEFAULT_ADMIN, KEYS_AUTHOR, CREATED
@@ -162,7 +162,7 @@ async def postman_get(request: Request, author: str = None, id: int = None):
 
 
 @app.post("/quotes")
-async def postman_post(request: Request, author: str, body: str):
+async def postman_post(request: Request, body=Body()):
     """Method that post new quote for postman.
 
     Args:
@@ -174,6 +174,8 @@ async def postman_post(request: Request, author: str, body: str):
         json: result of work
     """
     DBMethods.check_auth(request.headers.get('Authorization'))
+    author = body.get('author')
+    body = body.get('body')
     response = DBHandler.process_post(author, body)
     return JSONResponse(content=response, status_code=CREATED)
 
