@@ -11,7 +11,7 @@ database name, host, port, passsword and user to connect
 # docker for postgresql and installation of some modules:
 
 - chmod +x requirements/init_script.sh
-- .requirements/init_script.sh
+- ./requirements/init_script.sh
 
 # run:
 - python3 main.py
