@@ -1,5 +1,5 @@
 """File with database managing utils."""
-from config import SELECTOR, GET_TOKEN, INSERT, UPDATE, DELETE, FIRST_LINE, TABLE
+from config import SELECTOR, GET_TOKEN, INSERT, UPDATE, DELETE, FIRST_LINE, TABLE, RETURN_ID
 from view import is_num, list_to_view
 from dotenv import load_dotenv
 from psycopg2 import connect
@@ -93,12 +93,13 @@ class DbHandler:
             [f"{key}={key_val}" if is_num(key_val) else f"{key}='{key_val}'" for key, key_val in record.items()]
         )
         try:
-            cls.db_cursor.execute(cls.query_request(UPDATE.format(table='people', request=req), where))
+            cls.db_cursor.execute(cls.query_request(UPDATE.format(table='people', request=req), where) + RETURN_ID)
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
+        person_id = cls.db_cursor.fetchone()
         cls.db_connection.commit()
-        return bool(cls.db_cursor.rowcount)
+        return person_id
 
     @classmethod
     def insert(cls, people_data: dict) -> bool:
@@ -115,8 +116,10 @@ class DbHandler:
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
+        person_id = cls.db_cursor.fetchone()[0]
+        print(person_id)
         cls.db_connection.commit()
-        return bool(cls.db_cursor.rowcount)
+        return person_id
 
     @classmethod
     def delete(cls, req_conds: dict) -> bool:
