@@ -1,13 +1,21 @@
 """Routers for my FastApi."""
 
 
-from fastapi import FastAPI, Request, Form, Body
+from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from config import BAD_REQUEST, OK, DEFAULT_ADMIN, KEYS_AUTHOR, CREATED
 from functions import DBHandler, NotFoundException, \
     BadRequestException, ForbiddenException, DBMethods
 from fastapi.exceptions import RequestValidationError
+from pydantic import BaseModel
+
+
+class Quote(BaseModel):
+    """Model for post request json."""
+
+    author: str
+    body: str
 
 
 app = FastAPI()
@@ -162,20 +170,18 @@ async def postman_get(request: Request, author: str = None, id: int = None):
 
 
 @app.post("/quotes")
-async def postman_post(request: Request, body=Body()):
+async def postman_post(request: Request, quote: Quote):
     """Method that post new quote for postman.
 
     Args:
         request (Request): user request
-        body (Body): request body
+        quote (Quote): request body
 
     Returns:
         json: result of work
     """
     DBMethods.check_auth(request.headers.get('Authorization'))
-    author = body.get('author')
-    body = body.get('body')
-    response = DBHandler.process_post(author, body)
+    response = DBHandler.process_post(quote.author, quote.body)
     return JSONResponse(content=response, status_code=CREATED)
 
 
