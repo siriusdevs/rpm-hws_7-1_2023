@@ -31,9 +31,16 @@ jobs:
         pip install pytest==6.2.5
         cd fastapi
         pip install -r requirements.txt
+        cd ../flask
+        pip install -r requirements.txt
         cd ..
     - name: Pytest
       run: |
         cd fastapi
         echo $'HOST=localhost\nPORT=27018\nDBNAME=anime\nCOLNAME=titles\nTOKEN=MAX228' >> .env
         pytest
+        cd ../flask
+        echo $'HOST=localhost\nPORT=27018\nDBNAME=anime\nCOLNAME=titles\nTOKEN=MAX2288' >> .env
+        docker run -d -p 27018:27017 --name test_shop mongo
+        pytest
+        docker rm -f test_shop
