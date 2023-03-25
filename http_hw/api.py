@@ -167,8 +167,7 @@ async def postman_post(request: Request, body=Body()):
 
     Args:
         request (Request): user request
-        author (str): new author
-        body (str): new body
+        body (Body): request body
 
     Returns:
         json: result of work
