@@ -1,0 +1,10 @@
+docker run -d --name python_server -p 5435:5432 \
+-v $HOME/postgresql/http_db:/var/lib/postgresql/http_db \
+-e POSTGRES_PASSWORD=12345678 \
+-e POSTGRES_USER=app \
+-e POSTGRES_DB=http_db \
+postgres
+
+psql -h 127.0.0.1 -p 5435 -U app http_db
+
+psql -h 127.0.0.1 -p 5435 -U app http_db -f init.ddl
