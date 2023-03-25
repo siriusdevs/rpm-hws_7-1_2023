@@ -144,7 +144,8 @@ class CustomHTTP(BaseHTTPRequestHandler):
             if all([key in record for key in MAIN_REQUIRED_ATTRS]):
                 person_id = DbHandler.insert(record)
                 answer = "OK" if person_id else "FAIL"
-                return CREATED, f"http://{HOST}:{PORT}{self.path}/id={person_id}: {self.command} {answer}"
+                return_path = self.path.split('?')[0]
+                return CREATED, f"http://{HOST}:{PORT}{return_path}?id={person_id}: {self.command} {answer}"
             return BAD_REQUEST, f"Required keys to add: {MAIN_REQUIRED_ATTRS}"
         return NO_CONTENT, "Content not found"
 
