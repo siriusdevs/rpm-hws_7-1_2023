@@ -167,7 +167,8 @@ class CustomHTTP(BaseHTTPRequestHandler):
             res = DbHandler.update(record=record, where=query)
             if not res:
                 return self.put(record)
-            return OK, f"http://{HOST}:{PORT}{self.path}/id={res}: {self.command} OK"
+            return_path = self.path.split('?')[0]
+            return OK, f"http://{HOST}:{PORT}{return_path}?id={res[0]}: {self.command} OK"
 
     def get(self) -> None:
         """Runs get template method."""
