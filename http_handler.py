@@ -66,7 +66,7 @@ class CastomHandler(BaseHTTPRequestHandler):
                 return BAD_REQUEST, f'No content provided by {self.command}{note}'
             attr = list(content.keys())[0]
             if attr not in POSIB_BODY_KEY:
-                return NOT_IMPLEMENTED, f'students do not have attribute: {attr}'
+                return NOT_IMPLEMENTED, f'titles do not have attribute: {attr}'
 
             ans_bl, ind = DbHandler.insert(content)
             return (CREATED, f'{self.command} OK {OBJ_PATH.format(ind=ind)}') if ans_bl else (BAD_REQUEST, f'Incorrect values {note}')
