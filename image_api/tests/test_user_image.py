@@ -39,5 +39,10 @@ def test_user_post():
 
 
 def test_user_get():
+    response = client.get(f"/image/user/{TEST_USER}/{IMAGE_ID}/?token={USER_TOKEN}")
+    assert response.status_code == HTTP_OK
+
+
+def test_user_delete():
     response = client.delete(f"/image/user/{TEST_USER}/{IMAGE_ID}/?token={USER_TOKEN}")
     assert response.status_code == HTTP_OK
