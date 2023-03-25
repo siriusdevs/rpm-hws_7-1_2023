@@ -1,0 +1,52 @@
+
+name: Проверка
+on: [push]
+jobs:
+  linter:
+    name: Линтер
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Установка Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10.6
+    - name: Установка зависимостей
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r for_tests/flake_requirements.txt
+    - name: Flake8
+      run: flake8 .
+  container-job:
+    name: Тесты
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+            POSTGRES_PASSWORD: test
+            POSTGRES_DBNAME: test
+            POSTGRES_USER: test
+            POSTGRES_PORT: 5555
+            POSTGRES_HOST: 127.0.0.1
+        ports:
+          - 5555:5432
+    steps:
+    - uses: actions/checkout@v2
+    - name: Установка Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.10.6"
+    - name: Установка зависимостей
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r for_tests/test_requirements.txt
+        pip install jinja2
+        pip install python-multipart
+    - name: Создание env и бд
+      run: |
+        python3.10 for_tests/setup_env.py
+        python3.10 for_tests/setup_db.py
+    - name: Тесты
+      run: |
+        pytest http_hw/test_api_test.py

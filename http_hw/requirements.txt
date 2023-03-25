@@ -1,0 +1,7 @@
+psycopg2-binary==2.9.5
+python-dotenv==1.0.0
+python-multipart==0.0.6
+fastapi==0.94.0
+httpx==0.23.3
+requests==2.28.2
+uvicorn==0.21.0
