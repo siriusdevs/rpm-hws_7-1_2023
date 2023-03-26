@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS book (
     id int primary key generated always as identity,
     title text NOT NULL,
     volume int NOT NULL,
-    published int NOT NULL
+    published int NOT NULL,
+    UNIQUE (title, volume, published)
 );
 
 INSERT INTO book (title, volume, published) VALUES
@@ -29,7 +30,8 @@ CREATE TABLE IF NOT EXISTS movie (
     id int primary key generated always as identity,
     title text NOT NULL,
     duration int NOT NULL,
-    released int NOT NULL
+    released int NOT NULL,
+    UNIQUE (title, duration, released)
 );
 
 INSERT INTO movie (title, duration, released) VALUES
