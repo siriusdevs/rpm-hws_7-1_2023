@@ -2,7 +2,7 @@
 
 env_consts = {
     'PG_HOST': '127.0.0.1',
-    'PG_PORT': '5438',
+    'PG_PORT': '5439',
     'PG_USER': 'user',
     'PG_PASSWORD': '123456',
     'PG_DBNAME': 'chat'
