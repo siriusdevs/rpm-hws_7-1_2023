@@ -123,7 +123,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 return OK, f'{self.command} OK: http://{HOST}:{PORT}{self.path}'
         return NOT_FOUND, 'Content not found'
 
-    def put(self, material=None):
+    def post(self, material=None):
         """Proccess PUT request.
 
         Args:
@@ -150,7 +150,7 @@ class CustomHandler(BaseHTTPRequestHandler):
             return BAD_REQUEST, f'Required keys to add: {req_attr}'
         return NO_CONTENT, 'Content not found'
 
-    def post(self):
+    def put(self):
         """Proccess POST request."""
         if self.path.startswith((BOOKS, MOVIES)):
             material = self.read_content_json()
