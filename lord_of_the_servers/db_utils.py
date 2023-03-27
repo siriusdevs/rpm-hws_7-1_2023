@@ -62,7 +62,6 @@ class DbHandler:
         """
         cls.db_cursor.execute(GET_TOKEN.format(username=username))
         db_token = cls.db_cursor.fetchone()
-            # cls.db_connection.rollback()
         if db_token:
             return db_token[0] == req_token
         return False
