@@ -2,7 +2,6 @@
 from config import GET_TOKEN, SELECTOR, DELETE, INSERT, UPDATE, SELECT_ID
 from views import list_to_view
 from psycopg2 import connect
-from psycopg2.errors import UndefinedFunction
 from dotenv import load_dotenv
 from os import getenv
 from typing import Any
@@ -43,9 +42,9 @@ class DbHandler:
         selector = SELECTOR.format(table=table)
         try:
             cls.db_cursor.execute(DbHandler.query_request(selector, req_conds) if req_conds else selector)
-        except UndefinedFunction as error:
+        except Exception as error:
             db_data = []
-            print(f'Database attribute error: {error}')
+            print(f'{__name__} error: {error}')
         else:
             db_data = cls.db_cursor.fetchall()
         return {
@@ -63,6 +62,7 @@ class DbHandler:
         """
         cls.db_cursor.execute(GET_TOKEN.format(username=username))
         db_token = cls.db_cursor.fetchone()
+            # cls.db_connection.rollback()
         if db_token:
             return db_token[0] == req_token
         return False
@@ -95,6 +95,7 @@ class DbHandler:
             cls.db_cursor.execute(cls.query_request(UPDATE.format(table=table, request=req), where))
         except Exception as error:
             print(f'{__name__} error: {error}')
+            cls.db_connection.rollback()
             return False
         cls.db_connection.commit()
         return bool(cls.db_cursor.rowcount)
@@ -111,6 +112,7 @@ class DbHandler:
             cls.db_cursor.execute(cls.compose_insert(table, insert_data))
         except Exception as error:
             print(f'{__name__} error: {error}')
+            cls.db_connection.rollback()
             return False
         cls.db_connection.commit()
         return bool(cls.db_cursor.rowcount)
@@ -127,6 +129,7 @@ class DbHandler:
             cls.db_cursor.execute(cls.query_request(DELETE.format(table=table), req_conds))
         except Exception as error:
             print(f'{__name__} error: {error}')
+            cls.db_connection.rollback()
             return False
         cls.db_connection.commit()
         return bool(cls.db_cursor.rowcount)
