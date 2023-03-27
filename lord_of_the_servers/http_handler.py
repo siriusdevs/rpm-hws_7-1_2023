@@ -4,7 +4,7 @@ from db_utils import DbHandler
 import json
 from config import BOOKS, BOOK, CHARACTERS, MOVIE, MOVIES, PAGES, BOOKS_ALL_ATTRS, CHARACTERS_ALL_ATTRS, \
     MOVIES_ALL_ATTRS, CONTENT_TYPE, CODING, CONTENT_LENGTH, NOT_FOUND, BAD_REQUEST, OK, NOT_IMPLEMENTED, \
-    CREATED, NO_CONTENT, FORBIDDEN, AUTH, BOOKS_REQUIRED_ATTRS, MOVIES_REQUIRED_ATTRS, HOST, PORT
+    CREATED, NO_CONTENT, FORBIDDEN, AUTH, BOOKS_REQUIRED_ATTRS, MOVIES_REQUIRED_ATTRS, HOST, PORT, CONFLICT
 from views import books, characters, main_page, error_page, movies
 from characters import get_character
 from dotenv import load_dotenv
@@ -146,7 +146,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                     put_id = DbHandler.get_id(table, material)
                     return CREATED, f'{self.command} {answer}: http://{HOST}:{PORT}{self.path}?id={put_id}'
                 answer = 'FAIL'
-                return CREATED, f'{self.command} {answer}'
+                return CONFLICT, f'{self.command} {answer}: resource already exists'
             return BAD_REQUEST, f'Required keys to add: {req_attr}'
         return NO_CONTENT, 'Content not found'
 
@@ -166,7 +166,6 @@ class CustomHandler(BaseHTTPRequestHandler):
                 if attrs:
                     return NOT_IMPLEMENTED, f'{table} do not have attributes: {attrs}'
             res = DbHandler.update(table=table, where=query, data_to=material)
-            print(res)
             if not res:
                 return self.put(material)
             return OK, f'{self.command} OK'

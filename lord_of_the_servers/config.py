@@ -26,6 +26,7 @@ AUTH = 'Authorization'
 NOT_FOUND = 404
 FORBIDDEN = 403
 BAD_REQUEST = 400
+CONFLICT = 409
 
 # HTTP OK codes
 OK = 200
