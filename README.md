@@ -20,7 +20,9 @@ database name, host, port, passsword and user to connect
 
 POST example: 
 in HEADERS you have "Authorization" as key and "admin {YOUR_TOKEN}" as value
+
 in body you have {"phrase":"some_phrase"}: dict with one key = "phrase" and one value = any string
+
 
 PUT example: 
 
@@ -29,6 +31,7 @@ in HEADERS you have "Authorization" as key and "admin {YOUR_TOKEN}" as value
 in PARAMS you have "number" as key and some int value (number of a phrase on server) as value 
 
 in body you have {"phrase":"some_phrase"}: dict with one key = "phrase" and one value = any string 
+
 
 DELETE example: 
 
