@@ -1,0 +1,42 @@
+<html lang="en">
+    <head>
+        <title>
+            Books
+        </title>
+    </head>
+    <body>
+        <br>
+        <form action="/book" name="books_form" id="books_form">
+            <label for="title">Title</label><br>
+            <input type="text" id="title" name="title">
+            <br><br>
+            <label for="volume">Volume</label><br>
+            <input type="integer" id="volume" name="volume">
+            <br><br>
+            <label for="published">Published</label><br>
+            <input type="integer" id="published" name="published">
+            <br><br>
+            <input type="submit">
+        </form>
+        <script>
+            var form = document.getElementById("books_form")
+            form.addEventListener('submit', function () {{
+                var all_inputs = form.getElementsByTagName('input');
+                for (var i = 0; i < all_inputs.length; i++) {{
+                    var input = all_inputs[i];
+                    if (input.name && !input.value) {{
+                        input.name = '';
+                    }}
+                }}
+            }});
+        </script>
+        <h4>
+            Books count: {number}
+        </h4>
+        <h4> Full books list: </h4>
+            {rendered_books}
+        <br></br>
+        <a href="/">Back to main</a>
+    </body>
+
+</html>
