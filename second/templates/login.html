@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Login Page</h1>
+    </header>
+    <div class="container">
+        {% if error %}
+            <div class="error-message">
+                <i class="fa fa-exclamation-circle"></i>
+                {{ error }}
+            </div>
+        {% endif %}
+        <form id="mainform" action="/login" method="post">
+            <div class="form-field">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-field">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="btn">Log in</button>
+        </form>
+        <a href="/registration" class="signup-btn">Don`t have an account? Sign up</a>
+    </div>
+</body>
+</html>

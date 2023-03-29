@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Registration</h1>
+    </header>
+    <div class="container">
+        <form id="mainform" action="/registration" method="post">
+            {% if error %}
+                <div class="error-message">
+                    <i class="fa fa-exclamation-circle"></i>
+                    {{ error }}
+                </div>
+            {% endif %}
+            <div class="form-field">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="form-field">
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            <div class="form-field">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <div class="form-field">
+                <label for="copy_password">Confirm Password:</label>
+                <input type="password" id="copy_password" name="copy_password" placeholder="Confirm your password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <a href="/login">Already have an account? Sign in</a>
+    </div>
+</body>
+</html>

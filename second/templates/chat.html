@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</head>
+<body>
+    <header>
+        <h1>Chat App</h1>
+        <a href="/logout">Logout</a>
+    </header>
+    <div class="container">
+        <div class="messages">
+            {% for message in messages %}
+            <div style="background-color: {{ message[2] }};">{{ message[0] }} <p>{{ message[1] }}</p></div>
+            {% endfor %}
+        </div>
+        <form id="mainform" action="/chat" method="post">
+            <div class="form-field">
+                <label for="message">Message:</label>
+                <input type="text" id="message" name="message" placeholder="Enter your message" required>
+            </div>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</body>
+</html>
