@@ -33,7 +33,7 @@
 ## Tables: 
     message fields:
         user_id uuid references chat_user (id),
-    filling text
+        filling text
 
     chat_user fields:
         id uuid primary key not null default uuid_generate_v4(),
