@@ -1,5 +1,3 @@
-drop table if exists chat_user, message;
-drop extension if exists "uuid-ossp";
 create extension if not exists "uuid-ossp";
 create table if not exists chat_user(
     id uuid primary key not null default uuid_generate_v4(),
