@@ -13,7 +13,7 @@ docker run -d \
 postgres
 sleep 2
 
-./requirements/setup_env.py
+python3 requirements/setup_env.py
 
 export PGPASSWORD=12345F
 psql -h 127.0.0.1 -p 3850 -U app phrases_db -f requirements/db_creator.ddl
