@@ -36,7 +36,7 @@
     filling text
 
     chat_user fields:
-        id integer generated always as identity not null primary key, 
+        id uuid primary key not null default uuid_generate_v4(),
         username text,
         email text,
         password text,
