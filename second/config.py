@@ -7,7 +7,7 @@ REG_TEMPLATE = 'registration.html'
 
 # errors
 USERNAME_ERROR = 'Username already exists or too long'
-PASSWORD_ERROR = 'Incorrect password'
+PASSWORD_ERROR = 'Use not only numbers in password'
 EMAIL_ERROR = 'Incorrect email'
 LOGIN_ERROR = 'Check your password and username'
 
