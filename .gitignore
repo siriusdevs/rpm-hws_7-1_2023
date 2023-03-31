@@ -2,3 +2,4 @@
 *students*
 *venv*
 *.env
+*__pycache__*
