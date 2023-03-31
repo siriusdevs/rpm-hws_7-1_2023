@@ -64,7 +64,6 @@ def registration() -> Callable:
         password = request.form.get('password')
         email = request.form.get('email')
         name = request.form.get('username')
-        print(DbHandler.check_name(name), len(name))
         if not DbHandler.check_name(name) or len(name) > MAX_NAME_LEN:
             return render_template(REG_TEMPLATE, error=USERNAME_ERROR)
         if not DbHandler.check_email(email):
