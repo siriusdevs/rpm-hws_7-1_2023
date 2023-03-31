@@ -68,7 +68,7 @@ def registration() -> Callable:
             return render_template(REG_TEMPLATE, error=USERNAME_ERROR)
         if not DbHandler.check_email(email):
             return render_template(REG_TEMPLATE, error=EMAIL_ERROR)
-        if password == request.form.get('copy_password') and DbHandler.check_password(password):
+        if password == request.form.get('copy_password'):
             DbHandler.registrate(name, email, password, choice(COLORS))
             return redirect(LOGIN_PATH)
         return render_template(REG_TEMPLATE, error=PASSWORD_ERROR)

@@ -91,7 +91,7 @@ class DbHandler:
             bool - False if user not in database.
         """
         cls.cursor.execute(COUNT_USERS, (username,))
-        return cls.cursor.fetchone()[0] == 0
+        return not cls.cursor.fetchone()[0] == 0
 
     @staticmethod
     def check_email(email: str) -> bool:
@@ -108,15 +108,3 @@ class DbHandler:
             if part:
                 email_arr.append(part)
         return len(email_arr) > 1 and email.endswith(ENDINGS) and email.count('@') == 1
-
-    @staticmethod
-    def check_password(password):
-        """Method checks password.
-
-        Args:
-            password: str - users password.
-
-        Returns:
-            bool - True if password is valid
-        """
-        return password.isdigit() and len(password) < 5
