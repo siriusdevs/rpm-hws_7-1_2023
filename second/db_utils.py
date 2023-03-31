@@ -91,7 +91,7 @@ class DbHandler:
             bool - False if user not in database.
         """
         cls.cursor.execute(COUNT_USERS, (username,))
-        return not cls.cursor.fetchone()[0] == 0
+        return cls.cursor.fetchone()[0] == 0
 
     @staticmethod
     def check_email(email: str) -> bool:
