@@ -28,7 +28,7 @@ POST example:
 
 PUT example: 
 
-- in HEADERS you have "Authorization" as key and "admin {YOUR_TOKEN}" as value 
+- in HEADERS you have "Authorization" as key and "admin {077bc286-8564-4627-84c2-beb7b6af5521}" as value 
 
 - in PARAMS you have "number" as key and some int value (number of a phrase on server) as value 
 
@@ -37,7 +37,7 @@ PUT example:
 
 DELETE example: 
 
-- in HEADERS you have "Authorization" as key and "admin {YOUR_TOKEN}" as value 
+- in HEADERS you have "Authorization" as key and "admin {077bc286-8564-4627-84c2-beb7b6af5521}" as value 
 
 - in PARAMS you have "number" as key and some int value (number of a phrase on server) as value 
 
