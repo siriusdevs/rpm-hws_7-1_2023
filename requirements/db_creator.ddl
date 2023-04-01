@@ -6,6 +6,6 @@ INSERT INTO titles (number, phrase) values (1, 'Do not rely on chance, but trust
 
 CREATE EXTENSION "uuid-ossp";
 
-CREATE TABLE IF NOT EXISTS token  (username text primary key, password uuid default uuid_generate_v4());
+CREATE TABLE IF NOT EXISTS token  (username text primary key, password uuid);
 
-INSERT INTO token (username) values ('admin');
+INSERT INTO token (username, password) values ('admin', '077bc286-8564-4627-84c2-beb7b6af5521');
