@@ -6,7 +6,7 @@ create table if not exists chat_user(
     password text,
     frame_color text
 );
-insert into chat_user (username, email, password, frame_color) values ('admin', 'admin@admin.com', 'admin', '#B6DCEE');
+insert into chat_user (username, email, password, frame_color) values ('admin',  'admin@admin.com', 'admin', '#B6DCEE');
 create table if not exists message(
     user_id uuid references chat_user (id),
     filling text

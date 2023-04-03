@@ -61,9 +61,13 @@ def registration() -> Callable:
         Callable - method which redirects on other page or renders templates.
     """
     if request.method == 'POST':
+        # print(request.form.to_dict(flat=False))
+        # print(request.data)
+        # print(request.headers)
         password = request.form.get('password')
         email = request.form.get('email')
         name = request.form.get('username')
+        # print(password, email, name)
         if not DbHandler.check_name(name) or len(name) > MAX_NAME_LEN:
             return render_template(REG_TEMPLATE, error=USERNAME_ERROR)
         if not DbHandler.check_email(email):
