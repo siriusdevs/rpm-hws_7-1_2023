@@ -12,7 +12,7 @@ app.secret_key = 'secret!123'
 
 
 @app.route(LOGIN_PATH, methods=['POST', 'GET'])
-def login() -> Callable:
+async def login() -> Callable:
     """Function manages log in system.
 
     Returns:
@@ -31,7 +31,7 @@ def login() -> Callable:
 
 
 @app.route(LOGOUT_PATH, methods=['GET'])
-def logout() -> Callable:
+async def logout() -> Callable:
     """Function manages log out system.
 
     Returns:
@@ -42,7 +42,7 @@ def logout() -> Callable:
 
 
 @app.route(INDEX_PATH, methods=['GET'])
-def index() -> Callable:
+async def index() -> Callable:
     """Function which is responsible for rendering main page.
 
     Returns:
@@ -54,7 +54,7 @@ def index() -> Callable:
 
 
 @app.route(REG_PATH, methods=['GET', 'POST'])
-def registration() -> Callable:
+async def registration() -> Callable:
     """Function manages registration system.
 
     Returns:
@@ -80,7 +80,7 @@ def registration() -> Callable:
 
 
 @app.route(CHAT_PATH, methods=['POST', 'GET'])
-def fill_chat():
+async def fill_chat():
     """Function manages chat filling.
 
     Returns:

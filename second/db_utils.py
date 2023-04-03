@@ -17,7 +17,6 @@ class DbHandler:
         user=getenv('PG_USER'),
         password=getenv('PG_PASSWORD')
     )
-    cursor = connection.cursor()
 
     @classmethod
     def get_user_id(cls, username: str, password: str) -> tuple:
@@ -30,8 +29,9 @@ class DbHandler:
         Returns:
             tuple - tuple with id.
         """
-        cls.cursor.execute(SELECT_ID, (username, password))
-        return cls.cursor.fetchone()
+        with cls.connection.cursor() as cursor:
+            cursor.execute(SELECT_ID, (username, password))
+            return cursor.fetchone()
 
     @classmethod
     def get_username(cls, user_id: str) -> tuple:
@@ -43,8 +43,9 @@ class DbHandler:
         Returns:
             tuple - tuple with username.
         """
-        cls.cursor.execute(SELECT_USERNAME, (user_id,))
-        return cls.cursor.fetchone()
+        with cls.connection.cursor() as cursor:
+            cursor.execute(SELECT_USERNAME, (user_id,))
+            return cursor.fetchone()
 
     @classmethod
     def fill_page(cls):
@@ -53,8 +54,9 @@ class DbHandler:
         Returns:
             tuple - messages from all users.
         """
-        cls.cursor.execute(SELECT_MESSAGE)
-        return cls.cursor.fetchall()
+        with cls.connection.cursor() as cursor:
+            cursor.execute(SELECT_MESSAGE)
+            return cursor.fetchall()
 
     @classmethod
     def registrate(cls, username: str, email: str, password: str, frame_color: str) -> None:
@@ -66,8 +68,9 @@ class DbHandler:
             password: str - users password.
             frame_color: str - color of filling messages.
         """
-        cls.cursor.execute(INSERT_USER, (username, email, password, frame_color))
-        cls.connection.commit()
+        with cls.connection.cursor() as cursor:
+            cursor.execute(INSERT_USER, (username, email, password, frame_color))
+            cls.connection.commit()
 
     @classmethod
     def add_massage(cls, message: str, user_id: str) -> None:
@@ -77,8 +80,9 @@ class DbHandler:
             message: str - text from user.
             user_id: str - users id.
         """
-        cls.cursor.execute(INSERT_MESSAGE, (user_id, message))
-        cls.connection.commit()
+        with cls.connection.cursor() as cursor:
+            cursor.execute(INSERT_MESSAGE, (user_id, message))
+            cls.connection.commit()
 
     @classmethod
     def check_name(cls, username: str) -> bool:
@@ -90,8 +94,9 @@ class DbHandler:
         Returns:
             bool - False if user not in database.
         """
-        cls.cursor.execute(COUNT_USERS, (username,))
-        return cls.cursor.fetchone()[0] == 0
+        with cls.connection.cursor() as cursor:
+            cursor.execute(COUNT_USERS, (username,))
+            return cursor.fetchone()[0] == 0
 
     @staticmethod
     def check_email(email: str) -> bool:
