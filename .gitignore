@@ -1,2 +1,7 @@
-*branches.sh
-*students*
+*cache*
+*.env*
+.env
+testss
+.gitignore
+.idea
+__pycache__
