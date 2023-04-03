@@ -19,7 +19,7 @@ python3.10 second/setup_db.py
 
 # server start
 echo "Starting the chat"
-python3 -m flask --app app.py run
+python3 -m flask --app second/app.py run
 
 # real tests
 sleep 2
@@ -41,4 +41,4 @@ exit 1
 fi
 
 # clean up
-rm first/.env
+rm second/.env
