@@ -31,7 +31,23 @@ post_code=`curl -s -o /dev/null \
   -d "username=a1b2c3d4&email=abcdef@bb.ru&password=com&copy_password=com" \
   -w %{http_code} \
   http://127.0.0.1:5000/registration`
-if [[ $post_code -eq $CREATED ]]
+if [[ $post_code -eq 302 ]]
+then
+echo "OK"
+else
+echo "FAILED"
+echo "POST_CODE $post_code"
+exit 1
+fi
+
+echo "POST request:"
+post_code=`curl -s -o /dev/null \
+  -X POST \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=a1b2c3d4&password=com" \
+  -w %{http_code} \
+  http://127.0.0.1:5000/login`
+if [[ $post_code -eq 302 ]]
 then
 echo "OK"
 else
