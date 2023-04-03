@@ -1,0 +1,10 @@
+docker run -d --name chat -p 5557:5432 \
+    -v $HOME/postgresql/chat:/var/lib/postgresql/chat \
+    -e POSTGRES_PASSWORD=12345678 \
+    -e POSTGRES_USER=chat_user \
+    -e POSTGRES_DB=chat_db \
+    postgres
+
+psql -h 127.0.0.1 -p 5557 -U chat_user chat_db
+
+psql -h 127.0.0.1 -p 5557 -U chat_user chat_db -f init.ddl
