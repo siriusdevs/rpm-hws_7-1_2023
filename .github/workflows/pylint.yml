@@ -45,5 +45,5 @@ jobs:
       run: |
         chmod +x first/test.sh
         ./first/test.sh
-        chmod +x second/init.sh
+        chmod +x second/test.sh
         ./second/test.sh
