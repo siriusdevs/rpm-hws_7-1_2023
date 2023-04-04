@@ -1,9 +1,9 @@
 env_consts = {
     'PG_HOST': '127.0.0.1',
     'PG_PORT': '5555',
-    'PG_USER': '.env',
-    'PG_PASSWORD': '.env',
-    'PG_DBNAME': '.env'
+    'PG_USER': 'sirius_2023',
+    'PG_PASSWORD': 'change_me',
+    'PG_DBNAME': 'postgres'
 }
 
 
