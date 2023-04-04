@@ -3,14 +3,14 @@ from requests import get
 
 OK = 200
 CREATED = 201
-URL = 'http://127.0.0.1:8001/students'
+URL = 'http://127.0.0.1:8001/ips'
 headers = {
     'Authorization': 'admin {a1b2c3d4-a1b2-c3d4-e5f6-a1b2c3a1b2c3}'
 }
 data = {
-    "fname": "a1b2c3d4",
-    "lname": "abcdef",
-    "group_": "1"
+    "name": 'Work',
+    "local_ip": '127.0.0.2',
+    "public_ip": '86.101.44.128'
 }
 
 
