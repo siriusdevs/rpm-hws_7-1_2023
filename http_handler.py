@@ -86,6 +86,8 @@ class CustomHandler(BaseHTTPRequestHandler):
                 return BAD_REQUEST, 'DELETE FAILED'
             if DbHandler.delete(query):
                 return OK, f'Content has been deleted {self.path}'
+        else:
+            return BAD_REQUEST, "Invalid path"
         return NOT_FOUND, 'Content not found'
 
     # добавление
@@ -105,6 +107,8 @@ class CustomHandler(BaseHTTPRequestHandler):
                 answer = 'OK' if DbHandler.insert(content) else 'FAIL'
                 return CREATED, f'{self.command} {answer} {self.path}?name={content["name"]}'
             return BAD_REQUEST, f'Required keys to add: {IPS_REQUIRED_ATTRS}'
+        else:
+            return BAD_REQUEST, "Invalid path"
         return NO_CONTENT, 'Content not found'
 
     # Изменение
@@ -123,6 +127,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             if not res:
                 return self.put()
             return OK, f'{self.command} OK {self.path}'
+        else:
+            return BAD_REQUEST, "Invalid path"
 
     def check_auth(self):
         auth = self.headers.get(AUTH, '').split()
