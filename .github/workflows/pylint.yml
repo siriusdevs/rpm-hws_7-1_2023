@@ -23,9 +23,9 @@ jobs:
       postgres:
         image: postgres
         env:
-            POSTGRES_PASSWORD: .env
-            POSTGRES_DBNAME: .env
-            POSTGRES_USER: .env
+            POSTGRES_PASSWORD: change_me
+            POSTGRES_DBNAME: postgres
+            POSTGRES_USER: sirius_2023
             POSTGRES_PORT: 5555
             POSTGRES_HOST: 127.0.0.1
         ports:
