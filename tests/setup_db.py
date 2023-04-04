@@ -12,7 +12,6 @@ def main():
         "user": getenv("PG_USER"),
         "password": getenv("PG_PASSWORD"),
     }
-    print(creds)
 
     connection = connect(**creds)
     cursor = connection.cursor()
