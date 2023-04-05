@@ -1,4 +1,4 @@
-from config import GET_TOKEN, DELETE, INSERT, UPDATE, SELECTOR, LEN_UUID
+from config import GET_TOKEN, DELETE, INSERT, UPDATE, SELECTOR, LEN_UUID, SELECT_NUM
 from psycopg2 import connect
 from dotenv import load_dotenv
 from os import getenv
@@ -19,7 +19,7 @@ class DbHandler:
 
     @classmethod
     def find_max_index(cls):
-        max_ind = 1
+        max_ind = 0
         cls.db_cursor.execute('select number from titles;')
         for elem in cls.db_cursor.fetchall():
             if elem[0] > max_ind:
@@ -35,8 +35,11 @@ class DbHandler:
         return False
 
     @classmethod
-    def get_data(cls) -> list:
-        cls.db_cursor.execute(SELECTOR.format(table='titles'))
+    def get_data(cls, query) -> list:
+        if not query:
+            cls.db_cursor.execute(SELECTOR.format(table='titles'))
+        else:
+            cls.db_cursor.execute(SELECT_NUM.format(table='titles', number=query['number']))
         res = []
         for elem in cls.db_cursor.fetchall():
             res.append(elem[1])
@@ -88,12 +91,16 @@ class DbHandler:
     @classmethod
     def delete(cls, data: dict):
         key = list(data.keys())[0]
-        value = data[key]
+        value = int(data[key])
+        if value > cls.find_max_index():
+            return False, "No such a number"
         try:
-            cls.delete_and_change(key, int(value))
+            cls.delete_and_change(key, value)
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False, 'Database command error'
         cls.db_connection.commit()
+        if value == 1:
+            return True, ''
         changed_rows = bool(cls.db_cursor.rowcount)
         return (changed_rows, "No changes") if not changed_rows else (changed_rows, '')

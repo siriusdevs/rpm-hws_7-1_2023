@@ -9,6 +9,7 @@ QOUTE_RESPONSE_MSG = "QOUTE API"
 
 TEMPLATES = 'templates/'
 ANSWER_TEMPLATE = f'{TEMPLATES}answer.html'
+ERROR_TEMPLATE = f'{TEMPLATES}error.html'
 MAIN_PAGE = f'{TEMPLATES}index.html'
 
 ANSWER_PATH = "/answer"
@@ -41,6 +42,7 @@ INSERT = 'INSERT INTO {table} ({keys}) VALUES {values};'
 UPDATE = "UPDATE {table} SET {colomn}='{new_value}' where {key}={value};"
 DELETE = 'DELETE FROM {table} where {key}={value};'
 SELECTOR = 'select * from {table} order by number;'
+SELECT_NUM = 'select * from {table} WHERE number={number};'
 
 # some db consts
 LEN_UUID = -37
@@ -49,4 +51,4 @@ LEN_UUID = -37
 CODING = 'KOI8-R'
 POSIB_ATTRS = ('number')
 POSIB_BODY_KEY = ('phrase')
-OBJ_PATH = "\n path to the obj: http/main?number={ind}"
+OBJ_PATH = "\n path to the obj: http://127.0.0.1:8001/main?number={ind}"

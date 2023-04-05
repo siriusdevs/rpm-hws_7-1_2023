@@ -16,6 +16,11 @@ def quote(quote_data):
         return template.read().format(quote=quote_data["quote"]["body"], author=quote_data["quote"]["author"])
 
 
+def error_page(msg):
+    with open(ERROR_TEMPLATE, 'r') as template:
+        return template.read().format(msg=msg)
+
+
 def frombase_to_main(iterable: list):
     if not iterable:
         return '<p>No data given.</p>'

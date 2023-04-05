@@ -1,6 +1,6 @@
 from config import *
 from http.server import BaseHTTPRequestHandler
-from views import answer, quote, frombase_to_main
+from views import answer, quote, frombase_to_main, error_page
 from get_request.quote import get_quote
 from json import loads
 from get_request.Yes_or_No import get_answer
@@ -10,9 +10,9 @@ from db_handler import DbHandler
 class CastomHandler(BaseHTTPRequestHandler):
 
     @staticmethod
-    def main_page():
+    def main_page(query=None):
         with open(MAIN_PAGE, 'r') as template:
-            return template.read().format(phrases=frombase_to_main(DbHandler.get_data()))
+            return template.read().format(phrases=frombase_to_main(DbHandler.get_data(query)))
 
     def parse_query(self) -> dict:
         qm_ind = self.path.find('?')
@@ -26,11 +26,17 @@ class CastomHandler(BaseHTTPRequestHandler):
 
     def page(self):
         if self.path.startswith(QUOTE_PATH):
-            return quote(get_quote())
+            return OK, quote(get_quote())
 
         elif self.path.startswith(ANSWER_PATH):
-            return answer(get_answer())
-        return CastomHandler.main_page()
+            return OK, answer(get_answer())
+
+        if self.path.startswith(MAIN_PATH):
+            query, msg = self.parse_query()
+            if not query and msg == 'No query':
+                return OK, CastomHandler.main_page()
+            return (OK, CastomHandler.main_page(query)) if query else (BAD_REQUEST, error_page(msg))
+        return NOT_FOUND, error_page('Use http://127.0.0.1:8001/main for Homepage')
 
     def read_content_json(self) -> dict:
         content_length = int(self.headers.get(CONTENT_LENGTH, 0))
@@ -111,7 +117,7 @@ class CastomHandler(BaseHTTPRequestHandler):
         self.respond(FORBIDDEN, 'Auth Fail')
 
     def do_GET(self):
-        self.respond(OK, self.page())
+        self.respond(*self.page())
 
     def do_PUT(self):
         self.process_request()
