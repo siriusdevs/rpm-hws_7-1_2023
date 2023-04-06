@@ -1,9 +1,10 @@
 from requests import get
 from config import API_URL
 
+
 def get_humoreska() -> dict:
     humoreska_data = {
-        'joke': None
+        'joke': None,
     }
     response = get(API_URL)
     if response.status_code == 200:

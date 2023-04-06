@@ -5,9 +5,9 @@ from config import *
 from dotenv import load_dotenv
 from humoreski import get_humoreska
 from views import humoreska, login_page, main_page
+from check_user import check_passes
 
 load_dotenv()
-from check_user import check_passes
 
 API_URL = getenv('API_URL')
 
