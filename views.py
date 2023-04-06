@@ -9,9 +9,11 @@ def humoreska(humoreska_data: dict) -> bytes:
     with open(HUMORESKA, 'r') as template:
         return template.read().format(**humoreska_data).encode(CODING)
 
+
 def main_page():
     with open(MAIN_PAGE, 'r') as template:
         return template.read().encode(CODING)
+
 
 def login_page():
     with open(LOGIN, 'r') as template:
