@@ -3,7 +3,7 @@ env_consts = {
     'PG_PORT': '38746',
     'PG_USER': 'sirius_2023',
     'PG_PASSWORD': 'change_me',
-    'PG_DBNAME': 'sirius_2023'
+    'PG_DBNAME': 'sirius_2023',
 }
 
 
