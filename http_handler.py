@@ -1,24 +1,24 @@
 from http.server import BaseHTTPRequestHandler
-from json import loads
 from os import getenv
-from humoreski import get_humoreska
-from dotenv import load_dotenv
-from views import main_page, humoreska, login_page
+
 from config import *
-from http.cookies import SimpleCookie
+from dotenv import load_dotenv
+from humoreski import get_humoreska
+from views import humoreska, login_page, main_page
+
 load_dotenv()
 from check_user import check_passes
+
 API_URL = getenv('API_URL')
 
 
-class CustomHandler(BaseHTTPRequestHandler): 
+class CustomHandler(BaseHTTPRequestHandler):
     def get_template(self) -> bytes:
         if 'Cookie' not in self.headers:
             return login_page()
         if self.path.startswith("/humoreska"):
             return humoreska(get_humoreska())
         return main_page()
-
 
     def parse_query(self) -> dict:
         if '?' in self.path:
@@ -27,13 +27,11 @@ class CustomHandler(BaseHTTPRequestHandler):
             return {key: int(value) if value.isdigit() else value for key, value in attrs_values}
         return None
 
-
     def do_GET(self):
         self.send_response(OK)
         self.send_header('Content-type', 'html')
         self.end_headers()
         self.wfile.write(self.get_template())
-
 
     def respond(self, http_code: int, msg: str):
         self.send_response(http_code)
@@ -41,29 +39,25 @@ class CustomHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(msg.encode())
 
-
     def process(self):
         if self.check_auth():
             self.respond(*self.make_changes())
             return
         self.respond(FORBIDDEN, 'Auth Fail')
 
-
     def do_POST(self):
         self.send_response(200)
-        content_len = int(self.headers.get('Content-Length'))
-        post_body = str(self.rfile.read(content_len))
+        post_body = str(self.rfile.read(int(self.headers.get('Content-Length'))))
         entered = post_body.replace("login=", "").replace("pass=", "").replace("b", "").replace("'", "").split("&")
         log = entered[0]
         passsword = entered[1]
-        data = check_passes()
-        if log in data.keys():
-            if data[log] == passsword:
+        logpass_data = check_passes()
+        if log in logpass_data.keys():
+            if logpass_data[log] == passsword:
                 self.send_header('Content-type', 'html')
                 self.send_header('Set-Cookie', 'cookie_name=value; Max-Age=15')
         self.end_headers()
         self.wfile.write(self.get_template())
-
 
     def do_DELETE(self):
         self.process()
