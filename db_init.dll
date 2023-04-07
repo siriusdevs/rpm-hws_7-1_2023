@@ -1,4 +1,4 @@
-create schema college
+create schema college;
 
 create extension "uuid-ossp";
 
@@ -18,9 +18,6 @@ create table if not exists college.ips
 );
 
 insert into college.ips (name, local_ip, public_ip) values ('Work', '127.0.0.2', '86.101.44.128');
-
-DELETE FROM college.ips
-   WHERE id=3
 
 insert into college.token (username)
 values ('admin');
