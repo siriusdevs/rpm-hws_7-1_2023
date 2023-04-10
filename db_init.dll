@@ -19,5 +19,5 @@ create table if not exists college.ips
 
 insert into college.ips (name, local_ip, public_ip) values ('Work', '127.0.0.2', '86.101.44.128');
 
-insert into college.token (username)
-values ('admin');
+insert into college.token (username, token)
+values ('admin', '77f498fc-ab20-4017-aa62-c8b246615bae');
