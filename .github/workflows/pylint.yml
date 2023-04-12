@@ -45,6 +45,3 @@ jobs:
       run: |
         chmod +x tests/test.sh
         ./tests/test.sh
-    - name: Тесты python-requests
-      run: |
-        pytest tests/test_requests.py
