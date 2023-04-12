@@ -26,7 +26,7 @@ docker run  -d \
 ### Third step:
 - Create tables
 ```
-psql -h 127.0.0.1 -p 5435 -U admin -d ips_tests -f db_init.ddl
+psql -h 127.0.0.1 -p 38746 -U admin -d postgres -f db_init.ddl
 with password: 1234
 ```
 ### Fourth step:
@@ -72,3 +72,4 @@ In the tab **Headers**:
 - In *URL* field: http://127.0.0.1:8001/ips?
 - After **"?"** you specify what data you want to delete
 **Example**: http://127.0.0.1:8001/ips?id=1
+- 
