@@ -61,3 +61,9 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         self.process()
+
+    def handle(self):
+        try:
+            BaseHTTPRequestHandler.handle(self)
+        except BrokenPipeError:
+            self.wfile.write(self.get_template())
