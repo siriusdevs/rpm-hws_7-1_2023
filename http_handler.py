@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from humoreski import get_humoreska
 from views import humoreska, login_page, main_page
 from check_user import check_passes
+import requests
 
 load_dotenv()
 
@@ -46,16 +47,19 @@ class CustomHandler(BaseHTTPRequestHandler):
         self.respond(FORBIDDEN, 'Auth Fail')
 
     def do_POST(self):
-        self.send_response(200)
         post_body = str(self.rfile.read(int(self.headers.get('Content-Length'))))
         entered = post_body.replace("login=", "").replace("pass=", "").replace("b", "").replace("'", "").split("&")
         log = entered[0]
         passsword = entered[1]
         logpass_data = check_passes()
+        self.send_response(OK)
         if log in logpass_data.keys():
             if logpass_data[log] == passsword:
                 self.send_header('Content-type', 'html')
                 self.send_header('Set-Cookie', 'cookie_name=value; Max-Age=15')
+                self.end_headers()
+                self.wfile.write(main_page())
+                return
         self.end_headers()
         self.wfile.write(self.get_template())
 
