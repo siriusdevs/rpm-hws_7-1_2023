@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from humoreski import get_humoreska
 from views import humoreska, login_page, main_page
 from check_user import check_passes
-import requests
 
 load_dotenv()
 
