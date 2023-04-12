@@ -5,7 +5,7 @@ This web application allows you to create a local and public IP entry, view and 
 ### First step: 
 - Copy project from git
 ```
-git clone git clone https://github.com/nester256/rpm-hws_7-1_2023/tree/nesterov
+git clone https://github.com/nester256/rpm-hws_7-1_2023
 
 cd rpm-hws_7-1_2023
 
@@ -26,7 +26,8 @@ docker run  -d \
 ### Third step:
 - Create tables
 ```
-psql -h 127.0.0.1 -p 5435 -u admin ips_tests -f db_init.ddl
+psql -h 127.0.0.1 -p 5435 -U admin -d ips_tests -f db_init.ddl
+with password: 1234
 ```
 ### Fourth step:
 - Create .env file with credentials: 
@@ -53,13 +54,7 @@ python3.X main.py
 Go to Postman and add:
 In the tab **Headers**:
 - In the *Key* field type **Authorization**
-- In the *Value* field type **admin {token}**
-To find out your token:
-```
-psql -h 127.0.0.1 -p 5435 -u admin ips_tests
-
-SELECT token FROM token WHERE username="admin"
-```
+- In the *Value* field type **admin {'77f498fc-ab20-4017-aa62-c8b246615bae'}**
 
 ### If you want to execute POST, PUT requests
 
