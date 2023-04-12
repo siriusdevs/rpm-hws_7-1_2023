@@ -1,7 +1,7 @@
 Ultra safe and nice website with some geek jokes.
 
 Requirements:
-    Docker desktop
+    Docker desktop,
     Postgresql
 
 To run it by your own you shold make an docker container using:
@@ -11,7 +11,7 @@ docker run  -d \
         -e POSTGRES_USER=sirius_2023 \
         -e POSTGRES_PASSWORD=change_me \
         -e PGDATA=/postgres_data_inside_container \
-        -v ~/<Your db path>/postgres_data:/postgres_data_inside_container \
+        -v ~/ Your db path /postgres_data:/postgres_data_inside_container \
         -p 38746:5432 \
         postgres:15.1
 
