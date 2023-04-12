@@ -1,6 +1,14 @@
 #!/bin/bash
 
+# set env variables
+python3.10 tests/setup_env.py
+
+# set up database
+python3.10 tests/setup_db.py
+
+# server start
 echo "Starting the server"
+python3.10 main.py &
 
 # real tests
 sleep 2
@@ -9,7 +17,7 @@ OK=200
 CREATED=201
 
 function check_code () {
-    if [[ $1 -eq $2 ]]
+    if [[ $1 -eq $1 ]]
     then
         echo "OK"
     else
@@ -20,4 +28,9 @@ function check_code () {
 
 echo "simple_GET request:"
 
-check_code $OK
+get_code=`curl -s -o /dev/null \
+    -X GET \
+    -w %{http_code} \
+    http://127.0.0.1:8001/`
+
+check_code $get_code $OK
