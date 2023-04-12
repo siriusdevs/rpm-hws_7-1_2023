@@ -13,8 +13,7 @@ if __name__ == '__main__':
         password=getenv("PG_PASSWORD"),
         )
         cursor = db_connection.cursor()
-    except psycopg2.OperationalError:
-        print("Не подключена база данных")
-    else:
         with HTTPServer((HOST, PORT), CustomHandler) as server:
             server.serve_forever()
+    except psycopg2.OperationalError:
+        print("Не подключена база данных")
