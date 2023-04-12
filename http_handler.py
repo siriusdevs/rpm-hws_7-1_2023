@@ -14,7 +14,8 @@ API_URL = getenv('API_URL')
 
 class CustomHandler(BaseHTTPRequestHandler):
     def get_template(self) -> bytes:
-        if 'Cookie' not in self.headers:
+        print("super_auth" in self.headers["Cookie"])
+        if "super_auth" not in self.headers["Cookie"]:
             return login_page()
         if self.path.startswith("/humoreska"):
             return humoreska(get_humoreska())
@@ -55,7 +56,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         if log in logpass_data.keys():
             if logpass_data[log] == passsword:
                 self.send_header('Content-type', 'html')
-                self.send_header('Set-Cookie', 'cookie_name=value; Max-Age=15')
+                self.send_header('Set-Cookie', 'super_auth=yes; Max-Age=5')
                 self.end_headers()
                 self.wfile.write(main_page())
                 return
