@@ -31,6 +31,6 @@ echo "simple_GET request:"
 get_code=`curl -s -o /dev/null \
     -X GET \
     -w %{http_code} \
-    http://127.0.0.1:8001/students`
+    http://127.0.0.1:8001`
 
 check_code $get_code $OK
