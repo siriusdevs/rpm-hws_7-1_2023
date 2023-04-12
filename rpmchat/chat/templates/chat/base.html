@@ -1,0 +1,128 @@
+<html>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'chat/style_base.css' %}">
+<head>
+  <title>Chat</title>
+  <meta name="csrf_token" content="{{ csrf_token }}">
+</head>
+
+<body>
+
+  <div class='chat'>
+
+    <div class='chat-messages' id="chat">
+      <div class='chat-messages__content' id='messages'>
+        <b>Загрузка...</b>
+      </div>
+    </div>
+
+    
+    <div class='chat-input'>
+      <form method='post' id='chat-form'>
+        {% csrf_token %}
+        <input type='text' id='message-text' class='chat-form__input' placeholder='Введите сообщение'>
+        <input type='submit' class='chat-form__submit' value='Отправить'>
+      </form>
+    </div>
+    
+    <div class='logout-button'>
+      <a href="{% url 'users:logout' %}">Выйти</a>
+    </div>
+  </div>
+
+<script>
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  window.addEventListener('beforeunload', function(e) {
+    e.preventDefault()
+    e.returnValue = ''
+    fetch('logout/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({
+        'data': '/logout'
+      })
+    })
+    .then(response => {return response.json()})
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+  });
+
+  var messages__container = document.getElementById('messages');
+  var chatblock = document.getElementById('chat');
+  var interval = null;
+  var sendForm = document.getElementById('chat-form');
+  var messageInput = document.getElementById('message-text');
+
+  function send_request(act) {
+    var var1 = null;
+    var var2 = null;
+
+    if(act == 'send') {
+      var1 = messageInput.value;
+    }
+    fetch('send/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({
+        'act': act,
+        'var1': var1,
+        'var2': var2,
+        csrfmiddlewaretoken: csrftoken
+      })
+    })
+    .then(response => {return response.json()})
+    .then(data => {
+      data = JSON.parse(JSON.stringify(data)).data
+      messages__container.innerHTML = data;
+
+      if(act == 'send') {
+        messageInput.value = '';
+      }
+    })
+    .catch(error => console.error(error));
+  }
+
+  sendForm.onsubmit = function () {
+    send_request('send');
+    return false;
+  };
+  
+  function load() {
+    chatblock.scrollTop = chatblock.scrollHeight;
+    fetch('send/', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({
+        'act': 'load',
+        csrfmiddlewaretoken: csrftoken
+      })
+    })
+    .then(response => {return response.json()})
+    .then(data => {
+      data = JSON.parse(JSON.stringify(data)).data
+      messages__container.innerHTML = data;
+    }).catch(error => console.error(error));
+  }
+  
+  function update() {
+    load();
+  }
+  interval = setInterval(load,500);
+</script>
+</body>
+</html>

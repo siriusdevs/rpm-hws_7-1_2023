@@ -1,0 +1,59 @@
+body {
+    background: white url("images/cosmic_background.jpg") no-repeat;
+    background-size: cover;
+    background-position: center top;
+}
+.header {
+background-color: #111;
+padding: 10px;
+}
+.nav {
+display: flex;
+justify-content: flex-end;
+}
+.nav__list {
+display: flex;
+list-style-type: none;
+padding: 0;
+margin: 0;
+}
+.nav__item {
+margin-left: 10px;
+}
+.nav__link {
+color: #fff;
+text-decoration: none;
+}
+
+.main {
+padding: 50px;
+}
+.hero__title {
+background-color: #000000;
+font-size: 48px;
+border-radius: 4px;
+padding: 8px 12px;
+color: #fff;
+}
+.hero__description {
+padding: 8px 12px;
+background-color: #000000;
+font-size: 18px;
+color: #fff;
+max-width: 600px;
+border-radius: 4px;
+margin: 20px 0;
+}
+.hero__cta {
+display: inline-block;
+padding: 12px 24px;
+background-color: #fff;
+color: #111;
+text-decoration: none;
+font-size: 18px;
+border-radius: 4px;
+transition: background-color 0.3s ease;
+}
+.hero__cta:hover {
+background-color: #e62222;
+}

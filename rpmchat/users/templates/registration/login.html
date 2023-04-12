@@ -1,0 +1,22 @@
+{% load static %}
+<html>
+<link rel="stylesheet" href="{% static 'users/style_login.css' %}">
+<div class="login-block">
+  <div class="form-container">
+    <form method="POST" action="{% url 'users:login' %}">
+      {% csrf_token %}
+      <h1>Вход</h1>
+      <div class="form-inputs">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn">Войти</button>
+    </form>
+    <div class="form-bottom">
+      <p>Нет аккаунта? <a href="{% url 'users:register' %}">Зарегистрироваться</a></p>
+    </div>
+  </div>
+</div>
+</html>
