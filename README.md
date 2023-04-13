@@ -11,7 +11,7 @@
 
 - `docker run --name mycontainer -p 5432:5432 -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=mydb -d postgres`
 
-- `git clone https://github.com/vylkov/rpm-hws_7-1_2023.git`
+- `https://github.com/KabeSai/rpm-hws_7-1_2023.git`
 
 ### Перед установкой зависимостей рекомендуем создать виртуальную среду и активировать её
 
