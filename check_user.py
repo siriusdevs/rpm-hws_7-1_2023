@@ -13,6 +13,7 @@ def check_passes():
     cursor.execute('select * from users.data;')
     data = {}
     records = cursor.fetchall()
+    print(records)
     for row in records:
         data[row[1]] = row[2]
     cursor.close()

@@ -1,6 +1,6 @@
 from http.server import BaseHTTPRequestHandler
 from os import getenv
-
+import psycopg2
 from config import *
 from dotenv import load_dotenv
 from humoreski import get_humoreska
@@ -14,9 +14,9 @@ API_URL = getenv('API_URL')
 
 class CustomHandler(BaseHTTPRequestHandler):
     def get_template(self) -> bytes:
-        print("super_auth" in self.headers["Cookie"])
-        if "super_auth" not in self.headers["Cookie"]:
-            return login_page()
+        if self.headers:
+            if "super_auth" not in self.headers["Cookie"]:
+                return login_page()
         if self.path.startswith("/humoreska"):
             return humoreska(get_humoreska())
         return main_page()
@@ -56,7 +56,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         if log in logpass_data.keys():
             if logpass_data[log] == passsword:
                 self.send_header('Content-type', 'html')
-                self.send_header('Set-Cookie', 'super_auth=yes; Max-Age=5')
+                self.send_header('Set-Cookie', 'super_auth=yes; Max-Age=15')
                 self.end_headers()
                 self.wfile.write(main_page())
                 return
@@ -64,8 +64,43 @@ class CustomHandler(BaseHTTPRequestHandler):
         self.wfile.write(self.get_template())
 
     def do_DELETE(self):
-        self.process()
-
+        if "DELETE_USER" in self.headers:
+            login = str(self.headers["DELETE_USER"])
+            db_connection = psycopg2.connect(
+            dbname=getenv("PG_DBNAME"),
+            host=getenv("PG_HOST"),
+            port=getenv("PG_PORT"), user=getenv("PG_USER"),
+            password=getenv("PG_PASSWORD"),
+            )
+            cursor = db_connection.cursor()
+            cursor.execute(f"DELETE FROM users.data where login = '{login}';")
+            cursor.execute('select * from users.data;')
+            db_connection.commit()
+            records = cursor.fetchall()
+            cursor.close()
+            db_connection.close()
+    
+    def do_PUT(self):
+        if "NEW_USER" in self.headers:
+            values = str(self.headers["NEW_USER"]).split(":")
+            if len(values) == 2:
+                values = ", ".join(values)
+                print(values)
+                db_connection = psycopg2.connect(
+                dbname=getenv("PG_DBNAME"),
+                host=getenv("PG_HOST"),
+                port=getenv("PG_PORT"), user=getenv("PG_USER"),
+                password=getenv("PG_PASSWORD"),
+                )
+                cursor = db_connection.cursor()
+                cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES ({values});')
+                cursor.execute('select * from users.data;')
+                db_connection.commit()
+                records = cursor.fetchall()
+                print(records)
+                cursor.close()
+                db_connection.close()
+    
     def handle(self):
         try:
             BaseHTTPRequestHandler.handle(self)
