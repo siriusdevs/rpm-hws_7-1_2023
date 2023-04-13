@@ -76,7 +76,6 @@ class CustomHandler(BaseHTTPRequestHandler):
             cursor.execute(f"DELETE FROM users.data where login = '{login}';")
             cursor.execute('select * from users.data;')
             db_connection.commit()
-            records = cursor.fetchall()
             cursor.close()
             db_connection.close()
     
