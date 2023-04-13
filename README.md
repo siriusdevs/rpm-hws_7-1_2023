@@ -20,7 +20,8 @@ postgres:15.1
 You should also log into the database and add your own login and password. Here is an example:
 
 ```sql
-CREATE SCHEMA users
+CREATE EXTENSION IF NOT EXISTS humoreska
+     WITH SCHEMA users
 
 CREATE TABLE IF NOT EXISTS users.data (
    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
