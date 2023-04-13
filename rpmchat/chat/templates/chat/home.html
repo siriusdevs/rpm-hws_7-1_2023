@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'chat/style_home.css' %}">
+<head>
+  <title>Космический чат</title>
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item"><a href="/account/" class="nav__link">Вход</a></li>
+        <li class="nav__item"><a href="/account/registration" class="nav__link">Регистрация</a></li>
+        <li class="nav__item"><a href="/chat/" class="nav__link">Чат</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main class="main">
+    <section class="hero">
+      <h1 class="hero__title">Космический чат</h1>
+      <p class="hero__description">Добро пожаловать в захватывающий мир космического общения! Присоединяйтесь к нашему космическому сообществу и общайтесь с космическими путешественниками со всего мира. Регистрируйтесь, входите в систему и начинайте общаться сейчас!</p>
+      <a href="/account/registration" class="hero__cta">Зарегистрироваться</a>
+    </section>
+  </main>
+</body>
+</html>
