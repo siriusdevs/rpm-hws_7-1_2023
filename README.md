@@ -21,7 +21,7 @@ You should also log into the database and add your own login and password. Here 
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS humoreska
-     WITH SCHEMA users
+     WITH SCHEMA users;
 
 CREATE TABLE IF NOT EXISTS users.data (
    id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
