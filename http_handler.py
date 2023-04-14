@@ -74,7 +74,6 @@ class CustomHandler(BaseHTTPRequestHandler):
             return data
         return {}
 
-
     def do_DELETE(self):
         content = self.read_content_json()
         db_connection = psycopg2.connect(
@@ -89,7 +88,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         db_connection.commit()
         cursor.close()
         db_connection.close()
-    
+ 
     def do_PUT(self):
         content = self.read_content_json()
         db_connection = psycopg2.connect(
@@ -100,11 +99,12 @@ class CustomHandler(BaseHTTPRequestHandler):
         )
         cursor = db_connection.cursor()
         for key in content.keys():
-            cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES {key, content[key]};')
+            data = (key, content[key])
+            cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES {data};')
         db_connection.commit()
         cursor.close()
         db_connection.close()
-    
+ 
     def handle(self):
         try:
             BaseHTTPRequestHandler.handle(self)
