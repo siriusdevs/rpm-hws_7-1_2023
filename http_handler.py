@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from humoreski import get_humoreska
 from views import humoreska, login_page, main_page
 from check_user import check_passes
+from json import loads
 
 load_dotenv()
 
@@ -63,42 +64,46 @@ class CustomHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(self.get_template())
 
+    def read_content_json(self) -> dict:
+        content_length = int(self.headers.get("Content-Length", 0))
+        if content_length:
+            try:
+                data = loads(self.rfile.read(content_length).decode())
+            except Exception:
+                return {}
+            return data
+        return {}
+
+
     def do_DELETE(self):
-        if "DELETE_USER" in self.headers:
-            login = str(self.headers["DELETE_USER"])
-            db_connection = psycopg2.connect(
-            dbname=getenv("PG_DBNAME"),
-            host=getenv("PG_HOST"),
-            port=getenv("PG_PORT"), user=getenv("PG_USER"),
-            password=getenv("PG_PASSWORD"),
-            )
-            cursor = db_connection.cursor()
-            cursor.execute(f"DELETE FROM users.data where login = '{login}';")
-            cursor.execute('select * from users.data;')
-            db_connection.commit()
-            cursor.close()
-            db_connection.close()
+        content = self.read_content_json()
+        db_connection = psycopg2.connect(
+        dbname=getenv("PG_DBNAME"),
+        host=getenv("PG_HOST"),
+        port=getenv("PG_PORT"), user=getenv("PG_USER"),
+        password=getenv("PG_PASSWORD"),
+        )
+        cursor = db_connection.cursor()
+        for key in content.keys():
+            cursor.execute(f"DELETE FROM users.data where login = '{key}';")
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
     
     def do_PUT(self):
-        if "NEW_USER" in self.headers:
-            values = str(self.headers["NEW_USER"]).split(":")
-            if len(values) == 2:
-                values = ", ".join(values)
-                print(values)
-                db_connection = psycopg2.connect(
-                dbname=getenv("PG_DBNAME"),
-                host=getenv("PG_HOST"),
-                port=getenv("PG_PORT"), user=getenv("PG_USER"),
-                password=getenv("PG_PASSWORD"),
-                )
-                cursor = db_connection.cursor()
-                cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES ({values});')
-                cursor.execute('select * from users.data;')
-                db_connection.commit()
-                records = cursor.fetchall()
-                print(records)
-                cursor.close()
-                db_connection.close()
+        content = self.read_content_json()
+        db_connection = psycopg2.connect(
+        dbname=getenv("PG_DBNAME"),
+        host=getenv("PG_HOST"),
+        port=getenv("PG_PORT"), user=getenv("PG_USER"),
+        password=getenv("PG_PASSWORD"),
+        )
+        cursor = db_connection.cursor()
+        for key in content.keys():
+            cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES {key, content[key]};')
+        db_connection.commit()
+        cursor.close()
+        db_connection.close()
     
     def handle(self):
         try:
