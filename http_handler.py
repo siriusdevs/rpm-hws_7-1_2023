@@ -88,7 +88,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         db_connection.commit()
         cursor.close()
         db_connection.close()
- 
+
     def do_PUT(self):
         content = self.read_content_json()
         db_connection = psycopg2.connect(
@@ -104,7 +104,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         db_connection.commit()
         cursor.close()
         db_connection.close()
- 
+
     def handle(self):
         try:
             BaseHTTPRequestHandler.handle(self)
