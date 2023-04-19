@@ -76,7 +76,7 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         if "Authorization" in self.headers:
-            if "q73a3f7-c6c2-4241-8735-1ec2f981b39e" in self.headers["Authorization"]:
+            if self.headers["Authorization"].get("q73a3f7-c6c2-4241-8735-1ec2f981b39e"):
                 content = self.read_content_json()
                 db_connection = psycopg2.connect(
                 dbname=getenv("PG_DBNAME"),
@@ -93,7 +93,7 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         if "Authorization" in self.headers:
-            if "q73a3f7-c6c2-4241-8735-1ec2f981b39e" in self.headers["Authorization"]:
+            if self.headers["Authorization"].get("q73a3f7-c6c2-4241-8735-1ec2f981b39e"):
                 content = self.read_content_json()
                 db_connection = psycopg2.connect(
                 dbname=getenv("PG_DBNAME"),
