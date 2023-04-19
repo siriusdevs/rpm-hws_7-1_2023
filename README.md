@@ -52,7 +52,7 @@ python3.X main.py
 Go to Postman and add:
 In the tab **Headers**:
 - In the *Key* field type **Authorization**
-- In the *Value* field type **admin {'77f498fc-ab20-4017-aa62-c8b246615bae'}**
+- In the *Value* field type **admin {77f498fc-ab20-4017-aa62-c8b246615bae}**
 
 ### If you want to execute POST, PUT requests
 
