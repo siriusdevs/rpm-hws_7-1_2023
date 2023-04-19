@@ -46,13 +46,13 @@ class DbHandler:
         values = [insert_data[key] for key in keys]
         attrs = ', '.join(keys)
         values = ', '.join([str(val) if is_num(val) else f"'{val}'" for val in values])
-        return INSERT.format(table='ips', keys=attrs, values=values)
+        return INSERT.format(table='college.ips', keys=attrs, values=values)
 
     @classmethod
     def update(cls, data: dict, where: dict):
         req = ', '.join([f"{key}={val}" if is_num(val) else f"{key}='{val}'" for key, val in data.items()])
         try:
-            cls.db_cursor.execute(cls.query_request(UPDATE.format(table='ips', request=req), where))
+            cls.db_cursor.execute(cls.query_request(UPDATE.format(table='college.ips', request=req), where))
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
@@ -72,7 +72,7 @@ class DbHandler:
     @classmethod
     def delete(cls, req_conds: dict):
         try:
-            cls.db_cursor.execute(cls.query_request(DELETE.format(table='ips'), req_conds))
+            cls.db_cursor.execute(cls.query_request(DELETE.format(table='college.ips'), req_conds))
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False

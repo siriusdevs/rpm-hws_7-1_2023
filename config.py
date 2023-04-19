@@ -33,8 +33,8 @@ NO_CONTENT = 204
 NOT_IMPLEMENTED = 501
 
 # db requests
-SELECTOR = 'SELECT id, name, local_ip, public_ip, date(created) as created FROM ips'
-GET_TOKEN = 'SELECT token FROM token WHERE username=\'{username}\''
+SELECTOR = 'SELECT id, name, local_ip, public_ip, date(created) as created FROM college.ips'
+GET_TOKEN = 'SELECT token FROM college.token WHERE username=\'{username}\''
 INSERT = 'INSERT INTO {table} ({keys}) VALUES ({values})'
 UPDATE = 'UPDATE {table} SET {request}'
 DELETE = 'DELETE FROM {table} '

@@ -18,8 +18,6 @@ docker run  -d \
         --name ips_test \
         -e POSTGRES_USER=admin \
         -e POSTGRES_PASSWORD=1234 \
-        -e PGDATA=/postgres_data_inside_container \
-        -v ~/sirius_db_2023/postgres_data:/postgres_data_inside_container \
         -p 38746:5432 \
         postgres:15.1
 ```
@@ -34,7 +32,7 @@ with password: 1234
 ```
 PG_DBNAME=postgres
 PG_HOST=127.0.0.1
-PG_PORT=5432
+PG_PORT=38746
 PG_USER=admin
 PG_PASSWORD=1234
 (optional, for test doesn`t need)
