@@ -104,10 +104,10 @@ class CustomHandler(BaseHTTPRequestHandler):
             if all([key in content for key in IPS_REQUIRED_ATTRS]):
                 content['local_ip'] = socket.gethostbyname(socket.gethostname())
                 content['public_ip'] = requests.get("http://api.ipify.org").text
-                answer = 'OK' if DbHandler.insert(content) else 'FAIL'
+                # answer = 'OK' if DbHandler.insert(content) else 'FAIL'
                 status, message = DbHandler.insert(content)
                 message = f'http://{HOST}:{PORT}{IPS}/?id={message}' if status == CREATED else message
-                return CREATED, message
+                return status, message
             return BAD_REQUEST, f'Required keys to add: {IPS_REQUIRED_ATTRS}'
         return BAD_REQUEST, "Invalid path"
 

@@ -25,10 +25,10 @@ def list_to_view(iterable: list):
     return res
 
 
-def ips(students_data: dict) -> str:
+def ips(ips_data: dict) -> str:
     with open(IPS_TEMPLATE, 'r') as template:
         page = template.read()
-        return page.format(**students_data)
+        return page.format(**ips_data)
 
 
 def ips_tools() -> str:
