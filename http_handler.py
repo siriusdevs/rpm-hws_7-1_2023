@@ -86,7 +86,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 )
                 cursor = db_connection.cursor()
                 for key in content.keys():
-                    cursor.execute(f"DELETE FROM users.data where login = '{key}';")
+                    cursor.execute("DELETE FROM users.data where login = '{}';".format(key))
                 db_connection.commit()
                 cursor.close()
                 db_connection.close()
