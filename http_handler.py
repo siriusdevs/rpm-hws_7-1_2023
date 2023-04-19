@@ -1,12 +1,12 @@
 from http.server import BaseHTTPRequestHandler
 from os import getenv
 import psycopg2
-from config import *
+from config import OK, FORBIDDEN
 from dotenv import load_dotenv
 from humoreski import get_humoreska
 from views import humoreska, login_page, main_page
 from check_user import check_passes
-from json import loads
+from json import loads as ld
 
 load_dotenv()
 
@@ -68,7 +68,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         content_length = int(self.headers.get("Content-Length", 0))
         if content_length:
             try:
-                data = loads(self.rfile.read(content_length).decode())
+                data = ld(self.rfile.read(content_length).decode())
             except Exception:
                 return {}
             return data
@@ -104,7 +104,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 cursor = db_connection.cursor()
                 for key in content.keys():
                     data = (key, content[key])
-                    cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES {data};')
+                    cursor.execute('INSERT INTO users.data (login, pwd) VALUES {};'.format(data))
                 db_connection.commit()
                 cursor.close()
                 db_connection.close()

@@ -1,8 +1,8 @@
-from config import *
+from config import CODING, HUMORESKA, MAIN_PAGE, LOGIN
 
 
 def list_to_view(iterable: list):
-    return ''.join([f'<ul>{item}</ul>' for item in iterable]) if iterable else '<p>No data given.</p>'
+    return ''.join(['<ul>{}</ul>'.format(item) for item in iterable]) if iterable else '<p>No data given.</p>'
 
 
 def humoreska(humoreska_data: dict) -> bytes:

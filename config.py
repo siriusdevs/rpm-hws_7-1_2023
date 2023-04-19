@@ -8,9 +8,9 @@ PAGES = (HUMORESKA)
 
 # templates paths
 TEMPLATES = 'templates/'
-MAIN_PAGE = f'{TEMPLATES}index.html'
-HUMORESKA = f'{TEMPLATES}humoreska.html'
-LOGIN = f'{TEMPLATES}auth.html'
+MAIN_PAGE = '{}index.html'.format(TEMPLATES)
+HUMORESKA = '{}humoreska.html'.format(TEMPLATES)
+LOGIN = '{}auth.html'.format(TEMPLATES)
 
 # HTTP codes
 OK = 200
