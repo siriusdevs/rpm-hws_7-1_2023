@@ -75,35 +75,39 @@ class CustomHandler(BaseHTTPRequestHandler):
         return {}
 
     def do_DELETE(self):
-        content = self.read_content_json()
-        db_connection = psycopg2.connect(
-        dbname=getenv("PG_DBNAME"),
-        host=getenv("PG_HOST"),
-        port=getenv("PG_PORT"), user=getenv("PG_USER"),
-        password=getenv("PG_PASSWORD"),
-        )
-        cursor = db_connection.cursor()
-        for key in content.keys():
-            cursor.execute(f"DELETE FROM users.data where login = '{key}';")
-        db_connection.commit()
-        cursor.close()
-        db_connection.close()
+        if "Authorization" in self.headers:
+            if "q73a3f7-c6c2-4241-8735-1ec2f981b39e" in self.headers["Authorization"]:
+                content = self.read_content_json()
+                db_connection = psycopg2.connect(
+                dbname=getenv("PG_DBNAME"),
+                host=getenv("PG_HOST"),
+                port=getenv("PG_PORT"), user=getenv("PG_USER"),
+                password=getenv("PG_PASSWORD"),
+                )
+                cursor = db_connection.cursor()
+                for key in content.keys():
+                    cursor.execute(f"DELETE FROM users.data where login = '{key}';")
+                db_connection.commit()
+                cursor.close()
+                db_connection.close()
 
     def do_PUT(self):
-        content = self.read_content_json()
-        db_connection = psycopg2.connect(
-        dbname=getenv("PG_DBNAME"),
-        host=getenv("PG_HOST"),
-        port=getenv("PG_PORT"), user=getenv("PG_USER"),
-        password=getenv("PG_PASSWORD"),
-        )
-        cursor = db_connection.cursor()
-        for key in content.keys():
-            data = (key, content[key])
-            cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES {data};')
-        db_connection.commit()
-        cursor.close()
-        db_connection.close()
+        if "Authorization" in self.headers:
+            if "q73a3f7-c6c2-4241-8735-1ec2f981b39e" in self.headers["Authorization"]:
+                content = self.read_content_json()
+                db_connection = psycopg2.connect(
+                dbname=getenv("PG_DBNAME"),
+                host=getenv("PG_HOST"),
+                port=getenv("PG_PORT"), user=getenv("PG_USER"),
+                password=getenv("PG_PASSWORD"),
+                )
+                cursor = db_connection.cursor()
+                for key in content.keys():
+                    data = (key, content[key])
+                    cursor.execute(f'INSERT INTO users.data (login, pwd) VALUES {data};')
+                db_connection.commit()
+                cursor.close()
+                db_connection.close()
 
     def handle(self):
         try:

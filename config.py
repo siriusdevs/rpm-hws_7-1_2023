@@ -11,7 +11,6 @@ TEMPLATES = 'templates/'
 MAIN_PAGE = f'{TEMPLATES}index.html'
 HUMORESKA = f'{TEMPLATES}humoreska.html'
 LOGIN = f'{TEMPLATES}auth.html'
-CREATE = f'{TEMPLATES}create_user.html'
 
 # HTTP codes
 OK = 200
