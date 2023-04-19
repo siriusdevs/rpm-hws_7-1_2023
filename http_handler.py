@@ -86,7 +86,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 )
                 cursor = db_connection.cursor()
                 for key in content.keys():
-                    cursor.execute("DELETE FROM users.data where login = '{}';".format(key))
+                    cursor.execute("DELETE FROM users.data where login = '{0}';".format(key))
                 db_connection.commit()
                 cursor.close()
                 db_connection.close()
@@ -104,7 +104,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 cursor = db_connection.cursor()
                 for key in content.keys():
                     data = (key, content[key])
-                    cursor.execute('INSERT INTO users.data (login, pwd) VALUES {};'.format(data))
+                    cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
                 db_connection.commit()
                 cursor.close()
                 db_connection.close()

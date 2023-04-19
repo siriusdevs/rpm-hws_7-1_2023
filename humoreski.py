@@ -12,5 +12,5 @@ def get_humoreska() -> dict:
         if response_data:
             humoreska_data = response_data
     else:
-        print('ANECDOT API failed with status code: {}'.format(response.status_code))
+        print('ANECDOT API failed with status code: {0}'.format(response.status_code))
     return humoreska_data
