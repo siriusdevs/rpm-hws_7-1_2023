@@ -105,7 +105,6 @@ class CustomHandler(BaseHTTPRequestHandler):
             if all([key in content for key in IPS_REQUIRED_ATTRS]):
                 content['local_ip'] = socket.gethostbyname(socket.gethostname())
                 content['public_ip'] = requests.get("http://api.ipify.org").text
-                # answer = 'OK' if DbHandler.insert(content) else 'FAIL'
                 status, message = DbHandler.insert(content)
                 message = f'http://{HOST}:{PORT}{IPS}/?id={message}' if status == CREATED else message
                 return status, message
