@@ -93,7 +93,7 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     # добавление
 
-    def post(self, content):
+    def post(self, content: dict = None):
         if self.path.startswith(IPS):
             content = content if content else self.read_content_json()
             print(content)
