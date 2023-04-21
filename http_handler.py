@@ -60,7 +60,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             if possible_attrs:
                 attrs = list(filter(lambda attr: attr not in possible_attrs, query.keys()))
                 if attrs:
-                    raise InvalidQuery(f'{__name__} unknown attributes: {attrs}')
+                    self.respond(BAD_REQUEST, "Request error")
+                    return None
             return query
         return None
 
@@ -92,9 +93,9 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     # добавление
 
-    def post(self):
+    def post(self, content):
         if self.path.startswith(IPS):
-            content = self.read_content_json()
+            content = content if content else self.read_content_json()
             print(content)
             if not content:
                 return BAD_REQUEST, f'No content provided by {self.command}'
@@ -117,7 +118,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         if self.path.startswith(IPS):
             content = self.read_content_json()
             if not content:
-                return BAD_REQUEST, f'No content provided by {self.command}'
+                return BAD_REQUEST, 'No content or incorrect data provided by PUT'
             query = self.parse_query()
             if query:
                 attrs = list(filter(lambda attr: attr not in IPS_ALL_ATTRS, query.keys()))
@@ -125,9 +126,9 @@ class CustomHandler(BaseHTTPRequestHandler):
                     return NOT_IMPLEMENTED, f'ips do not have attributes: {attrs}'
             res = DbHandler.update(where=query, data=content)
             if not res:
-                return self.put()
-            return OK, f'{self.command} OK {self.path}'
-        return BAD_REQUEST, "Invalid path"
+                return self.post(content)
+            return_path = self.path.split('?')[0]
+            return OK, f"http://{HOST}:{PORT}{return_path}?id={res[0]}: {self.command} OK"
 
     def check_auth(self):
         auth = self.headers.get(AUTH, '').split()
