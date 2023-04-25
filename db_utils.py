@@ -1,4 +1,4 @@
-from config import GET_TOKEN, SELECTOR, DELETE, INSERT, UPDATE, BAD_REQUEST, INTERNAL_ERROR, CREATED, RETURN_ID
+from config import *
 from views import list_to_view
 from psycopg2 import connect
 from dotenv import load_dotenv
@@ -52,7 +52,9 @@ class DbHandler:
     def update(cls, data: dict, where: dict):
         req = ', '.join([f"{key}={val}" if is_num(val) else f"{key}='{val}'" for key, val in data.items()])
         try:
-            cls.db_cursor.execute(cls.query_request(UPDATE.format(table='college.ips', request=req), where) + RETURN_ID)
+            cls.db_cursor.execute(
+                cls.query_request(UPDATE.format(table='college.ips', request=req), where) + RETURN_ID
+            )
         except Exception as error:
             print(f'{__name__} error: {error}')
             return False
