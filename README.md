@@ -35,3 +35,25 @@ Finally, you can run the app using following command:
 ```
 python main.py
 ```
+To make post request to add some users, you should use the following command:
+```
+Add in headers:
+Authorization: q73a3f7-c6c2-4241-8735-1ec2f981b39e
+Add in body using json format some data, example below:
+{
+    "login": "password",
+    "login1": "password1",
+    "login2": "password2"
+}
+```
+To make delete request to delete some users, you should use the following command:
+```
+Add in headers:
+Authorization: q73a3f7-c6c2-4241-8735-1ec2f981b39e
+Add in body using json format some data, example below:
+{
+    "login": "password",
+    "login1": "password1",
+    "login2": "password2"
+}
+```
