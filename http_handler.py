@@ -113,15 +113,15 @@ class CustomHandler(BaseHTTPRequestHandler):
                 cursor = db_connection.cursor()
                 for key in content.keys():
                     cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
-                    if not cursor.fetchall():
-                        data = (key, content[key])
-                        cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
-                    else:
+                    if cursor.fetchall():
                         self.respond(400, "Bad request, probably data already in db")
                         db_connection.commit()
                         cursor.close()
                         db_connection.close()
                         return
+                    else:
+                        data = (key, content[key])
+                        cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
                 self.respond(200, "Succesfully inputed ")
                 db_connection.commit()
                 cursor.close()
