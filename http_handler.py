@@ -76,7 +76,7 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         if "Authorization" in self.headers:
-            if self.headers["Authorization"].get("q73a3f7-c6c2-4241-8735-1ec2f981b39e", None):
+            if self.headers["Authorization"] == "q73a3f7-c6c2-4241-8735-1ec2f981b39e":
                 content = self.read_content_json()
                 db_connection = psycopg2.connect(
                 dbname=getenv("PG_DBNAME"),
@@ -86,14 +86,23 @@ class CustomHandler(BaseHTTPRequestHandler):
                 )
                 cursor = db_connection.cursor()
                 for key in content.keys():
-                    cursor.execute("DELETE FROM users.data where login = '{0}';".format(key))
+                    cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
+                    if cursor.fetchall():
+                        cursor.execute("DELETE FROM users.data where login = '{0}';".format(key))
+                    else:
+                        self.respond(400, "Bad request, probably data not exist in db")
+                        db_connection.commit()
+                        cursor.close()
+                        db_connection.close()
+                        return
+                self.respond(200, "Succesfully deleted")
                 db_connection.commit()
                 cursor.close()
                 db_connection.close()
 
     def do_PUT(self):
         if "Authorization" in self.headers:
-            if self.headers["Authorization"].get("q73a3f7-c6c2-4241-8735-1ec2f981b39e", None):
+            if self.headers["Authorization"] == "q73a3f7-c6c2-4241-8735-1ec2f981b39e":
                 content = self.read_content_json()
                 db_connection = psycopg2.connect(
                 dbname=getenv("PG_DBNAME"),
@@ -103,14 +112,30 @@ class CustomHandler(BaseHTTPRequestHandler):
                 )
                 cursor = db_connection.cursor()
                 for key in content.keys():
-                    data = (key, content[key])
-                    cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
+                    cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
+                    if not cursor.fetchall():
+                        data = (key, content[key])
+                        cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
+                    else:
+                        self.respond(400, "Bad request, probably data already in db")
+                        db_connection.commit()
+                        cursor.close()
+                        db_connection.close()
+                        return
+                self.respond(200, "Succesfully inputed ")
                 db_connection.commit()
                 cursor.close()
                 db_connection.close()
+        else:
+            self.respond(403, "Forbidden")
 
     def handle(self):
         try:
             BaseHTTPRequestHandler.handle(self)
         except BrokenPipeError:
             self.wfile.write(self.get_template())
+
+    def close_db(self, connection, cursor):
+        connection.commit()
+        cursor.close()
+        connection.close()
