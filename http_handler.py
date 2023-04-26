@@ -134,8 +134,3 @@ class CustomHandler(BaseHTTPRequestHandler):
             BaseHTTPRequestHandler.handle(self)
         except BrokenPipeError:
             self.wfile.write(self.get_template())
-
-    def close_db(self, connection, cursor):
-        connection.commit()
-        cursor.close()
-        connection.close()
