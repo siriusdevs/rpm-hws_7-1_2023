@@ -76,8 +76,12 @@ class CustomHandler(BaseHTTPRequestHandler):
 
     def read_content_json(self) -> dict:
         content_length = int(self.headers.get(CONTENT_LENGTH, 0))
+        check_json = loads(self.rfile.read(content_length).decode())
+        for element in check_json:
+            if element not in IPS_ALL_ATTRS:
+                return {}
         if content_length:
-            return loads(self.rfile.read(content_length).decode())
+            return check_json
         return {}
 
     def delete(self):
@@ -96,7 +100,6 @@ class CustomHandler(BaseHTTPRequestHandler):
     def post(self, content: dict = None):
         if self.path.startswith(IPS):
             content = content if content else self.read_content_json()
-            print(content)
             if not content:
                 return BAD_REQUEST, f'No content provided by {self.command}'
             for attr in content.keys():
@@ -105,8 +108,9 @@ class CustomHandler(BaseHTTPRequestHandler):
             if all([key in content for key in IPS_REQUIRED_ATTRS]):
                 content['local_ip'] = socket.gethostbyname(socket.gethostname())
                 content['public_ip'] = requests.get("http://api.ipify.org").text
-                status, message = DbHandler.insert(content)
-                message = f'http://{HOST}:{PORT}{IPS}/?id={message}' if status == CREATED else message
+                ip_id = DbHandler.insert(content)
+                status = OK if ip_id else "FAIL"
+                message = f'http://{HOST}:{PORT}{IPS}/?id={ip_id}' if status == OK else "Insert error"
                 return status, message
             return BAD_REQUEST, f'Required keys to add: {IPS_REQUIRED_ATTRS}'
         return BAD_REQUEST, "Invalid path"

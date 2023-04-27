@@ -34,7 +34,7 @@ NO_CONTENT = 204
 NOT_IMPLEMENTED = 501
 
 # db requests
-RETURN_ID = "returning id"
+RETURN_ID = " returning id"
 SELECTOR = 'SELECT id, name, local_ip, public_ip, date(created) as created FROM college.ips'
 GET_TOKEN = 'SELECT token FROM college.token WHERE username=\'{username}\''
 INSERT = 'INSERT INTO {table} ({keys}) VALUES ({values}) RETURNING id'

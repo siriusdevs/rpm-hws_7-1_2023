@@ -64,28 +64,14 @@ class DbHandler:
 
     @classmethod
     def insert(cls, ips_data: dict):
-        keys = tuple(ips_data.keys())
-        values = [ips_data[key] for key in keys]
-        attrs = ', '.join(keys)
-        values = ', '.join([str(val) if isinstance(val, int) else f"'{val}'" for val in values])
-        cls.db_cursor.execute(cls.query_request(SELECTOR, ips_data))
-        select_result = cls.db_cursor.fetchone()
-        if select_result:
-            ip_id = select_result[0]
-            return BAD_REQUEST, f'Record already exists, id={ip_id}'
-        request = INSERT.format(table='college.ips', keys=attrs, values=values)
-
         try:
-            cls.db_cursor.execute(request)
+            cls.db_cursor.execute(cls.compose_insert(ips_data))
         except Exception as error:
             print(f'{__name__} error: {error}')
-            return INTERNAL_ERROR, f'db execute error: {error}'
+            return False
+        ip_id = cls.db_cursor.fetchone()[0]
         cls.db_connection.commit()
-        insert_result = cls.db_cursor.fetchone()
-        if insert_result:
-            ip_id = insert_result[0]
-            return CREATED, str(ip_id)
-        return INTERNAL_ERROR, 'db insert failed'
+        return ip_id
 
     @classmethod
     def delete(cls, req_conds: dict):
