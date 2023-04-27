@@ -82,7 +82,7 @@ class DbHandler:
         return bool(cls.db_cursor.rowcount)
 
     @staticmethod
-    def query_request(request: str, req_conds: dict = {}):
+    def query_request(request: str, req_conds: dict):
         conditions = []
         for attr, value in req_conds.items():
             if attr == "created":
