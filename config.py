@@ -40,7 +40,7 @@ GET_TOKEN = 'SELECT token FROM college.token WHERE username=\'{username}\''
 INSERT = 'INSERT INTO {table} ({keys}) VALUES ({values}) RETURNING id'
 UPDATE = 'UPDATE {table} SET {request}'
 DELETE = 'DELETE FROM {table} '
-IPS_REQUIRED_ATTRS = ['name']
+IPS_REQUIRED_ATTRS = ['name', 'local_ip', 'public_ip']
 IPS_ALL_ATTRS = ['name', 'id', 'local_ip', 'public_ip', 'created']
 IPS_TOOLS_MAIL_ATR = ['mail']
 
