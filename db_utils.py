@@ -4,7 +4,6 @@ from psycopg2 import connect
 from dotenv import load_dotenv
 from os import getenv
 
-
 load_dotenv()
 
 PG_DBNAME = getenv('PG_DBNAME')
@@ -19,7 +18,6 @@ def is_num(value: any):
 
 
 class DbHandler:
-
     db_connection = connect(dbname=PG_DBNAME, host=PG_HOST, port=PG_PORT, user=PG_USER, password=PG_PASSWORD)
     db_cursor = db_connection.cursor()
 
@@ -84,7 +82,7 @@ class DbHandler:
         return bool(cls.db_cursor.rowcount)
 
     @staticmethod
-    def query_request(request: str, req_conds: dict):
+    def query_request(request: str, req_conds: dict = {}):
         conditions = []
         for attr, value in req_conds.items():
             if attr == "created":

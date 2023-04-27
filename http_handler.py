@@ -105,12 +105,12 @@ class CustomHandler(BaseHTTPRequestHandler):
             for attr in content.keys():
                 if attr not in IPS_ALL_ATTRS:
                     return NOT_IMPLEMENTED, f'ips do not have attribute: {attr}'
-            if all([key in content for key in IPS_REQUIRED_ATTRS]):
+            if any([key in content for key in IPS_REQUIRED_ATTRS]):
                 content['local_ip'] = socket.gethostbyname(socket.gethostname())
                 content['public_ip'] = requests.get("http://api.ipify.org").text
                 ip_id = DbHandler.insert(content)
-                status = OK if ip_id else "FAIL"
-                message = f'http://{HOST}:{PORT}{IPS}/?id={ip_id}' if status == OK else "Insert error"
+                status = CREATED if ip_id else BAD_REQUEST
+                message = f'http://{HOST}:{PORT}{IPS}/?id={ip_id}' if status == CREATED else "Insert error"
                 return status, message
             return BAD_REQUEST, f'Required keys to add: {IPS_REQUIRED_ATTRS}'
         return BAD_REQUEST, "Invalid path"
@@ -126,7 +126,7 @@ class CustomHandler(BaseHTTPRequestHandler):
             if query:
                 attrs = list(filter(lambda attr: attr not in IPS_ALL_ATTRS, query.keys()))
                 if attrs:
-                    return NOT_IMPLEMENTED, f'ips do not have attributes: {attrs}'
+                    return NOT_IMPLEMENTED, f"ips do not have attributes: {attrs}"
             res = DbHandler.update(where=query, data=content)
             if not res:
                 return self.post(content)
