@@ -1,0 +1,37 @@
+<html lang="en">
+    <head>
+        <title>IPS TOOLS</title>
+    </head>
+    <body>
+        <br>
+        <h4>Для отправки таблицы на почту введите email:</h4>
+        <form action="/tools_ips" name="ips_form" id="ips_form" method="get">
+            <label for="mail">mail</label><br>
+            <input type="mail" id="mail" name="mail">
+            <input type="submit" value="Отправить!">
+        </form>
+        <label for="name">Name</label><br>
+        <input type="text" id="name" name="name">
+        <button onclick="validateName()">Создать ip</button>
+        <a href="/">Back to main</a>
+        <script>
+        function validateName() {
+            var inpName = document.getElementById("name").value;
+            inpName === "" ? (alert("Введите название!")) : (addIp(inpName));
+        }
+        function addIp(name) {
+            var request = new XMLHttpRequest();
+            request.open('POST', '/ips');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.setRequestHeader('Authorization', 'admin {77f498fc-ab20-4017-aa62-c8b246615bae}');
+            let body = "{\n\"name\": \"" + name + "\"\n}"
+            request.send(body);
+            request.onreadystatechange = function () {
+                if (request.readyState === 4) {
+                   alert(request.responseText);
+                }
+            };
+        }
+    </script>
+    </body>
+</html>

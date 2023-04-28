@@ -1,0 +1,62 @@
+<html lang="en">
+    <head>
+        <title>IPS</title>
+        <style>
+            table {{
+               border-collapse: collapse;
+               border: 1px solid grey;
+               text-align: center;
+            }}
+            th, td {{
+               border: 1px solid grey;
+            }}
+        </style>
+    </head>
+    <body>
+        <br>
+        <form action="/ips" name="ips_form" id="ips_form">
+            <label for="name">Name</label><br>
+            <input type="text" id="name" name="name">
+            <br><br>
+            <label for="local_ip">Local_ip</label><br>
+            <input type="text" id="local_ip" name="local_ip">
+            <br><br>
+            <label for="public_ip">Public_ip</label><br>
+            <input type="text" id="public_ip" name="public_ip">
+            <br><br>
+            <label for="created">Date</label><br>
+            <input type="date" id="created" name="created">
+            <br><br>
+            <input type="submit">
+        </form>
+        <script>
+            var form = document.getElementById("ips_form")
+            form.addEventListener('submit', function () {{
+                var all_inputs = form.getElementsByTagName('input');
+                for (var i = 0; i < all_inputs.length; i++) {{
+                    var input = all_inputs[i];
+                    if (input.name && !input.value) {{
+                        input.name = '';
+                    }}
+                }}
+            }});
+        </script>
+
+        <h4>
+            IPS count: {number}
+        </h4>
+        <table>
+            <caption>Full IPS list: </caption>
+            <tr>
+                <td>id</td>
+                <td>name</td>
+                <td>local_ip</td>
+                <td>public_ip</td>
+                <td>created time</td>
+            </tr>
+            {rendered_ips}
+        </table>
+        <br></br>
+        <a href="/">Back to main</a>
+    </body>
+</html>
