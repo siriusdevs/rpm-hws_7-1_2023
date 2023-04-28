@@ -22,13 +22,6 @@ class CustomHandler(BaseHTTPRequestHandler):
             return humoreska(get_humoreska())
         return main_page()
 
-    def parse_query(self) -> dict:
-        if '?' in self.path:
-            query = self.path[self.path.find('?') + 1:].split('&')
-            attrs_values = [line.split('=') for line in query]
-            return {key: int(value) if value.isdigit() else value for key, value in attrs_values}
-        return None
-
     def do_GET(self):
         self.send_response(OK)
         self.send_header('Content-type', 'html')
@@ -89,11 +82,11 @@ class CustomHandler(BaseHTTPRequestHandler):
                     cursor = db_connection.cursor()
                     for key in content.keys():
                         if list(query[0].values())[0] != key:
-                                self.respond(400, "Bad request, data in body and in query doesnt match")
-                                db_connection.commit()
-                                cursor.close()
-                                db_connection.close()
-                                return
+                            self.respond(400, "Bad request, data in body and in query doesnt match")
+                            db_connection.commit()
+                            cursor.close()
+                            db_connection.close()
+                            return
                         cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
                         if cursor.fetchall():
                             cursor.execute("DELETE FROM users.data where login = '{0}';".format(key))
@@ -129,11 +122,11 @@ class CustomHandler(BaseHTTPRequestHandler):
                     cursor = db_connection.cursor()
                     for key in content.keys():
                         if list(query[0].values())[0] != key:
-                                self.respond(400, "Bad request, data in body and in query doesnt match")
-                                db_connection.commit()
-                                cursor.close()
-                                db_connection.close()
-                                return
+                            self.respond(400, "Bad request, data in body and in query doesnt match")
+                            db_connection.commit()
+                            cursor.close()
+                            db_connection.close()
+                            return
                         cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
                         if cursor.fetchall():
                             self.respond(400, "Bad request, probably data already in db")
@@ -142,8 +135,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                             db_connection.close()
                             return
                         else:
-                            data = (key, content[key])
-                            cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
+                            cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format((key, content[key])))
                     self.respond(200, "Succesfully inputed ")
                     db_connection.commit()
                     cursor.close()
@@ -162,7 +154,7 @@ class CustomHandler(BaseHTTPRequestHandler):
             BaseHTTPRequestHandler.handle(self)
         except BrokenPipeError:
             self.wfile.write(self.get_template())
-    
+
     def parse_query(self):
         qm_ind = self.path.find('?')
         if '?' in self.path and qm_ind != len(self.path) - 1:
