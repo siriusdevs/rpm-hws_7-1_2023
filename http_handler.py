@@ -77,55 +77,83 @@ class CustomHandler(BaseHTTPRequestHandler):
     def do_DELETE(self):
         if "Authorization" in self.headers:
             if self.headers["Authorization"] == "q73a3f7-c6c2-4241-8735-1ec2f981b39e":
-                content = self.read_content_json()
-                db_connection = psycopg2.connect(
-                dbname=getenv("PG_DBNAME"),
-                host=getenv("PG_HOST"),
-                port=getenv("PG_PORT"), user=getenv("PG_USER"),
-                password=getenv("PG_PASSWORD"),
-                )
-                cursor = db_connection.cursor()
-                for key in content.keys():
-                    cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
-                    if cursor.fetchall():
-                        cursor.execute("DELETE FROM users.data where login = '{0}';".format(key))
-                    else:
-                        self.respond(400, "Bad request, probably data not exist in db")
-                        db_connection.commit()
-                        cursor.close()
-                        db_connection.close()
+                query = self.parse_query()
+                if query[0] and list(query[0].values())[0]:
+                    content = self.read_content_json()
+                    db_connection = psycopg2.connect(
+                    dbname=getenv("PG_DBNAME"),
+                    host=getenv("PG_HOST"),
+                    port=getenv("PG_PORT"), user=getenv("PG_USER"),
+                    password=getenv("PG_PASSWORD"),
+                    )
+                    cursor = db_connection.cursor()
+                    for key in content.keys():
+                        if list(query[0].values())[0] != key:
+                                self.respond(400, "Bad request, data in body and in query doesnt match")
+                                db_connection.commit()
+                                cursor.close()
+                                db_connection.close()
+                                return
+                        cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
+                        if cursor.fetchall():
+                            cursor.execute("DELETE FROM users.data where login = '{0}';".format(key))
+                        else:
+                            self.respond(400, "Bad request, probably data not exist in db")
+                            db_connection.commit()
+                            cursor.close()
+                            db_connection.close()
+                            return
+                    self.respond(200, "Succesfully deleted")
+                    db_connection.commit()
+                    cursor.close()
+                    db_connection.close()
+                else:
+                    if query[1]:
+                        self.respond(400, query[1])
                         return
-                self.respond(200, "Succesfully deleted")
-                db_connection.commit()
-                cursor.close()
-                db_connection.close()
+                    else:
+                        self.respond(400, "No key in query!")
 
     def do_PUT(self):
         if "Authorization" in self.headers:
             if self.headers["Authorization"] == "q73a3f7-c6c2-4241-8735-1ec2f981b39e":
-                content = self.read_content_json()
-                db_connection = psycopg2.connect(
-                dbname=getenv("PG_DBNAME"),
-                host=getenv("PG_HOST"),
-                port=getenv("PG_PORT"), user=getenv("PG_USER"),
-                password=getenv("PG_PASSWORD"),
-                )
-                cursor = db_connection.cursor()
-                for key in content.keys():
-                    cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
-                    if cursor.fetchall():
-                        self.respond(400, "Bad request, probably data already in db")
-                        db_connection.commit()
-                        cursor.close()
-                        db_connection.close()
+                query = self.parse_query()
+                if query[0] and list(query[0].values())[0]:
+                    content = self.read_content_json()
+                    db_connection = psycopg2.connect(
+                    dbname=getenv("PG_DBNAME"),
+                    host=getenv("PG_HOST"),
+                    port=getenv("PG_PORT"), user=getenv("PG_USER"),
+                    password=getenv("PG_PASSWORD"),
+                    )
+                    cursor = db_connection.cursor()
+                    for key in content.keys():
+                        if list(query[0].values())[0] != key:
+                                self.respond(400, "Bad request, data in body and in query doesnt match")
+                                db_connection.commit()
+                                cursor.close()
+                                db_connection.close()
+                                return
+                        cursor.execute("SELECT * FROM users.data where login = '{0}'".format(key))
+                        if cursor.fetchall():
+                            self.respond(400, "Bad request, probably data already in db")
+                            db_connection.commit()
+                            cursor.close()
+                            db_connection.close()
+                            return
+                        else:
+                            data = (key, content[key])
+                            cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
+                    self.respond(200, "Succesfully inputed ")
+                    db_connection.commit()
+                    cursor.close()
+                    db_connection.close()
+                else:
+                    if query[1]:
+                        self.respond(400, query[1])
                         return
                     else:
-                        data = (key, content[key])
-                        cursor.execute('INSERT INTO users.data (login, pwd) VALUES {0};'.format(data))
-                self.respond(200, "Succesfully inputed ")
-                db_connection.commit()
-                cursor.close()
-                db_connection.close()
+                        self.respond(400, "No key in query!")
         else:
             self.respond(403, "Forbidden")
 
@@ -134,3 +162,13 @@ class CustomHandler(BaseHTTPRequestHandler):
             BaseHTTPRequestHandler.handle(self)
         except BrokenPipeError:
             self.wfile.write(self.get_template())
+    
+    def parse_query(self):
+        qm_ind = self.path.find('?')
+        if '?' in self.path and qm_ind != len(self.path) - 1:
+            query_data = self.path[qm_ind + 1:].split('=')
+            if query_data[0] != "login":
+                return False, "Request has incorrect attr 'login' or does not have it"
+            query = {query_data[0]: query_data[1]}
+            return query, ''
+        return None, 'No query'
