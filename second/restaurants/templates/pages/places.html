@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/places.css' %}">
+</head>
+<div class="name">
+    <h1>Все места</h1>
+</div>
+<div class="table">
+    <p><strong>Количество мест:</strong> {{ places_с }} </p>
+    <table>
+        <tr>
+            <td>ID</td><td>Название</td><td>Описание</td><td>Координаты</td><td>Масштаб</td>
+        </tr>
+    {% for place in places %}
+    <tr>
+        <td>{{place.id}}</td><td>{{place.name}}</td><td>{{place.description}}</td><td>{{place.map_points}}</td><td>{{place.map_scale}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+</div>
+<div class="footer">
+  <a href="{% url 'main_page' %}">На главную</a>
+</div>
+{% endblock %}
