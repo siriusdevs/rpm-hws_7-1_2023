@@ -43,7 +43,7 @@ jobs:
     - name: Тесты bash-curl
       run: |
         chmod +x first/tests/test.sh
-        ./tests/test.sh
+        .first/tests/test.sh
     - name: Тесты python-requests
       run: |
         pytest first/tests/test_requests.py
