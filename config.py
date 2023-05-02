@@ -20,3 +20,5 @@ BAD_REQUEST = 400
 
 # page str to byte coding
 CODING = 'KOI8-R'
+
+API_URL = 'https://geek-jokes.sameerkumar.website/api?format=json'
