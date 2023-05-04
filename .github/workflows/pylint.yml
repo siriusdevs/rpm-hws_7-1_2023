@@ -42,5 +42,5 @@ jobs:
         pip install -r server/tests/test_requirements.txt
     - name: Тесты bash-curl
       run: |
-        chmod +x tests/test.sh
-        ./tests/test.sh
+        chmod +x server/tests/test.sh
+        ./server/tests/test.sh
