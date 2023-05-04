@@ -39,7 +39,7 @@ jobs:
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
-        pip install -r tests/test_requirements.txt
+        pip install -r server/tests/test_requirements.txt
     - name: Тесты bash-curl
       run: |
         chmod +x tests/test.sh
