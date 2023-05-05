@@ -74,4 +74,4 @@ jobs:
       - name: Тесты django rest api
         run: |
           chmod +x second/restaurants/tests/test.sh 
-          .second/restaurants/tests/test.sh tests.test_rest
+          ./second/restaurants/tests/test.sh tests.test_rest
