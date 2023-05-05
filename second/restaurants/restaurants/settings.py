@@ -124,7 +124,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-   path.join(BASE_DIR, "static"),
+    path.join(BASE_DIR, "static"),
 ]
 
 APPEND_SLASH = False
