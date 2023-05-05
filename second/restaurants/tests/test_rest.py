@@ -29,7 +29,6 @@ class ViewSetTests(TestCase):
         self.user = User.objects.create_user(**self.creds_user)
         self.superuser = User.objects.create_user(is_superuser=True, **self.creds_superuser)
         self.token = Token.objects.create(user=self.superuser)
-        self.auth_header = f"Authorization: Token {self.token}"
 
     def test_get(self):
         # logging in with user
