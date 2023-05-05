@@ -23,7 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-d4!is5w%3kx@@9%d+r_=l8@(nu_l7^v50#7e2_vd!#_if=t@#-'
+load_dotenv()
+
+SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -93,7 +95,6 @@ WSGI_APPLICATION = 'restaurants.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 # Database
-load_dotenv()
 
 DATABASES = {
     'default': {
@@ -105,7 +106,7 @@ DATABASES = {
         'PORT': getenv('PG_PORT'),
         'OPTIONS': {'options': '-c search_path=public,library'},
         'TEST': {
-            'NAME': 'test',
+            'NAME': 'test_db',
         },
     }
 }

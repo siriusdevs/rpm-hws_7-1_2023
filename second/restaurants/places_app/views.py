@@ -48,49 +48,53 @@ def find_place(req):
     )
 
 
-def query_from_request(request, cls_serializer=None) -> dict:
-    if cls_serializer:
-        query = {}
-        for attr in cls_serializer.Meta.fields:
-            attr_value = request.GET.get(attr, '')
-            if attr_value:
-                query[attr] = attr_value
-        return query
-    return request.GET
-
-
 # Попытка переписать это под адекватный код
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 class PlacesList(APIView):
 
-    def get_object(self, pk):
+    def get_object(self, p_id):
         try:
-            return Places.objects.get(id=pk)
+            return Places.objects.get(id=p_id)
         except Places.DoesNotExist:
-            raise Exception()
+            return None
 
-    def get(self, request, pk, format=None):
-        place = self.get_object(pk)
+    def get(self, request, p_id=None):
+        if p_id:
+            place = self.get_object(p_id)
+        else:
+            place = Places.objects.filter(**request.data).first()
+        if not place:
+            return Response("Such a place does not exist", status=status_codes.HTTP_404_NOT_FOUND)
         serializer = serializers.PlacesSerializer(place)
         return Response(serializer.data)
 
-    def post(self, request, pk, format=None):
+    def post(self, request):
         serializer = serializers.PlacesSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status_codes.HTTP_201_CREATED)
         return Response(serializer.errors, status=status_codes.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, pk, format=None):
-        place = self.get_object(pk)
+    def put(self, request, p_id):
+        if p_id:
+            place = self.get_object(p_id)
+        else:
+            place = Places.objects.filter(**request.data).first()
+        if not place:
+            return Response("Such a place does not exist", status=status_codes.HTTP_404_NOT_FOUND)
         serializer = serializers.PlacesSerializer(place, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status_codes.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk, format=None):
-        place = self.get_object(pk)
+    def delete(self, request, p_id):
+        if p_id:
+            place = self.get_object(p_id)
+        else:
+            place = Places.objects.filter(**request.data).first()
+        if not place:
+            return Response("Such a place does not exist", status=status_codes.HTTP_404_NOT_FOUND)
         place.delete()
         return Response(status=status_codes.HTTP_204_NO_CONTENT)
