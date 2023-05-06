@@ -1,5 +1,5 @@
 ## Project description
-TODO
+The project was created in order to share good places with your loved ones.
 ## Quick start
 ### First step: 
 - Copy project from git
@@ -49,8 +49,10 @@ PG_PASSWORD=1234
 ```
 - And see what`s in there by going to: http://127.0.0.1:8000/main_page/
 
-## TODO URL to create location
+## URL to create location
 http://dimik.github.io/ymaps/examples/location-tool/1
+
+Select the desired location on the map, copy the coordinates and swap them. Example 1234, 5678 -> 5678, 1234
 
 ## HTTP Requests with Postman
 ### For sending PUT, POST and DELETE requests to the databases you must be an authorized user
@@ -67,17 +69,18 @@ In the tab **Headers**:
 
 ### If you want to execute POST, PUT requests
 
-#### For add ip (POST)
-- In *URL* field: http://127.0.0.1:8001/ips
+#### For add place (POST)
+- In *URL* field: http://127.0.0.1:8001/update_place/
 - In *Body* tab: input raw JSON
-**Example**: {"name": "home345678"}
+**Example**: 
+- {"name": "Щааурмечная", "description": "Лучшая шаурма в Сириусе", "map_points": "39.95696487,43.41423849", "map_scale": 17}
 
-#### For update ip (PUT)
-- In *URL* field: http://127.0.0.1:8001/ips?id=1
+#### For update place (PUT)
+- In *URL* field: http://127.0.0.1:8001/update_place/1
 - In *Body* tab: input raw JSON
-**Example**: {"name": "home345678", "public_ip": "228.228.228.255"}
+**Example**: {"name": "Щаурмечная"}
 
 #### If you want to execute DELETE requests
-- In *URL* field: http://127.0.0.1:8001/ips?
-- After **"?"** you specify what data you want to delete
-**Example**: http://127.0.0.1:8001/ips?id=1
+- In *URL* field: http://127.0.0.1:8001/update_place/id
+- After **"/"** you specify id what data you want to delete
+**Example**: http://127.0.0.1:8001/update_place/1
