@@ -63,7 +63,7 @@ In the url add:
 In the tab **Headers**:
 - In the *Key* field type **Authorization**
 - In the *Value* field type **Token created token in Third step **
-![Example for add token](image_url)
+![Example for add token](https://github.com/nester256/rpm-hws_7-1_2023/blob/nesterov/second/example.png)
 
 ### If you want to execute POST, PUT requests
 
