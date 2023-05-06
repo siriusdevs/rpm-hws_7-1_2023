@@ -4,11 +4,13 @@ TODO
 ### First step: 
 - Copy project from git
 ```
-git clone TODO
+git clone https://github.com/nester256/rpm-hws_7-1_2023
 
-cd TODO
+cd rpm-hws_7-1_2023
 
 git checkout nesterov
+
+cd second
 ```
 ### Second step:
 - Create docker image 
@@ -25,10 +27,21 @@ docker run  -d \
 ### Third step:
 ```
 ./manage.py migrate
+
 ./manage.py createsuperuser
+<Enther username>
+
 ./manage.py drf_create_token -r <username>
 ```
-
+### Fourth step:
+- Create .env file with credentials: 
+```
+PG_DBNAME=restaurants_test
+PG_HOST=127.0.0.1
+PG_PORT=38746
+PG_USER=admin
+PG_PASSWORD=1234
+```
 ### Finally
 - Run server
 ```
@@ -41,10 +54,16 @@ http://dimik.github.io/ymaps/examples/location-tool/1
 
 ## HTTP Requests with Postman
 ### For sending PUT, POST and DELETE requests to the databases you must be an authorized user
-Go to Postman and add:
+
+#### Go to Postman and add:
+
+In the url add:
+- http://127.0.0.1:8000/update_place/
+
 In the tab **Headers**:
 - In the *Key* field type **Authorization**
-- In the *Value* field type **admin {'77f498fc-ab20-4017-aa62-c8b246615bae'}**
+- In the *Value* field type **Token created token in Third step **
+![Example for add token](image_url)
 
 ### If you want to execute POST, PUT requests
 
