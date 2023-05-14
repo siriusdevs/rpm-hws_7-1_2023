@@ -10,7 +10,7 @@ cd rpm-hws_7-1_2023
 
 git checkout nesterov
 
-cd second
+cd second/restaurants
 ```
 ### Second step:
 - Create docker image 
@@ -26,17 +26,17 @@ docker run  -d \
 ```
 ### Third step:
 ```
-./manage.py migrate
+python3.x manage.py migrate
 
-./manage.py createsuperuser
+python3.x manage.py createsuperuser
 <Enther username>
 
-./manage.py drf_create_token -r <username>
+python3.x manage.py drf_create_token -r <username>
 ```
 ### Fourth step:
 - Create .env file with credentials: 
 ```
-PG_DBNAME=restaurants_test
+PG_DBNAME=postgres
 PG_HOST=127.0.0.1
 PG_PORT=38746
 PG_USER=admin
@@ -45,7 +45,7 @@ PG_PASSWORD=1234
 ### Finally
 - Run server
 ```
-./manage.py runserver
+python3.x manage.py runserver
 ```
 - And see what`s in there by going to: http://127.0.0.1:8000/main_page/
 
