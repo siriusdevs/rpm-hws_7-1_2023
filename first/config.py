@@ -8,7 +8,7 @@ IPS_TOOLS = '/tools_ips'
 PAGES = (IPS, IPS_TOOLS)
 
 # templates paths
-TEMPLATES = 'templates/'
+TEMPLATES = 'first/templates/'
 MAIN_PAGE = f'{TEMPLATES}index.html'
 IPS_TEMPLATE = f'{TEMPLATES}ips.html'
 IPS_TOOLS_TEMPLATE = f'{TEMPLATES}tools_ips.html'

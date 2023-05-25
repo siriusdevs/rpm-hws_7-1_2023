@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/find_places.css' %}">
+</head>
+<div class="name">
+    <h1>Поиск места</h1>
+</div>
+<div class="content">
+    <form action="/find_place" method="get">
+        <select id="f_place" name="f_place" onchange="this.form.submit();">
+                <option value="">Выберите!</option>
+            {% for place in places %}
+                <option value="{{place.name}}">{{place.name}}</option>
+            {% endfor %}
+        </select>
+    </form>
+</div>
+<div style="position:relative;overflow:hidden;margin: 0 auto;text-align:center;"><a href="https://yandex.ru/maps?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Яндекс Карты</a><a href="https://yandex.ru/maps/?ll={{points}}&utm_medium=mapframe&utm_source=maps&z={{scale}}" style="color:#eee;font-size:12px;position:absolute;top:14px;">Яндекс Карты — транспорт, навигация, поиск мест</a><iframe src="https://yandex.ru/map-widget/v1/?ll={{points}}&z={{scale}}" width="560" height="400" frameborder="1" allowfullscreen="true" style="position:relative;"></iframe></div>
+<div class="footer">
+  <a href="{% url 'main_page' %}">На главную</a>
+</div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const selectedValue = urlParams.get('f_place');
+
+    const selectElement = document.getElementById('f_place');
+    if (selectedValue && selectElement) {
+      const optionElement = selectElement.querySelector(`option[value="${selectedValue}"]`);
+      if (optionElement) {
+        optionElement.selected = true;
+      }
+    }
+</script>
+{% endblock %}

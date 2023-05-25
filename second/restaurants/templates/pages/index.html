@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<div>
+    <h1>Главная страница</h1>
+    <p>Навигация по сайту</p>
+    <a href="{% url 'places' %}">Места</a>
+    <a href="{% url 'find_place' %}">Найти место</a>
+</div>
+
+{% endblock %}

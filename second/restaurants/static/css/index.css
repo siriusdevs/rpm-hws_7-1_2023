@@ -1,0 +1,23 @@
+div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+div > * {
+  margin: 0 auto;
+}
+
+a:hover {
+  color: #990000; /* темно-красный */
+  text-decoration: underline;
+}
+h1 {
+  padding: 50px 50px 50px 50px;
+}
+
+p {
+  padding: 25px 50px 50px 50px;
+}
