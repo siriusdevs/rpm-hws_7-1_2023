@@ -1,15 +1,19 @@
+import hmac
+import http.cookies
+import urllib
 from http.server import BaseHTTPRequestHandler, HTTPServer
+from urllib.parse import urlsplit, parse_qs
+
+from api import *
 from config import *
 from register import *
-from api import *
-from urllib.parse import urlsplit, parse_qs
-import urllib
-import http.cookies
-import hmac
 
-SECRET_KEY = b'secret_key'  # replace with your own secret key
+
+SECRET_KEY = b'secret_key'
+
 
 class CustomHandler(BaseHTTPRequestHandler):
+
     def is_authenticated(self):
         session_id = self.cookies.get('session_id')
         if not session_id:
@@ -18,12 +22,13 @@ class CustomHandler(BaseHTTPRequestHandler):
         expected_signature = hmac.new(SECRET_KEY, msg=username.encode(), digestmod='sha256').hexdigest()
         return hmac.compare_digest(expected_signature, signature)
 
+
     def do_GET(self):
         self.cookies = http.cookies.SimpleCookie(self.headers.get('Cookie'))
         split_path = urlsplit(self.path)
         self.path = split_path.path
         query_params = parse_qs(split_path.query)
-        sol_date = query_params.get('sol', [''])[0]  # Берем дату из параметров запроса, если она там есть
+        sol_date = query_params.get('sol', [''])[0]
 
         if self.path == '/':
             self.send_response(200)
@@ -79,6 +84,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
 
+
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
@@ -126,6 +132,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes('Please enter a sol (date)', 'utf8'))
         else:
             self.send_response(404)
+
 
 def run(server_class=HTTPServer, handler_class=CustomHandler):
     server_address = ('', 8000)

@@ -1,7 +1,7 @@
-from dotenv import load_dotenv
 from os import getenv
+from dotenv import load_dotenv
 import psycopg2
-from psycopg2 import sql, errors
+from psycopg2 import errors
 
 load_dotenv()
 
@@ -10,6 +10,7 @@ PG_HOST = getenv('PG_HOST')
 PG_PORT = getenv('PG_PORT')
 PG_USER = getenv('PG_USER')
 PG_PASSWORD = getenv('PG_PASSWORD')
+
 
 def register_user(username, password):
     
@@ -72,6 +73,7 @@ def create_history_table():
         if conn:
             conn.close()
 
+
 def save_sol(user_id, sol):
     try:
         conn = psycopg2.connect(dbname=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
@@ -87,6 +89,7 @@ def save_sol(user_id, sol):
     finally:
         if conn:
             conn.close()
+
 
 def get_user_history(username):
     with psycopg2.connect(dbname=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT) as conn:
