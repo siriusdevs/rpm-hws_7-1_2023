@@ -1,2 +1,5 @@
-*branches.sh
-*students*
+.env
+__pycache__
+image_api/files
+.idea
+.pytest_cache

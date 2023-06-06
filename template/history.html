@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Mars Project - Sol History</title>
+    </head>
+    <body>
+        <h1>Mars Project</h1>
+        <h2>Your Sol History</h2>
+        {% if sol_history %}
+        <ul>
+            {% for record in sol_history %}
+            <li>{{ record.timestamp }}: Sol {{ record.sol }}</li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No sol history found.</p>
+        {% endif %}
+        <a href="/" style="display: inline-block; padding: 10px; background-color: blue; color: white; text-decoration: none;">Back</a>
+    </body>
+</html>
