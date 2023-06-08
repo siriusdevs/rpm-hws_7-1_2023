@@ -13,7 +13,7 @@ from register import (
     get_user_history,
     register_user,
     save_sol,
-    delete_user
+    delete_user,
 )
 
 SECRET_KEY = b'secret_key'
