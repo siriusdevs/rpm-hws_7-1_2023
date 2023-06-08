@@ -77,10 +77,9 @@ def check_credentials(username, password):
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT * FROM users WHERE username = %s AND password = %s;",  # noqa: WPS462
-        (username, password)
+        'SELECT * FROM users WHERE username = %s AND password = %s;',
+        (username, password),
     )
-
 
     user = cur.fetchone()
 
@@ -167,14 +166,12 @@ def get_user_history(username):
             port=PG_PORT,
         ) as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT sol, timestamp FROM user_history WHERE user_id = %s", (username))
-            rows = cur.fetchall()
+            cur.execute('SELECT sol, timestamp FROM user_history WHERE user_id = %s', (username))
             history = []
 
-            for row in rows:
-                sol = row[0]
-                timestamp = row[1].strftime("%Y-%m-%d %H:%M:%S")
-                history.append({'sol': sol, 'timestamp': timestamp})
+            for row in cur.fetchall():
+                timestamp = row[1].strftime('%Y-%m-%d %H:%M:%S')
+                history.append({'sol': row[0], 'timestamp': timestamp})
 
             return history
 
