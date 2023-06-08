@@ -3,16 +3,22 @@ import http.cookies
 import urllib
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit, parse_qs
+from jinja2 import Environment, FileSystemLoader
 
-from api import *
-from register import *
-
+from api import api_module
+from register import (
+    check_credentials,
+    create_history_table,
+    get_user_history,
+    register_user,
+    save_sol,
+    delete_user
+)
 
 SECRET_KEY = b'secret_key'
 
 
 class CustomHandler(BaseHTTPRequestHandler):
-
     def is_authenticated(self):
         session_id = self.cookies.get('session_id')
         if not session_id:
@@ -20,7 +26,6 @@ class CustomHandler(BaseHTTPRequestHandler):
         username, signature = session_id.value.split(':')
         expected_signature = hmac.new(SECRET_KEY, msg=username.encode(), digestmod='sha256').hexdigest()
         return hmac.compare_digest(expected_signature, signature)
-
 
     def do_GET(self):
         self.cookies = http.cookies.SimpleCookie(self.headers.get('Cookie'))
@@ -35,14 +40,14 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.end_headers()
             with open('template/index.html', 'r') as file:
                 self.wfile.write(bytes(file.read(), "utf8"))
-        
+
         elif self.path == '/info':
             if not self.is_authenticated():  # Проверяем наличие авторизационной сессии
                 self.send_response(302)
                 self.send_header('Location', '/')
                 self.end_headers()
                 return
-            
+
             self.send_response(200, 'OK')  # используйте HTTP/1.1
             self.send_header('Content-type', 'text/html')
             self.end_headers()
@@ -76,19 +81,19 @@ class CustomHandler(BaseHTTPRequestHandler):
 
             username, _ = self.cookies.get('session_id').value.split(':')
             user_history = get_user_history(username)
-            
+
             env = Environment(loader=FileSystemLoader('.'))
             template = env.get_template('template/history.html')
             rendered_html = template.render(sol_history=user_history)
             self.wfile.write(bytes(rendered_html, "utf8"))
-        
+
         elif self.path == '/delete_account':
             if not self.is_authenticated():
                 self.send_response(302)
                 self.send_header('Location', '/')
                 self.end_headers()
                 return
-            
+
             self.send_response(303)
             self.send_header('Location', '/')
             self.end_headers()
@@ -97,7 +102,6 @@ class CustomHandler(BaseHTTPRequestHandler):
 
         else:
             self.send_response(404)
-
 
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
@@ -144,7 +148,6 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 self.wfile.write(bytes('Please enter a sol (date)', 'utf8'))
-        
 
         elif self.path == '/delete_account':
             if not self.is_authenticated():
@@ -162,7 +165,6 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.end_headers()
         else:
             self.send_response(404)
-
 
     def do_DELETE(self):
         content_length = int(self.headers['Content-Length'])
@@ -196,7 +198,6 @@ def run(server_class=HTTPServer, handler_class=CustomHandler):
     server_address = ('', 8000)
     httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
-
 
 if __name__ == '__main__':
     run()
