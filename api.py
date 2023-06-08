@@ -7,8 +7,8 @@ API = 'YGjdEiolRdZV5T4dDZuq2ifq1ECuPk8PRmKYSueJ'
 
 
 def api_module(sol_date):
-
-    """
+    """ Метод для работы с API
+    
     Метод делает запрос к API, получая дату для обращения, 
     возвращает рендер изображения для шаблона.
 
@@ -17,6 +17,7 @@ def api_module(sol_date):
 
     Returns:
         photo: рендер для шаблона.
+
     """
     env = Environment(loader=FileSystemLoader('.'), autoescape=True)
     template = env.get_template('template/info.html')
