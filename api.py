@@ -1,4 +1,5 @@
 """Файл для работы с API, получает sol_date, выдает рендер для шаблона."""
+
 import requests
 from jinja2 import Environment, FileSystemLoader
 

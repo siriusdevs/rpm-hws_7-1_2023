@@ -1,8 +1,8 @@
-""" Модуль содержит методы для работы с pSQL. """
-import psycopg2
+"""Модуль содержит методы для работы с pSQL."""
+
 from os import getenv
 from dotenv import load_dotenv
-from psycopg2 import errors
+from psycopg2 import errors, connect
 
 load_dotenv()
 
@@ -24,7 +24,7 @@ def register_user(username, password):
         password (str): Пароль пользователя.
 
     """
-    conn = psycopg2.connect(
+    conn = connect(
         database=PG_DBNAME,
         user=PG_USER,
         password=PG_PASSWORD,
@@ -62,7 +62,7 @@ def check_credentials(username, password):
         password (str): Пароль пользователя.
 
     """
-    conn = psycopg2.connect(
+    conn = connect(
         database=PG_DBNAME,
         user=PG_USER,
         password=PG_PASSWORD,
@@ -92,7 +92,7 @@ def create_history_table():
 
     """
     try:
-        conn = psycopg2.connect(
+        conn = connect(
             database=PG_DBNAME,
             user=PG_USER,
             password=PG_PASSWORD,
@@ -129,7 +129,7 @@ def save_sol(user_id, sol):
 
     """
     try:
-        conn = psycopg2.connect(
+        conn = connect(
             database=PG_DBNAME,
             user=PG_USER,
             password=PG_PASSWORD,
@@ -159,7 +159,7 @@ def get_user_history(username):
         username (str): Имя пользователя.
 
     """
-    with psycopg2.connect(
+    with connect(
             database=PG_DBNAME,
             user=PG_USER,
             password=PG_PASSWORD,
@@ -180,7 +180,7 @@ def delete_user(username):
         username (str): Имя пользователя.
 
     """
-    conn = psycopg2.connect(
+    conn = connect(
         database=PG_DBNAME,
         user=PG_USER,
         password=PG_PASSWORD,
