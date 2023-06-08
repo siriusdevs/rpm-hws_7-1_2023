@@ -1,12 +1,11 @@
-"""Создание и настройка соединения к БД"""
+"""Создание и настройка соединения к БД."""
 from psycopg2 import connect
 from dotenv import load_dotenv
 from os import getenv
 
 
 def main():
-    """Создает подключение.
-    """
+    """Создает подключение."""
     load_dotenv()
     creds = {
         "host": getenv("PG_HOST"),
