@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Account</title>
+    <script>
+        function getCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        window.onload = function() {
+            var username = getCookie('cookies');
+            if (username) {
+                document.getElementById('username').value = username;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Delete Account</h1>
+    <form action="/delete_account" method="post">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" readonly><br>
+        <input type="submit" value="Delete Account">
+    </form>
+</body>
+</html>

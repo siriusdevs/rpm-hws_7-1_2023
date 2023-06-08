@@ -96,3 +96,22 @@ def get_user_history(username):
         with conn.cursor() as cur:
             cur.execute("SELECT sol, timestamp FROM user_history WHERE user_id = %s", (username,))
             return [{'sol': row[0], 'timestamp': row[1].strftime("%Y-%m-%d %H:%M:%S")} for row in cur.fetchall()]
+
+
+def delete_user(username):
+    conn = psycopg2.connect(database=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+
+    cur = conn.cursor()
+
+    cur.execute("""
+    DELETE FROM users WHERE username = %s;
+    """, (username,))
+    
+    cur.execute("""
+    DELETE FROM user_history WHERE user_id = %s;
+    """, (username,))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()

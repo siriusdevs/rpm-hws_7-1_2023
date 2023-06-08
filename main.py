@@ -5,7 +5,6 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlsplit, parse_qs
 
 from api import *
-from config import *
 from register import *
 
 
@@ -36,6 +35,7 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.end_headers()
             with open('template/index.html', 'r') as file:
                 self.wfile.write(bytes(file.read(), "utf8"))
+        
         elif self.path == '/info':
             if not self.is_authenticated():  # Проверяем наличие авторизационной сессии
                 self.send_response(302)
@@ -81,6 +81,20 @@ class CustomHandler(BaseHTTPRequestHandler):
             template = env.get_template('template/history.html')
             rendered_html = template.render(sol_history=user_history)
             self.wfile.write(bytes(rendered_html, "utf8"))
+        
+        elif self.path == '/delete_account':
+            if not self.is_authenticated():
+                self.send_response(302)
+                self.send_header('Location', '/')
+                self.end_headers()
+                return
+            
+            self.send_response(303)
+            self.send_header('Location', '/')
+            self.end_headers()
+            with open('template/delete_account.html', 'r') as file:
+                self.wfile.write(bytes(file.read(), "utf8"))
+
         else:
             self.send_response(404)
 
@@ -130,9 +144,53 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
                 self.wfile.write(bytes('Please enter a sol (date)', 'utf8'))
+        
+
+        elif self.path == '/delete_account':
+            if not self.is_authenticated():
+                self.send_response(302)
+                self.send_header('Location', '/')
+                self.end_headers()
+                return
+
+            username, _ = self.cookies.get('session_id').value.split(':')
+            delete_user(username)
+
+            self.send_response(303)
+            self.send_header('Location', '/')
+            self.send_header('Set-Cookie', 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 GMT')
+            self.end_headers()
         else:
             self.send_response(404)
 
+
+    def do_DELETE(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length)
+        form = urllib.parse.parse_qs(post_data.decode())
+        self.cookies = http.cookies.SimpleCookie(self.headers.get('Cookie'))
+
+        if self.path == '/delete_account':
+            if not self.is_authenticated():
+                self.send_response(302)
+                self.send_header('Location', '/')
+                self.send_header('Content-type', 'text/html')
+                self.end_headers()
+                self.wfile.write(bytes('Not authenticated', 'utf8'))
+                return
+
+            username = form.get('username')[0]
+            try:
+                delete_user(username)
+                # After deletion, redirect the user to the homepage
+                self.send_response(303)
+                self.send_header('Location', '/')
+                self.end_headers()
+            except Exception as e:
+                self.send_response(500)
+                self.send_header('Content-type', 'text/html')
+                self.end_headers()
+                self.wfile.write(bytes(f'An error occurred: {e}', 'utf8'))
 
 def run(server_class=HTTPServer, handler_class=CustomHandler):
     server_address = ('', 8000)
