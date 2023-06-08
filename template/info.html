@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Mars Project</title>
+</head>
+<body>
+    <h1>Welcome to Mars Project</h1>
+    <p>
+        Марс - четвёртая по удалённости от Солнца и седьмая по размеру планета Солнечной системы. Названа в честь Марса - 
+        древнеримского бога войны. Часто называют "Красной планетой" из-за красноватого оттенка поверхности, вызванного 
+        оксидом железа.
+        PS Солом названы марсианские солнечные сутки, продолжительность которых равна 24 часам, 39 минутам, 35,244 секундам.
+    </p>
+    <form action="/info" method="post">
+        <label for="sol">Введите сол на марсе</label><br>
+        <input type="text" id="sol" name="sol"><br>
+        <input type="submit" value="Submit">
+    </form>
+    <img id="rover-image" src="{{ photo }}" alt="Rover image will be here">
+    <h2>Or</h2>
+    <a href="/" style="display: inline-block; padding: 10px; background-color: blue; color: white; text-decoration: none;">Main page</a>
+    <a href="/history" style="display: inline-block; padding: 10px; background-color: blue; color: white; text-decoration: none; margin-left: 10px;">View Sol History</a>
+    <form method="POST" action="/delete_account">
+        <button href="/" style="display: inline-block; padding: 10px; background-color: red; color: white; text-decoration: none; margin-left: 10px;" type="submit">Delete Account</button>
+    </form>
+</body>
+</html>
