@@ -60,8 +60,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            with open('template/index.html', 'r') as file:
-                self.wfile.write(bytes(file.read(), "utf8"))
+            with open('template/index.html', 'r') as template:
+                self.wfile.write(bytes(template.read(), "utf8"))
 
         elif self.path == '/info':
             if not self.is_authenticated():  # Проверяем наличие авторизационной сессии
@@ -87,8 +87,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            with open('template/register.html', 'r') as file:
-                self.wfile.write(bytes(file.read(), "utf8"))
+            with open('template/register.html', 'r') as template:
+                self.wfile.write(bytes(template.read(), "utf8"))
 
         elif self.path == '/history':
             if not self.is_authenticated():
@@ -119,8 +119,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(303)
             self.send_header('Location', '/')
             self.end_headers()
-            with open('template/delete_account.html', 'r') as file:
-                self.wfile.write(bytes(file.read(), "utf8"))
+            with open('template/delete_account.html', 'r') as template:
+                self.wfile.write(bytes(template.read(), "utf8"))
 
         else:
             self.send_response(404)
@@ -224,6 +224,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(bytes(f'An error occurred: {exception}', 'utf8'))
 
+
 def run(server_class=HTTPServer, handler_class=CustomHandler):
     """Запуск сервера.
 
@@ -236,6 +237,7 @@ def run(server_class=HTTPServer, handler_class=CustomHandler):
     server_address = ('', 8000)
     httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
+
 
 if __name__ == '__main__':
     run()
