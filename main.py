@@ -60,8 +60,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            with open('template/index.html', 'r') as template:
-                self.wfile.write(bytes(template.read(), "utf8"))
+            with open('template/index.html', 'r') as file:
+                self.wfile.write(bytes(file.read(), "utf8"))
 
         elif self.path == '/info':
             if not self.is_authenticated():  # Проверяем наличие авторизационной сессии
@@ -87,8 +87,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type', 'text/html')
             self.end_headers()
-            with open('template/register.html', 'r') as template:
-                self.wfile.write(bytes(template.read(), "utf8"))
+            with open('template/register.html', 'r') as file:
+                self.wfile.write(bytes(file.read(), "utf8"))
 
         elif self.path == '/history':
             if not self.is_authenticated():
@@ -119,8 +119,8 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(303)
             self.send_header('Location', '/')
             self.end_headers()
-            with open('template/delete_account.html', 'r') as template:
-                self.wfile.write(bytes(template.read(), "utf8"))
+            with open('template/delete_account.html', 'r') as file:
+                self.wfile.write(bytes(file.read(), "utf8"))
 
         else:
             self.send_response(404)
