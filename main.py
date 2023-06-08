@@ -29,6 +29,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         BaseHTTPRequestHandler: Обработчик, просто обработчик запросов.
 
     """
+
     def is_authenticated(self):
         """Проверка аунтефикации.
 
@@ -44,7 +45,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         expected_signature = hmac.new(SECRET_KEY, msg=username.encode(), digestmod='sha256').hexdigest()
         return hmac.compare_digest(expected_signature, signature)
 
-    def do_GET(self):
+    def do_get(self):
         """Do_get.
 
         Возьми и дай - краткий комментарий разработчика.
@@ -77,7 +78,7 @@ class CustomHandler(BaseHTTPRequestHandler):
                 if rendered_html is None:  # Если нет фотографии, отображаем сообщение об ошибке
                     self.wfile.write(bytes("Oops, error 404, our rover doesn't know how to time travel", "UTF-8"))
             else:  # Если дата не указана, отдаём шаблон без фотографии
-                env = Environment(loader=FileSystemLoader('.'))
+                env = Environment(loader=FileSystemLoader('.'), autoescape=True)
                 template = env.get_template('template/info.html')
                 rendered_html = template.render(photo=None)
             self.wfile.write(bytes(rendered_html, "utf8"))
@@ -103,7 +104,7 @@ class CustomHandler(BaseHTTPRequestHandler):
             username, _ = self.cookies.get('session_id').value.split(':')
             user_history = get_user_history(username)
 
-            env = Environment(loader=FileSystemLoader('.'))
+            env = Environment(loader=FileSystemLoader('.'), autoescape=True)
             template = env.get_template('template/history.html')
             rendered_html = template.render(sol_history=user_history)
             self.wfile.write(bytes(rendered_html, "utf8"))
@@ -124,7 +125,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
 
-    def do_POST(self):
+    def do_post(self):
         """Do_post.
 
         Возьми и отправь - краткий комментарий разработчика.
@@ -191,7 +192,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
 
-    def do_DELETE(self):
+    def do_delete(self):
         """Do_delete.
 
         Возьми и удали - краткий ответ разъярённого разработчика.
@@ -217,17 +218,17 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.send_response(303)
                 self.send_header('Location', '/')
                 self.end_headers()
-            except Exception as e:
+            except Exception as exception:
                 self.send_response(500)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
-                self.wfile.write(bytes(f'An error occurred: {e}', 'utf8'))
+                self.wfile.write(bytes(f'An error occurred: {exception}', 'utf8'))
 
 def run(server_class=HTTPServer, handler_class=CustomHandler):
     """Запуск сервера.
 
     Да, возьми и запусти.
-    
+
     Args:
         server_class (_type_, optional): Defaults to HTTPServer.
         handler_class (_type_, optional): Defaults to CustomHandler.
