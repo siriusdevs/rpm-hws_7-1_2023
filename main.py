@@ -1,3 +1,4 @@
+"""Класс обо всем, который оказался слишком умным для гита по ошибке WPS232."""
 import hmac
 import http.cookies
 import urllib
@@ -19,7 +20,23 @@ SECRET_KEY = b'secret_key'
 
 
 class CustomHandler(BaseHTTPRequestHandler):
+    """Класс - обработчик HTTP-запросов.
+
+    Содержит в себе 3 виде запросов - post, get и delete.
+    Delete запрос для особо искушенных - в браузере он работать не будет...
+
+    Args:
+        BaseHTTPRequestHandler: Обработчик, просто обработчик запросов.
+
+    """
     def is_authenticated(self):
+        """Проверка аунтефикации.
+
+        Осуществляет проверку аунтефикации пользователей для /info.
+
+        Returns:
+            Возвращает сравнение двух хеш-сигнатур.
+        """
         session_id = self.cookies.get('session_id')
         if not session_id:
             return False
@@ -28,6 +45,10 @@ class CustomHandler(BaseHTTPRequestHandler):
         return hmac.compare_digest(expected_signature, signature)
 
     def do_GET(self):
+        """Do_get.
+
+        Возьми и дай - краткий комментарий разработчика.
+        """
         self.cookies = http.cookies.SimpleCookie(self.headers.get('Cookie'))
         split_path = urlsplit(self.path)
         self.path = split_path.path
@@ -104,6 +125,10 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(404)
 
     def do_POST(self):
+        """Do_post.
+
+        Возьми и отправь - краткий комментарий разработчика.
+        """
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         form = urllib.parse.parse_qs(post_data.decode())
@@ -167,6 +192,10 @@ class CustomHandler(BaseHTTPRequestHandler):
             self.send_response(404)
 
     def do_DELETE(self):
+        """Do_delete.
+
+        Возьми и удали - краткий ответ разъярённого разработчика.
+        """
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length)
         form = urllib.parse.parse_qs(post_data.decode())
@@ -195,6 +224,14 @@ class CustomHandler(BaseHTTPRequestHandler):
                 self.wfile.write(bytes(f'An error occurred: {e}', 'utf8'))
 
 def run(server_class=HTTPServer, handler_class=CustomHandler):
+    """Запуск сервера.
+
+    Да, возьми и запусти.
+    
+    Args:
+        server_class (_type_, optional): Defaults to HTTPServer.
+        handler_class (_type_, optional): Defaults to CustomHandler.
+    """
     server_address = ('', 8000)
     httpd = server_class(server_address, handler_class)
     httpd.serve_forever()
