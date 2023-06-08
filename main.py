@@ -45,7 +45,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         expected_signature = hmac.new(SECRET_KEY, msg=username.encode(), digestmod='sha256').hexdigest()
         return hmac.compare_digest(expected_signature, signature)
 
-    def do_get(self):
+    def do_GET(self):
         """Do_get.
 
         Возьми и дай - краткий комментарий разработчика.
@@ -125,7 +125,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
 
-    def do_post(self):
+    def do_POST(self):
         """Do_post.
 
         Возьми и отправь - краткий комментарий разработчика.
@@ -192,7 +192,7 @@ class CustomHandler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
 
-    def do_delete(self):
+    def do_DELETE(self):
         """Do_delete.
 
         Возьми и удали - краткий ответ разъярённого разработчика.

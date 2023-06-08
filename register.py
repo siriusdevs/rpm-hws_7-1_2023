@@ -168,7 +168,7 @@ def get_user_history(username):
         with conn.cursor() as cur:
             cur.execute(
                 'SELECT sol, timestamp FROM user_history WHERE user_id = %s',
-                (username),
+                (username,),
             )
             history = []
 
