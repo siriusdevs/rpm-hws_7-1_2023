@@ -1,6 +1,7 @@
+""" Модуль содержит методы для работы с pSQL. """
+import psycopg2
 from os import getenv
 from dotenv import load_dotenv
-import psycopg2
 from psycopg2 import errors
 
 load_dotenv()
@@ -13,25 +14,34 @@ PG_PASSWORD = getenv('PG_PASSWORD')
 
 
 def register_user(username, password):
+    
     """
     Регистрация нового пользователя в базе данных.
-    :param username: Имя пользователя.
-    :param password: Пароль пользователя.
+    Args:
+        username: Имя пользователя.
+        password: Пароль пользователя.
     """
-    conn = psycopg2.connect(database=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+    conn = psycopg2.connect(
+        database=PG_DBNAME,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        host=PG_HOST,
+        port=PG_PORT
+    )
     cur = conn.cursor()
 
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(255) NOT NULL,
-        password VARCHAR(255) NOT NULL
-    );
-    """)
+    cur.execute(
+        'CREATE TABLE IF NOT EXISTS users ('
+        '    id SERIAL PRIMARY KEY,'
+        '    username VARCHAR(255) NOT NULL,'
+        '    password VARCHAR(255) NOT NULL'
+        ');'
+    )
 
-    cur.execute("""
-    INSERT INTO users (username, password) VALUES (%s, %s);
-    """, (username, password))
+    cur.execute(
+        'INSERT INTO users (username, password) VALUES (%s, %s);',
+        (username, password)
+    )
 
     conn.commit()
 
