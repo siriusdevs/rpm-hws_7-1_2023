@@ -5,15 +5,16 @@ from jinja2 import Environment, FileSystemLoader
 ENDPOINT = 'https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos'
 API = 'YGjdEiolRdZV5T4dDZuq2ifq1ECuPk8PRmKYSueJ'
 
+
 def api_module(sol_date):
-    """Метод делает запрос к API, получая дату для обращения
-    возвращает рендер изображения для шаблона
+
+    """Метод делает запрос к API, получая дату для обращения, возвращает рендер изображения для шаблона.
 
     Args:
-        sol_date (int): дата для вывода рендера
+        sol_date (int): дата для вывода рендера.
 
     Returns:
-        photo: рендер для шаблона
+        photo: рендер для шаблона.
     """
     env = Environment(loader=FileSystemLoader('.'), autoescape=True)
     template = env.get_template('template/info.html')
@@ -24,5 +25,3 @@ def api_module(sol_date):
         return template.render(photo=photo_data['photos'][0]['img_src'])
     except IndexError:
         return None
-
-api_module(1009)
