@@ -168,7 +168,7 @@ def get_user_history(username):
         with conn.cursor() as cur:
             cur.execute(
                 'SELECT sol, timestamp FROM user_history WHERE user_id = %s',
-                (username,)
+                (username),
             )
             history = []
 
@@ -197,15 +197,11 @@ def delete_user(username):
     )
     cur = conn.cursor()
 
-    sql_users = ["""
-    DELETE FROM users WHERE username = %s;
-    """, (username)]
+    sql_users = "DELETE FROM users WHERE username = %s;"
+    cur.execute(sql_users, (username,))
 
-    sql_history = ["""
-    DELETE FROM user_history WHERE user_id = %s;
-    """, (username)]
-
-    cur.execute(sql_users, sql_history)
+    sql_history = "DELETE FROM user_history WHERE user_id = %s;"
+    cur.execute(sql_history, (username,))
 
     conn.commit()
 
