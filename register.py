@@ -34,13 +34,13 @@ def register_user(username, password):
     )
     cur = conn.cursor()
 
-    sql = (
-        "CREATE TABLE IF NOT EXISTS users ("
-        "id SERIAL PRIMARY KEY,"
-        "username VARCHAR(255) NOT NULL,"
-        "password VARCHAR(255) NOT NULL"
-        ");"
-    )
+    sql = """
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL
+        );
+    """
     cur.execute(sql)
 
     cur.execute(
@@ -106,14 +106,14 @@ def create_history_table():
     )
     cur = conn.cursor()
 
-    sql = (
-        "CREATE TABLE IF NOT EXISTS user_history ("
-        "id SERIAL PRIMARY KEY,"
-        "user_id VARCHAR(255) NOT NULL,"
-        "sol INT NOT NULL,"
-        "timestamp TIMESTAMP NOT NULL DEFAULT NOW()"
-        ");"
-    )
+    sql = """
+        CREATE TABLE IF NOT EXISTS user_history (
+        id SERIAL PRIMARY KEY,
+        user_id VARCHAR(255) NOT NULL,
+        sol INT NOT NULL,
+        timestamp TIMESTAMP NOT NULL DEFAULT NOW()
+        );
+    """
     cur.execute(sql)
     conn.commit()
     conn.close()
