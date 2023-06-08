@@ -1,8 +1,9 @@
 """Модуль содержит методы для работы с pSQL."""
 
 from os import getenv
+
 from dotenv import load_dotenv
-from psycopg2 import errors, connect
+from psycopg2 import connect, errors
 
 load_dotenv()
 
