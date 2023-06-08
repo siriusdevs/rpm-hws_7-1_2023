@@ -34,13 +34,14 @@ def register_user(username, password):
     )
     cur = conn.cursor()
 
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            username VARCHAR(255) NOT NULL,
-            password VARCHAR(255) NOT NULL
-        );
-    ''')
+    sql = (
+        "CREATE TABLE IF NOT EXISTS users ("
+        "id SERIAL PRIMARY KEY,"
+        "username VARCHAR(255) NOT NULL,"
+        "password VARCHAR(255) NOT NULL"
+        ");"
+    )
+    cur.execute(sql)
 
     cur.execute(
         'INSERT INTO users (username, password) VALUES (%s, %s);',
@@ -71,14 +72,15 @@ def check_credentials(username, password):
         user=PG_USER,
         password=PG_PASSWORD,
         host=PG_HOST,
-        port=PG_PORT
+        port=PG_PORT,
     )
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT * FROM users WHERE username = %s AND password = %s;",
+        "SELECT * FROM users WHERE username = %s AND password = %s;",  # noqa: WPS462
         (username, password)
     )
+
 
     user = cur.fetchone()
 
@@ -95,30 +97,26 @@ def create_history_table():
     хранит историю запросов.
 
     """
-    try:
-        conn = psycopg2.connect(
-            database=PG_DBNAME,
-            user=PG_USER,
-            password=PG_PASSWORD,
-            host=PG_HOST,
-            port=PG_PORT,
-        )
-        cur = conn.cursor()
+    conn = psycopg2.connect(
+        database=PG_DBNAME,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        host=PG_HOST,
+        port=PG_PORT,
+    )
+    cur = conn.cursor()
 
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS user_history (
-                id SERIAL PRIMARY KEY,
-                user_id VARCHAR(255) NOT NULL,
-                sol INT NOT NULL,
-                timestamp TIMESTAMP NOT NULL DEFAULT NOW()
-            );
-        ''')
-        conn.commit()
-    except errors.Error as e:
-        print(f"Unable to create table: {e}")
-    finally:
-        if conn:
-            conn.close()
+    sql = (
+        "CREATE TABLE IF NOT EXISTS user_history ("
+        "id SERIAL PRIMARY KEY,"
+        "user_id VARCHAR(255) NOT NULL,"
+        "sol INT NOT NULL,"
+        "timestamp TIMESTAMP NOT NULL DEFAULT NOW()"
+        ");"
+    )
+    cur.execute(sql)
+    conn.commit()
+    conn.close()
 
 
 def save_sol(user_id, sol):
@@ -157,6 +155,9 @@ def get_user_history(username):
     Args:
         username (str): Имя пользователя.
 
+    Returns:
+        return: возвращает набор строк в шаблон с историей.
+
     """
     with psycopg2.connect(
             database=PG_DBNAME,
@@ -167,7 +168,15 @@ def get_user_history(username):
         ) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT sol, timestamp FROM user_history WHERE user_id = %s", (username))
-            return [{'sol': row[0], 'timestamp': row[1].strftime("%Y-%m-%d %H:%M:%S")} for row in cur.fetchall()]
+            rows = cur.fetchall()
+            history = []
+
+            for row in rows:
+                sol = row[0]
+                timestamp = row[1].strftime("%Y-%m-%d %H:%M:%S")
+                history.append({'sol': sol, 'timestamp': timestamp})
+
+            return history
 
 
 def delete_user(username):
