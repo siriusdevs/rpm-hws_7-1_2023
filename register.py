@@ -3,7 +3,7 @@
 from os import getenv
 
 from dotenv import load_dotenv
-from psycopg2 import connect, errors
+import psycopg2
 
 load_dotenv()
 
@@ -25,26 +25,26 @@ def register_user(username, password):
         password (str): Пароль пользователя.
 
     """
-    conn = connect(
+    conn = psycopg2.connect(
         database=PG_DBNAME,
         user=PG_USER,
         password=PG_PASSWORD,
         host=PG_HOST,
-        port=PG_PORT
+        port=PG_PORT,
     )
     cur = conn.cursor()
 
-    cur.execute(
-        'CREATE TABLE IF NOT EXISTS users ('
-        '    id SERIAL PRIMARY KEY,'
-        '    username VARCHAR(255) NOT NULL,'
-        '    password VARCHAR(255) NOT NULL'
-        ');'
-    )
+    cur.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL
+        );
+    ''')
 
     cur.execute(
         'INSERT INTO users (username, password) VALUES (%s, %s);',
-        (username, password)
+        (username, password),
     )
 
     conn.commit()
@@ -62,8 +62,11 @@ def check_credentials(username, password):
         username (str): Имя пользователя.
         password (str): Пароль пользователя.
 
+    Returns:
+        user: если юзер существует, возвращаем его.
+
     """
-    conn = connect(
+    conn = psycopg2.connect(
         database=PG_DBNAME,
         user=PG_USER,
         password=PG_PASSWORD,
@@ -93,12 +96,12 @@ def create_history_table():
 
     """
     try:
-        conn = connect(
+        conn = psycopg2.connect(
             database=PG_DBNAME,
             user=PG_USER,
             password=PG_PASSWORD,
             host=PG_HOST,
-            port=PG_PORT
+            port=PG_PORT,
         )
         cur = conn.cursor()
 
@@ -129,26 +132,21 @@ def save_sol(user_id, sol):
         sol (int): Номер сола.
 
     """
-    try:
-        conn = connect(
-            database=PG_DBNAME,
-            user=PG_USER,
-            password=PG_PASSWORD,
-            host=PG_HOST,
-            port=PG_PORT
-        )
-        cur = conn.cursor()
+    conn = psycopg2.connect(
+        database=PG_DBNAME,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        host=PG_HOST,
+        port=PG_PORT,
+    )
+    cur = conn.cursor()
 
-        cur.execute(
-            'INSERT INTO user_history (user_id, sol) VALUES (%s, %s);',
-            (user_id, sol,)
-        )
-        conn.commit()
-    except errors.Error as e:
-        print(f"Unable to save sol: {e}")
-    finally:
-        if conn:
-            conn.close()
+    cur.execute(
+        'INSERT INTO user_history (user_id, sol) VALUES (%s, %s);',
+        (user_id, sol),
+    )
+    conn.commit()
+    conn.close()
 
 
 def get_user_history(username):
@@ -160,15 +158,15 @@ def get_user_history(username):
         username (str): Имя пользователя.
 
     """
-    with connect(
+    with psycopg2.connect(
             database=PG_DBNAME,
             user=PG_USER,
             password=PG_PASSWORD,
             host=PG_HOST,
-            port=PG_PORT
+            port=PG_PORT,
         ) as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT sol, timestamp FROM user_history WHERE user_id = %s", (username,))
+            cur.execute("SELECT sol, timestamp FROM user_history WHERE user_id = %s", (username))
             return [{'sol': row[0], 'timestamp': row[1].strftime("%Y-%m-%d %H:%M:%S")} for row in cur.fetchall()]
 
 
@@ -181,22 +179,22 @@ def delete_user(username):
         username (str): Имя пользователя.
 
     """
-    conn = connect(
+    conn = psycopg2.connect(
         database=PG_DBNAME,
         user=PG_USER,
         password=PG_PASSWORD,
         host=PG_HOST,
-        port=PG_PORT
+        port=PG_PORT,
     )
     cur = conn.cursor()
 
     cur.execute("""
     DELETE FROM users WHERE username = %s;
-    """, (username,))
+    """, (username))
     
     cur.execute("""
     DELETE FROM user_history WHERE user_id = %s;
-    """, (username,))
+    """, (username))
 
     conn.commit()
 
