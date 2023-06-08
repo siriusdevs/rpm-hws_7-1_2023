@@ -14,12 +14,15 @@ PG_PASSWORD = getenv('PG_PASSWORD')
 
 
 def register_user(username, password):
-    
-    """
-    Регистрация нового пользователя в базе данных.
+    """Метод для работы с БД.
+
+    Метод создает таблицу в pSQL,
+    передает туда username+password.
+
     Args:
-        username: Имя пользователя.
-        password: Пароль пользователя.
+        username (str): Имя пользователя.
+        password (str): Пароль пользователя.
+
     """
     conn = psycopg2.connect(
         database=PG_DBNAME,
@@ -50,18 +53,28 @@ def register_user(username, password):
 
 
 def check_credentials(username, password):
+    """Метод для работы с БД.
+
+    Метод проверяет данные авторизации в pSQL.
+
+    Args:
+        username (str): Имя пользователя.
+        password (str): Пароль пользователя.
+
     """
-    Проверка учетных данных пользователя.
-    :param username: Имя пользователя.
-    :param password: Пароль пользователя.
-    :return: True, если учетные данные верные, иначе False.
-    """
-    conn = psycopg2.connect(database=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+    conn = psycopg2.connect(
+        database=PG_DBNAME,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        host=PG_HOST,
+        port=PG_PORT
+    )
     cur = conn.cursor()
 
-    cur.execute("""
-    SELECT * FROM users WHERE username = %s AND password = %s;
-    """, (username, password))
+    cur.execute(
+        "SELECT * FROM users WHERE username = %s AND password = %s;",
+        (username, password)
+    )
 
     user = cur.fetchone()
 
@@ -72,11 +85,20 @@ def check_credentials(username, password):
 
 
 def create_history_table():
-    """
-    Создание таблицы истории запросов.
+    """Метод для работы с БД.
+
+    Метод создает таблицу в pSQL,
+    хранит историю запросов.
+
     """
     try:
-        conn = psycopg2.connect(dbname=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+        conn = psycopg2.connect(
+            database=PG_DBNAME,
+            user=PG_USER,
+            password=PG_PASSWORD,
+            host=PG_HOST,
+            port=PG_PORT
+        )
         cur = conn.cursor()
 
         cur.execute('''
@@ -96,13 +118,24 @@ def create_history_table():
 
 
 def save_sol(user_id, sol):
-    """
-    Сохранение запроса на вывод изображения в историю.
-    :param user_id: Идентификатор пользователя.
-    :param sol: Значение sol.
+    """Метод для работы с БД.
+
+    Метод добавляет в таблицу history
+    данные sol.
+
+    Args:
+        user_id (str): Имя пользователя.
+        sol (int): Номер сола.
+
     """
     try:
-        conn = psycopg2.connect(dbname=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+        conn = psycopg2.connect(
+            database=PG_DBNAME,
+            user=PG_USER,
+            password=PG_PASSWORD,
+            host=PG_HOST,
+            port=PG_PORT
+        )
         cur = conn.cursor()
 
         cur.execute(
@@ -118,23 +151,42 @@ def save_sol(user_id, sol):
 
 
 def get_user_history(username):
+    """Метод для работы с БД.
+
+    Метод выводит таблицу history из pSQL.
+
+    Args:
+        username (str): Имя пользователя.
+
     """
-    Получение истории запросов пользователя.
-    :param username: Имя пользователя.
-    :return: Список словарей с данными о запросах.
-    """
-    with psycopg2.connect(dbname=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT) as conn:
+    with psycopg2.connect(
+            database=PG_DBNAME,
+            user=PG_USER,
+            password=PG_PASSWORD,
+            host=PG_HOST,
+            port=PG_PORT
+        ) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT sol, timestamp FROM user_history WHERE user_id = %s", (username,))
             return [{'sol': row[0], 'timestamp': row[1].strftime("%Y-%m-%d %H:%M:%S")} for row in cur.fetchall()]
 
 
 def delete_user(username):
+    """Метод для работы с БД.
+
+    Метод удаляет пользователя из pSQL.
+
+    Args:
+        username (str): Имя пользователя.
+
     """
-    Удаление пользователя из базы данных.
-    :param username: Имя пользователя.
-    """
-    conn = psycopg2.connect(database=PG_DBNAME, user=PG_USER, password=PG_PASSWORD, host=PG_HOST, port=PG_PORT)
+    conn = psycopg2.connect(
+        database=PG_DBNAME,
+        user=PG_USER,
+        password=PG_PASSWORD,
+        host=PG_HOST,
+        port=PG_PORT
+    )
     cur = conn.cursor()
 
     cur.execute("""
