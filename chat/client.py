@@ -95,7 +95,7 @@ class MainWindow(QWidget):
 
 class ClientThread(Thread):
     def __init__(self, window):
-        Thread.__init__(self)
+        super().__init__()
         self.window = window
 
     def run(self):

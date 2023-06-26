@@ -52,7 +52,7 @@ class Window(QDialog):
         self.chatTextField.setText("")
 
 
-class server_thread(Thread):
+class ServerThread(Thread):
     def __init__(self, window):
         super().__init__()
         self.window = window
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     try:
         window = Window()
-        server_thread = server_thread(window)
+        server_thread = ServerThread(window)
         server_thread.start()
         window.exec()
     except KeyboardInterrupt:
