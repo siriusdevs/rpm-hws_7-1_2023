@@ -6,6 +6,7 @@ from http_handler import CustomHandler
 
 if __name__ == '__main__':
     try:
+        print(123)
         db_connection = psycopg2.connect(
         dbname=getenv("PG_DBNAME"),
         host=getenv("PG_HOST"),

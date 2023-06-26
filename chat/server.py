@@ -10,6 +10,9 @@ from socketserver import ThreadingMixIn
 conn=None
 class Window(QDialog):
     def __init__(self):
+        """
+        Creates window for chat
+        """
         super().__init__()
         self.flag=0
         self.chatTextField=QLineEdit(self)
@@ -72,18 +75,16 @@ class ServerThread(Thread):
             newthread = ClientThread(ip,port,window) 
             newthread.start() 
             threads.append(newthread) 
-        
-
-        for t in threads: 
-            t.join() 
-
 
 
 class ClientThread(Thread): 
  
     def __init__(self,ip,port,window): 
+        """
+        Creates thread for clients
+        """
         Thread.__init__(self) 
-        self.window=window
+        self.window = window
         self.ip = ip 
         self.port = port 
         print("[+] New server socket thread started for " + ip + ":" + str(port)) 
