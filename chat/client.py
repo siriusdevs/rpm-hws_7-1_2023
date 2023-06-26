@@ -101,7 +101,6 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        global tcpclient_a
         host = socket.gethostname()
         port = 80
         buffer_size = 2000

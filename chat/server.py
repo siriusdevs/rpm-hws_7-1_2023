@@ -17,7 +17,7 @@ class Window(QDialog):
         self.chatTextField = QLineEdit(self)
         self.chatTextField.resize(480, 100)
         self.chatTextField.move(10, 350)
-        self.btnSend=QPushButton("Send",self)
+        self.btnSend = QPushButton("Send", self)
         self.btnSend.resize(480, 30)
         self.btnSendFont = self.btnSend.font()
         self.btnSendFont.setPointSize(15)
@@ -32,7 +32,7 @@ class Window(QDialog):
         splitter.addWidget(self.chat)
         splitter.addWidget(self.chatTextField)
         splitter.setSizes([400, 100])
-        splitter2=QSplitter(QtCore.Qt.Vertical)
+        splitter2 = QSplitter(QtCore.Qt.Vertical)
         splitter2.addWidget(splitter)
         splitter2.addWidget(self.btnSend)
         splitter2.setSizes([200, 10])
@@ -41,12 +41,12 @@ class Window(QDialog):
         self.resize(500, 500)
 
     def send(self):
-        text=self.chatTextField.text()
-        font=self.chat.font()
+        text = self.chatTextField.text()
+        font = self.chat.font()
         font.setPointSize(13)
         self.chat.setFont(font)
-        textFormatted = f'U:{text}'
-        self.chat.append(textFormatted)
+        text_formatted = f'U:{text}'
+        self.chat.append(text_formatted)
         global conn
         conn.send(text.encode("utf-8"))
         self.chatTextField.setText("")
@@ -58,38 +58,36 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        tcp_ip = '0.0.0.0'
-        tcp_port = 80
         tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        tcp_server.bind((tcp_ip, tcp_port))
+        tcp_server.bind(('0.0.0.0', 80))
         threads = []
-        tcp_server.listen(4) 
+        tcp_server.listen(4)
         while True:
             print("Multithreaded Python server : Waiting for connections from TCP clients...")
             global conn
-            (conn, (ip,port)) = tcp_server.accept()
-            newthread = ClientThread(ip,port,window)
+            (conn, (ip, port)) = tcp_server.accept()
+            newthread = ClientThread(ip, port, window)
             newthread.start()
-            threads.append(newthread) 
+            threads.append(newthread)
 
 
-class ClientThread(Thread): 
+class ClientThread(Thread):
  
-    def __init__(self,ip,port,window): 
+    def __init__(self, ip, port, window): 
         """
         Creates thread for clients
         """
         super().__init__() 
         self.window = window
-        self.ip = ip 
-        self.port = port 
-        print("[+] New server socket thread started for " + ip + ":" + str(port)) 
+        self.ip = ip
+        self.port = port
+        print("[+] New server socket thread started for " + ip + ":" + str(port))
  
     def run(self): 
-        while True :
+        while True:
             global conn
-            data = conn.recv(2048) 
+            data = conn.recv(2048)
             window.chat.append("client: " + data.decode("utf-8"))
             print(data)
 
