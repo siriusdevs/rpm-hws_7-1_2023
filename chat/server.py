@@ -80,7 +80,7 @@ class ClientThread(Thread):
         """
         Creates thread for clients
         """
-        Thread.__init__(self) 
+        super().__init__() 
         self.window = window
         self.ip = ip 
         self.port = port 
