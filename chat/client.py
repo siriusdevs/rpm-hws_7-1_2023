@@ -4,10 +4,10 @@ from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import (
     QApplication, QLineEdit, QPushButton, QSplitter, QTextEdit,
-    QVBoxLayout, QLabel, QWidget
+    QVBoxLayout, QLabel, QWidget,
 )
 
-tcpClientA = None
+tcp_client_a = None
 
 
 class AuthorizationPage(QWidget):
@@ -44,8 +44,8 @@ class AuthorizationPage(QWidget):
         if username == "admin" and password == "admin":
             self.window = MainWindow()
             self.window.show()
-            clientThread = ClientThread(self.window)
-            clientThread.start()
+            client_thread = ClientThread(self.window)
+            client_thread.start()
             self.hide()
         else:
             print("Invalid credentials.")
@@ -86,10 +86,10 @@ class MainWindow(QWidget):
         font = self.chat.font()
         font.setPointSize(13)
         self.chat.setFont(font)
-        textFormatted = 'U: ' + text
-        print(textFormatted)
-        self.chat.append(textFormatted)
-        tcpClientA.send(text.encode())
+        text_formatted = f'U: {text}'
+        print(text_formatted)
+        self.chat.append(text_formatted)
+        tcp_client_a.send(text.encode())
         self.chatTextField.setText("")
 
 
@@ -101,13 +101,13 @@ class ClientThread(Thread):
     def run(self):
         host = socket.gethostname()
         port = 80
-        BUFFER_SIZE = 2000
-        global tcpClientA
-        tcpClientA = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        tcpClientA.connect((host, port))
+        buffer_size = 2000
+        global tcp_client_a
+        tcp_client_a = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcp_client_a.connect((host, port))
         while True:
-            data = tcpClientA.recv(BUFFER_SIZE)
-            self.window.chat.append("server: " + data.decode("utf-8"))
+            data = tcp_client_a.recv(buffer_size)
+            self.window.chat.append(f"server: {data.decode('utf-8')}")
 
 
 if __name__ == '__main__':
