@@ -58,14 +58,14 @@ class ServerThread(Thread):
         self.window = window
 
     def run(self):
-        tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        tcpServer.bind(('0.0.0.0', 80))
-        tcpServer.listen(4)
+        tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        tcp_server.bind(('0.0.0.0', 80))
+        tcp_server.listen(4)
         while True:
             print("Multithreaded Python server : Waiting for connections from TCP clients...")
             global conn
-            (conn, (ip, port)) = tcpServer.accept()
+            (conn, (ip, port)) = tcp_server.accept()
             newthread = ClientThread(ip, port, self.window)
             newthread.start()
 
