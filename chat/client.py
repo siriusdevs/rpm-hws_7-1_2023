@@ -2,15 +2,18 @@ import socket
 from threading import Thread
 from PyQt5.QtGui import QIcon
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import (QApplication, QLineEdit, QPushButton, QSplitter, QTextEdit, QVBoxLayout, QLabel, QWidget)
+from PyQt5.QtWidgets import (
+    QApplication, QLineEdit, QPushButton, QSplitter, QTextEdit,
+    QVBoxLayout, QLabel, QWidget
+)
 
-tcpclient_a = None
+tcpClientA = None
 
 
 class AuthorizationPage(QWidget):
     def __init__(self):
-        """Creates window for authorization"""
         super().__init__()
+
         self.setWindowTitle("Authorization Page")
         self.setFixedSize(300, 150)
         self.setWindowIcon(QIcon("icon.png"))
@@ -37,11 +40,12 @@ class AuthorizationPage(QWidget):
     def login(self):
         username = self.username_field.text()
         password = self.password_field.text()
+
         if username == "admin" and password == "admin":
             self.window = MainWindow()
             self.window.show()
-            client_thread = ClientThread(self.window)
-            client_thread.start()
+            clientThread = ClientThread(self.window)
+            clientThread.start()
             self.hide()
         else:
             print("Invalid credentials.")
@@ -49,9 +53,6 @@ class AuthorizationPage(QWidget):
 
 class MainWindow(QWidget):
     def __init__(self):
-        """
-        Creates window for chat
-        """
         super().__init__()
         self.flag = 0
         self.chatTextField = QLineEdit(self)
@@ -85,30 +86,28 @@ class MainWindow(QWidget):
         font = self.chat.font()
         font.setPointSize(13)
         self.chat.setFont(font)
-        text_formatted = f'U: {text}'
-        print(text_formatted)
-        self.chat.append(text_formatted)
-        tcpclient_a.send(text.encode())
+        textFormatted = 'U: ' + text
+        print(textFormatted)
+        self.chat.append(textFormatted)
+        tcpClientA.send(text.encode())
         self.chatTextField.setText("")
 
 
 class ClientThread(Thread):
     def __init__(self, window):
-        """
-        Creates thread for client
-        """
-        super().__init__()
+        Thread.__init__(self)
         self.window = window
 
     def run(self):
         host = socket.gethostname()
         port = 80
-        buffer_size = 2000
-        client_a = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client_a.connect((host, port))
+        BUFFER_SIZE = 2000
+        global tcpClientA
+        tcpClientA = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcpClientA.connect((host, port))
         while True:
-            data = client_a.recv(buffer_size)
-            self.window.chat.append(f"server: {data.decode('utf-8')}")
+            data = tcpClientA.recv(BUFFER_SIZE)
+            self.window.chat.append("server: " + data.decode("utf-8"))
 
 
 if __name__ == '__main__':

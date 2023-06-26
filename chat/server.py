@@ -1,17 +1,19 @@
 import sys
-from PyQt5 import QtCore
-from PyQt5.QtWidgets import QSplitter, QVBoxLayout, QDialog, QPushButton, QApplication, QTextEdit, QLineEdit
+import time
 import socket
 from threading import Thread
+from socketserver import ThreadingMixIn
+from PyQt5 import QtGui, QtCore
+from PyQt5.QtWidgets import (
+    QSplitter, QVBoxLayout, QDialog,
+    QPushButton, QApplication, QTextEdit, QLineEdit
+)
 
 conn = None
 
 
 class Window(QDialog):
     def __init__(self):
-        """
-        Creates window for chat
-        """
         super().__init__()
         self.flag = 0
         self.chatTextField = QLineEdit(self)
@@ -45,8 +47,8 @@ class Window(QDialog):
         font = self.chat.font()
         font.setPointSize(13)
         self.chat.setFont(font)
-        text_formatted = f'U:{text}'
-        self.chat.append(text_formatted)
+        textFormatted = 'U:' + text
+        self.chat.append(textFormatted)
         global conn
         conn.send(text.encode("utf-8"))
         self.chatTextField.setText("")
@@ -54,41 +56,45 @@ class Window(QDialog):
 
 class ServerThread(Thread):
     def __init__(self, window):
-        super().__init__(self)
+        Thread.__init__(self)
         self.window = window
 
     def run(self):
-        tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        tcp_server.bind(('0.0.0.0', 80))
+        TCP_IP = '0.0.0.0'
+        TCP_PORT = 80
+        BUFFER_SIZE = 20
+        tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        tcpServer.bind((TCP_IP, TCP_PORT))
         threads = []
-        tcp_server.listen(4)
+
+        tcpServer.listen(4)
         while True:
             print("Multithreaded Python server : Waiting for connections from TCP clients...")
             global conn
-            (conn, (ip, port)) = tcp_server.accept()
-            newthread = ClientThread(ip, port, window)
+            (conn, (ip, port)) = tcpServer.accept()
+            newthread = ClientThread(ip, port, self.window)
             newthread.start()
             threads.append(newthread)
 
+        for t in threads:
+            t.join()
+
 
 class ClientThread(Thread):
- 
-    def __init__(self, ip, port, window): 
-        """
-        Creates thread for clients
-        """
-        super().__init__() 
+
+    def __init__(self, ip, port, window):
+        Thread.__init__(self)
         self.window = window
         self.ip = ip
         self.port = port
         print("[+] New server socket thread started for " + ip + ":" + str(port))
- 
-    def run(self): 
+
+    def run(self):
         while True:
             global conn
             data = conn.recv(2048)
-            window.chat.append("client: " + data.decode("utf-8"))
+            self.window.chat.append("client: " + data.decode("utf-8"))
             print(data)
 
 
@@ -96,7 +102,7 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     try:
         window = Window()
-        serverThread=ServerThread(window)
+        serverThread = ServerThread(window)
         serverThread.start()
         window.exec()
     except KeyboardInterrupt:
