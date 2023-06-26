@@ -41,7 +41,7 @@ class AuthorizationPage(QWidget):
         username = self.username_field.text()
         password = self.password_field.text()
 
-        if username == "admin" and password == "admin":
+        if username == "admin" and password == username:
             self.window = MainWindow()
             self.window.show()
             client_thread = ClientThread(self.window)
