@@ -40,7 +40,7 @@ class AuthorizationPage(QWidget):
         if username == "admin" and password == "admin":
             self.window = MainWindow()
             self.window.show()
-            global client_thread
+            # global client_thread
             client_thread = client_thread(self.window)
             client_thread.start()
             self.hide()
@@ -102,14 +102,14 @@ class ClientThread(Thread):
         self.window = window
 
     def run(self):
-        #global tcpclient_a
+        # global tcpclient_a
         host = socket.gethostname()
         port = 80
         buffer_size = 2000
-        tcpclient_a = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        tcpclient_a.connect((host, port))
+        client_a = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client_a.connect((host, port))
         while True:
-            data = tcpclient_a.recv(buffer_size)
+            data = client_a.recv(buffer_size)
             self.window.chat.append(f"server: {data.decode('utf-8')}")
 
 

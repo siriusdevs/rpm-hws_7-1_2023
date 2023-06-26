@@ -14,19 +14,19 @@ class Window(QDialog):
         """
         super().__init__()
         self.flag = 0
-        self.chatTextField=QLineEdit(self)
+        self.chatTextField = QLineEdit(self)
         self.chatTextField.resize(480, 100)
         self.chatTextField.move(10, 350)
         self.btnSend=QPushButton("Send",self)
         self.btnSend.resize(480, 30)
-        self.btnSendFont=self.btnSend.font()
+        self.btnSendFont = self.btnSend.font()
         self.btnSendFont.setPointSize(15)
         self.btnSend.setFont(self.btnSendFont)
         self.btnSend.move(10, 460)
         self.btnSend.setStyleSheet("background-color: #8e7cc3")
         self.btnSend.clicked.connect(self.send)
-        self.chatBody=QVBoxLayout(self)
-        splitter=QSplitter(QtCore.Qt.Vertical)
+        self.chatBody = QVBoxLayout(self)
+        splitter = QSplitter(QtCore.Qt.Vertical)
         self.chat = QTextEdit()
         self.chat.setReadOnly(True)
         splitter.addWidget(self.chat)
@@ -51,27 +51,26 @@ class Window(QDialog):
         conn.send(text.encode("utf-8"))
         self.chatTextField.setText("")
 
-class ServerThread(Thread):
-    def __init__(self,window): 
-        Thread.__init__(self) 
-        self.window=window
 
- 
-    def run(self): 
-        TCP_IP = '0.0.0.0' 
-        TCP_PORT = 80 
-        tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-        tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
-        tcpServer.bind((TCP_IP, TCP_PORT)) 
-        threads = [] 
-        
-        tcpServer.listen(4) 
+class ServerThread(Thread):
+    def __init__(self, window):
+        super().__init__(self)
+        self.window = window
+
+    def run(self):
+        tcp_ip = '0.0.0.0'
+        tcp_port = 80
+        tcp_server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        tcp_server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        tcp_server.bind((tcp_ip, tcp_port))
+        threads = []
+        tcp_server.listen(4) 
         while True:
-            print("Multithreaded Python server : Waiting for connections from TCP clients...") 
+            print("Multithreaded Python server : Waiting for connections from TCP clients...")
             global conn
-            (conn, (ip,port)) = tcpServer.accept() 
-            newthread = ClientThread(ip,port,window) 
-            newthread.start() 
+            (conn, (ip,port)) = tcp_server.accept()
+            newthread = ClientThread(ip,port,window)
+            newthread.start()
             threads.append(newthread) 
 
 
